@@ -1,0 +1,52 @@
+apply plugin: 'java'
+apply plugin: "war"
+apply plugin: "eclipse-wtp"
+
+buildscript {
+	repositories { jcenter() }
+	dependencies {
+		classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
+	}
+}
+apply plugin: 'jettyEclipse'
+
+sourceCompatibility = 1.7
+version = '1.0'
+jar {
+	manifest {
+		attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+	}
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+	compile 'org.slf4j:slf4j-api:1.7.7'
+	compile 'org.slf4j:slf4j-simple:1.7.7'
+
+	//quartz
+	compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
+	compile group: 'org.quartz-scheduler', name: 'quartz-jobs', version: '2.2.1'
+
+	//jetty
+	compile 'org.eclipse.jetty:jetty-server:9.3.0.M0'
+	compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M0'
+
+	//jersey jaxrs
+	compile "javax.ws.rs:jsr311-api:1.1.1"
+	compile 'com.sun.jersey:jersey-server:1.13'
+	compile 'com.sun.jersey:jersey-core:1.13'
+	compile 'com.sun.jersey:jersey-servlet:1.13'
+
+	//twitter
+	compile 'com.twitter:hbc-core:2.2.0'
+
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test { systemProperties 'property': 'value' }
+
+uploadArchives {
+	repositories { flatDir { dirs 'repos' } }
+}
