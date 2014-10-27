@@ -10,4 +10,4 @@ Start
 	
 
 	gradle build
-	gradle serve
+	gradle jettyEclipseRun
