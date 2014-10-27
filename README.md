@@ -7,7 +7,5 @@ Start
 -----------
 
 - Install Gradle http://www.gradle.org/
-	
-
-	gradle build
-	gradle jettyEclipseRun
+- gradle build
+- gradle jettyEclipseRun
