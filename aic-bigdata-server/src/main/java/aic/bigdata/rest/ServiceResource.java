@@ -15,4 +15,12 @@ public class ServiceResource {
 	public String showServiceStatus() {
 		return BackgroundTaskManager.getStatus();
 	}
+
+	@GET
+	@Path("/tweet")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String showTweetCount() {
+		return BackgroundTaskManager.getTweetCount();
+	}
+
 }

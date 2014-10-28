@@ -17,17 +17,22 @@ public class MainRestServlet extends ServletContainer {
 		super.init(config);
 
 		String twitterPath = getServletConfig().getInitParameter("twitter");
-		Properties props = new Properties();
+		String serverPath = getServletConfig().getInitParameter("server");
+		Properties propsTwitter = new Properties();
+		Properties propsServer = new Properties();
 		try {
-			InputStream is = getServletContext().getResourceAsStream(twitterPath);
-			props.load(is);
+			InputStream isTwitter = getServletContext().getResourceAsStream(twitterPath);
+			propsTwitter.load(isTwitter);
+			InputStream isServer = getServletContext().getResourceAsStream(serverPath);
+			propsServer.load(isServer);
 		} catch (IOException e) {
 			System.err.println("could not load twitter properties");
 			e.printStackTrace();
 		}
 
 		ServerConfig serverConfig = new ServerConfig();
-		serverConfig.setTwitter(props);
+		serverConfig.setTwitter(propsTwitter);
+		serverConfig.setServer(propsServer);
 
 		BackgroundTaskManager.startServices(serverConfig);
 

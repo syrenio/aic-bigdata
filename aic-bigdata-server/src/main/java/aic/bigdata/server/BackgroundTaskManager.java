@@ -1,18 +1,20 @@
 package aic.bigdata.server;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class BackgroundTaskManager {
+
+	private static TwitterStreamJob job;
 
 	private static enum Singleton {
 		INSTANCE;
 
-		public ExecutorService executor;
+		public ThreadPoolExecutor executor;
 
 		private Singleton() {
 			System.out.println("Singleton BackgroundTaskManager instance is created: " + System.currentTimeMillis());
-			executor = Executors.newFixedThreadPool(5);
+			executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 		}
 
 	}
@@ -21,9 +23,11 @@ public class BackgroundTaskManager {
 	}
 
 	public static void startServices(ServerConfig config) {
+		job = new TwitterStreamJob(config);
 
-		TwitterStreamJob job = new TwitterStreamJob(config);
-		Singleton.INSTANCE.executor.execute(job);
+		if (config.getStreamOnStartup()) {
+			Singleton.INSTANCE.executor.execute(job);
+		}
 
 	}
 
@@ -32,7 +36,11 @@ public class BackgroundTaskManager {
 	}
 
 	public static String getStatus() {
-		return "Service running: " + !Singleton.INSTANCE.executor.isTerminated();
+		return "Service running: " + (Singleton.INSTANCE.executor.getActiveCount() != 0);
+	}
+
+	public static String getTweetCount() {
+		return "Tweets found: " + job.getCounter();
 	}
 
 }

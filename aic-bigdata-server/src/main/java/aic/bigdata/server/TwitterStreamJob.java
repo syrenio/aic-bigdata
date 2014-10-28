@@ -19,6 +19,7 @@ import com.twitter.hbc.httpclient.auth.OAuth1;
 public class TwitterStreamJob implements Runnable {
 
 	private ServerConfig config;
+	private int counter;
 
 	public ServerConfig getConfig() {
 		return config;
@@ -26,6 +27,14 @@ public class TwitterStreamJob implements Runnable {
 
 	public void setConfig(ServerConfig config) {
 		this.config = config;
+	}
+
+	public int getCounter() {
+		return counter;
+	}
+
+	public void setCounter(int counter) {
+		this.counter = counter;
 	}
 
 	public TwitterStreamJob(ServerConfig config) {
@@ -80,14 +89,17 @@ public class TwitterStreamJob implements Runnable {
 		Client client = createStreamClient(msgQueue);
 		client.connect();
 
+		setCounter(0);
+
 		// on a different thread, or multiple different threads....
-		while (!client.isDone()) {
+		while (!client.isDone() && getCounter() <= config.getMaxTweetCount()) {
 			String msg;
 			try {
 				// FIXME TWEET CODE!
 				msg = msgQueue.take();
 				System.out.println(msg);
-				Thread.sleep(1000);
+				counter++;
+				// Thread.sleep(1000);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();

@@ -20,6 +20,10 @@
 			<param-name>twitter</param-name>
 			<param-value>/WEB-INF/twitter.properties</param-value>
 		</init-param>
+		<init-param>
+			<param-name>server</param-name>
+			<param-value>/WEB-INF/server.properties</param-value>
+		</init-param>
 
 		<!-- the following is only needed if you want to use the built-in support 
 			for mapping pojo objects to json. -->
