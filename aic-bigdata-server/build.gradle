@@ -14,7 +14,7 @@ sourceCompatibility = 1.7
 version = '1.0'
 jar {
 	manifest {
-		attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+		attributes 'Implementation-Title': 'AIC Group Twitter BigData', 'Implementation-Version': version
 	}
 }
 
@@ -26,8 +26,8 @@ dependencies {
 	compile 'org.slf4j:slf4j-simple:1.7.7'
 
 	//quartz
-	compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
-	compile group: 'org.quartz-scheduler', name: 'quartz-jobs', version: '2.2.1'
+	//compile group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
+	//compile group: 'org.quartz-scheduler', name: 'quartz-jobs', version: '2.2.1'
 
 	//jetty
 	compile 'org.eclipse.jetty:jetty-server:9.3.0.M0'

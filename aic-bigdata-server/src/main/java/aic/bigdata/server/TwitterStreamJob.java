@@ -4,10 +4,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
@@ -20,34 +16,20 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
-public class TwitterStreamJob implements Job {
+public class TwitterStreamJob implements Runnable {
 
 	private ServerConfig config;
 
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		// TODO Auto-generated method stub
+	public ServerConfig getConfig() {
+		return config;
+	}
 
-		setConfig((ServerConfig) context.getJobDetail().getJobDataMap().get("config"));
-		BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
+	public void setConfig(ServerConfig config) {
+		this.config = config;
+	}
 
-		Client client = createStreamClient(msgQueue);
-		client.connect();
-
-		// on a different thread, or multiple different threads....
-		while (!client.isDone()) {
-			String msg;
-			try {
-				// FIXME TWEET CODE!
-				msg = msgQueue.take();
-				System.out.println(msg);
-				Thread.sleep(1000);
-
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		}
-		client.stop();
+	public TwitterStreamJob(ServerConfig config) {
+		setConfig(config);
 	}
 
 	private Client createStreamClient(BlockingQueue<String> msgQueue) {
@@ -89,12 +71,30 @@ public class TwitterStreamJob implements Job {
 				"oauth.accessTokenSecret"));
 	}
 
-	public ServerConfig getConfig() {
-		return config;
-	}
+	public void run() {
 
-	public void setConfig(ServerConfig config) {
-		this.config = config;
+		// setConfig((ServerConfig)
+		// context.getJobDetail().getJobDataMap().get("config"));
+		BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
+
+		Client client = createStreamClient(msgQueue);
+		client.connect();
+
+		// on a different thread, or multiple different threads....
+		while (!client.isDone()) {
+			String msg;
+			try {
+				// FIXME TWEET CODE!
+				msg = msgQueue.take();
+				System.out.println(msg);
+				Thread.sleep(1000);
+
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
+		client.stop();
 	}
 
 }
