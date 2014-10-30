@@ -7,6 +7,8 @@ import java.util.Properties;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 
+import aic.bigdata.extraction.ServerConfigBuilder;
+
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 public class MainRestServlet extends ServletContainer {
@@ -15,7 +17,11 @@ public class MainRestServlet extends ServletContainer {
 	public void init(ServletConfig config) throws ServletException {
 		// TODO Auto-generated method stub
 		super.init(config);
-
+		
+		ServerConfig cf = new ServerConfigBuilder().getConfig();
+		BackgroundTaskManager.startServices(cf);
+		
+		/*
 		String twitterPath = getServletConfig().getInitParameter("twitter");
 		String serverPath = getServletConfig().getInitParameter("server");
 		Properties propsTwitter = new Properties();
@@ -33,9 +39,7 @@ public class MainRestServlet extends ServletContainer {
 		ServerConfig serverConfig = new ServerConfig();
 		serverConfig.setTwitter(propsTwitter);
 		serverConfig.setServer(propsServer);
-
-		BackgroundTaskManager.startServices(serverConfig);
-
+		*/
 	}
 
 	@Override
