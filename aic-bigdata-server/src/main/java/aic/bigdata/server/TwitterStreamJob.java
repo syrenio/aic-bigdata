@@ -1,8 +1,12 @@
 package aic.bigdata.server;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+
+import aic.bigdata.extraction.TweetHandler;
+import aic.bigdata.extraction.TweetProvider;
 
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
@@ -16,10 +20,11 @@ import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
 
-public class TwitterStreamJob implements Runnable {
+public class TwitterStreamJob implements TweetProvider {
 
 	private ServerConfig config;
 	private int counter;
+	private List<TweetHandler> tweethandlers = new ArrayList<TweetHandler>();
 
 	public ServerConfig getConfig() {
 		return config;
@@ -41,6 +46,12 @@ public class TwitterStreamJob implements Runnable {
 		setConfig(config);
 	}
 
+	public void addTweetHandler(TweetHandler handler)
+	{
+		this.tweethandlers.add(handler);
+	}
+	
+	
 	private Client createStreamClient(BlockingQueue<String> msgQueue) {
 
 		/**
@@ -97,7 +108,10 @@ public class TwitterStreamJob implements Runnable {
 			try {
 				// FIXME TWEET CODE!
 				msg = msgQueue.take();
-				System.out.println(msg);
+				for (TweetHandler t : this.tweethandlers) {
+					t.HandleTweet(msg);
+				}
+				System.out.println(msg);	
 				counter++;
 				// Thread.sleep(1000);
 
@@ -108,5 +122,6 @@ public class TwitterStreamJob implements Runnable {
 		}
 		client.stop();
 	}
+
 
 }
