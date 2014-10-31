@@ -6,6 +6,7 @@ public class ServerConfig {
 
 	private Properties twitter;
 	private Properties server;
+	private Properties mongo;
 
 	public Properties getTwitter() {
 		return twitter;
@@ -31,5 +32,17 @@ public class ServerConfig {
 	// aic.bigdata.stream.maxTweetCount
 	public Integer getMaxTweetCount() {
 		return new Integer(server.getProperty("aic.bigdata.stream.maxTweetCount"));
+	}
+
+	public void setMongo(Properties propsMongo) {
+		this.mongo = propsMongo;
+		
+	}
+	public String getMongoDbName() {
+		return mongo.getProperty("mongo.database");
+	}
+	
+	public String getMongoCollection() {
+		return mongo.getProperty("mongo.collection");
 	}
 }
