@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import twitter4j.Status;
+import twitter4j.TwitterException;
+import twitter4j.TwitterObjectFactory;
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 
@@ -25,6 +28,7 @@ public class TwitterStreamJob implements TweetProvider {
 	private ServerConfig config;
 	private int counter;
 	private List<TweetHandler> tweethandlers = new ArrayList<TweetHandler>();
+	private Client client;
 
 	public ServerConfig getConfig() {
 		return config;
@@ -46,12 +50,10 @@ public class TwitterStreamJob implements TweetProvider {
 		setConfig(config);
 	}
 
-	public void addTweetHandler(TweetHandler handler)
-	{
+	public void addTweetHandler(TweetHandler handler) {
 		this.tweethandlers.add(handler);
 	}
-	
-	
+
 	private Client createStreamClient(BlockingQueue<String> msgQueue) {
 
 		/**
@@ -97,7 +99,7 @@ public class TwitterStreamJob implements TweetProvider {
 		// context.getJobDetail().getJobDataMap().get("config"));
 		BlockingQueue<String> msgQueue = new LinkedBlockingQueue<String>(100000);
 
-		Client client = createStreamClient(msgQueue);
+		client = createStreamClient(msgQueue);
 		client.connect();
 
 		setCounter(0);
@@ -109,11 +111,15 @@ public class TwitterStreamJob implements TweetProvider {
 				// FIXME TWEET CODE!
 				msg = msgQueue.take();
 				for (TweetHandler t : this.tweethandlers) {
-					t.HandleTweet(msg);
+					try {
+						Status status = TwitterObjectFactory.createStatus(msg);
+						t.HandleStatusTweet(status, msg);
+					} catch (TwitterException e) {
+						System.err.println("Error creating Status Object: " + msg);
+						e.printStackTrace();
+					}
 				}
-				System.out.println(msg);	
 				counter++;
-				// Thread.sleep(1000);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -123,5 +129,8 @@ public class TwitterStreamJob implements TweetProvider {
 		client.stop();
 	}
 
+	public void stopTwitterJob() {
+		client.stop();
+	}
 
 }

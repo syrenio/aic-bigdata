@@ -32,6 +32,7 @@ public class BackgroundTaskManager {
 	}
 
 	public static void stopServices() {
+		job.stopTwitterJob();
 		Singleton.INSTANCE.executor.shutdown();
 	}
 

@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: "war"
 apply plugin: "eclipse-wtp"
 
+
 buildscript {
 	repositories { jcenter() }
 	dependencies {
@@ -41,6 +42,7 @@ dependencies {
 
 	//twitter
 	compile 'com.twitter:hbc-core:2.2.0'
+	compile 'com.twitter:hbc-twitter4j:2.2.0'
 	
 	//mongodb
 	compile 'org.mongodb:mongo-java-driver:2.12.4'
@@ -52,4 +54,9 @@ test { systemProperties 'property': 'value' }
 
 uploadArchives {
 	repositories { flatDir { dirs 'repos' } }
+}
+
+task main(type:JavaExec, dependsOn: build){
+	main = "aic.bigdata.extraction.ExtractionRunner"
+	classpath = sourceSets.main.runtimeClasspath
 }
