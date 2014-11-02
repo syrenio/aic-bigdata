@@ -11,7 +11,6 @@ import twitter4j.TwitterObjectFactory;
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 
-import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
 import com.twitter.hbc.core.Client;
 import com.twitter.hbc.core.Constants;
@@ -70,15 +69,15 @@ public class TwitterStreamJob implements TweetProvider {
 		Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
 		StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint();
 		// Optional: set up some followings and track terms
-		List<Long> followings = Lists.newArrayList(1234L, 566788L);
-		List<String> terms = Lists.newArrayList("twitter", "api");
+		List<Long> followings = config.getFollowers();
+		List<String> terms = config.getTerms();
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
 
 		// These secrets should be read from a config file
 		Authentication hosebirdAuth = createOAuth();
 
-		ClientBuilder builder = new ClientBuilder().name("Hosebird-Client-01")
+		ClientBuilder builder = new ClientBuilder().name("AIC-BigData-Client-01")
 				// optional: mainly for the logs
 				.hosts(hosebirdHosts).authentication(hosebirdAuth).endpoint(hosebirdEndpoint)
 				.processor(new StringDelimitedProcessor(msgQueue)).eventMessageQueue(eventQueue);
