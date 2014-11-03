@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
@@ -30,13 +31,21 @@ public class MongoDatabase {
 		this.collection.insert(o);
 		
 	}
+	
+	public DBCursor getCursorForTweets() throws UnknownHostException
+	{
+		if(!init)intialize();
+		DBCursor c = collection.find();
+		return c;
+	}
 
-	private void intialize() throws UnknownHostException {
+	private void intialize() throws UnknownHostException {		
 		this.mongoclient = new MongoClient(); //use local started one
 		String mongodbname = cfg.getMongoDbName();
 		System.out.println(mongodbname);
 		this.database = mongoclient.getDB(mongodbname);
 		this.collection = database.getCollection(cfg.getMongoCollection());
+		this.init=true;
 	}
 
 }
