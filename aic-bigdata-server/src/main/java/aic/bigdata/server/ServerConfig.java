@@ -42,7 +42,8 @@ public class ServerConfig {
 		String[] strlist = server.getProperty("aic.bigdata.stream.followers").split(",");
 		List<Long> longlist = new ArrayList<Long>();
 		for (int i = 0; i < strlist.length; i++) {
-			longlist.add(Long.valueOf(strlist[i]));
+			if(!"".equals(strlist[i]))
+				longlist.add(Long.valueOf(strlist[i]));
 		}
 		return longlist;
 	}
