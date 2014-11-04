@@ -1,17 +1,50 @@
 package aic.bigdata.extraction;
 
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
+
+import twitter4j.Status;
+import twitter4j.TwitterException;
+import twitter4j.TwitterObjectFactory;
+
+import com.mongodb.DBObject;
+import com.mongodb.DBCursor;
+
 public class MongoDbTweetProvider implements TweetProvider{
 
+	private MongoDatabase db;
+	private List<TweetHandler> handler = new ArrayList<TweetHandler>();
+	
+	public MongoDbTweetProvider(MongoDatabase db) {
+		this.db=db;
+	}
+	
 	@Override
 	public void run() {
-		// TODO iterate over the tweets stored
+		try {
+			for(DBObject c : db.getCursorForTweets())
+			{
+				String message = c.toString();
+				Status status = null;
+				try {
+					 status = TwitterObjectFactory.createStatus(message);
+				} catch (TwitterException e) {
+					continue;
+				}
+				for (TweetHandler t : this.handler) {
+					t.HandleStatusTweet(status, message);
+				}
+			}
+		} catch (UnknownHostException e) {			
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
 	public void addTweetHandler(TweetHandler t) {
-		// TODO add tweet handler logic here
-		
+		this.handler.add(t);
 	}
 
 }

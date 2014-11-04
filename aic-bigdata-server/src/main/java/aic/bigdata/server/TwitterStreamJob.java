@@ -110,12 +110,13 @@ public class TwitterStreamJob implements TweetProvider {
 					try {
 						Status status = TwitterObjectFactory.createStatus(msg);
 						t.HandleStatusTweet(status, msg);
+						counter++;
 					} catch (TwitterException e) {
 						System.err.println("Error creating Status Object: " + msg);
 						e.printStackTrace();
 					}
 				}
-				counter++;
+				
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();

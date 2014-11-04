@@ -73,6 +73,9 @@ public class ServerConfig {
 		List<Long> longlist = new ArrayList<Long>();
 		for (int i = 0; i < strlist.length; i++) {
 			String entry = strlist[i];
+			if("".equals(strlist[i]))
+				continue;
+
 			if (StringUtils.isNumeric(entry)) {
 				longlist.add(Long.valueOf(entry));
 			} else {
