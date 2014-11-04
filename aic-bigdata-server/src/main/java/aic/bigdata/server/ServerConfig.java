@@ -73,7 +73,7 @@ public class ServerConfig {
 		List<Long> longlist = new ArrayList<Long>();
 		for (int i = 0; i < strlist.length; i++) {
 			String entry = strlist[i];
-			if("".equals(strlist[i]))
+			if ("".equals(entry))
 				continue;
 
 			if (StringUtils.isNumeric(entry)) {
@@ -95,9 +95,13 @@ public class ServerConfig {
 		return Lists.newArrayList(server.getProperty("aic.bigdata.stream.terms").split(","));
 	}
 
+	// aic.bigdata.stream.languages
+	public List<String> getLanguages() {
+		return Lists.newArrayList(server.getProperty("aic.bigdata.stream.languages").split(","));
+	}
+
 	public void setMongo(Properties propsMongo) {
 		this.mongo = propsMongo;
-
 	}
 
 	public String getMongoDbName() {
@@ -106,7 +110,6 @@ public class ServerConfig {
 
 	public String getMongoCollection() {
 		return mongo.getProperty("mongo.collection");
-
 	}
 
 	private Configuration getConfigForTwitter4J() {

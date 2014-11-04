@@ -72,10 +72,14 @@ public class TwitterStreamJob implements TweetProvider {
 		// Optional: set up some followings and track terms
 		List<Long> followings = config.getFollowers();
 		List<String> terms = config.getTerms();
+		List<String> langs = config.getLanguages();
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
+		hosebirdEndpoint.languages(langs);
+
 		System.out.println("Followers: " + StringUtils.join(followings, ","));
 		System.out.println("Terms: " + StringUtils.join(terms, ","));
+		System.out.println("Languages: " + StringUtils.join(langs, ","));
 
 		// These secrets should be read from a config file
 		Authentication hosebirdAuth = config.createOAuth();
@@ -116,7 +120,6 @@ public class TwitterStreamJob implements TweetProvider {
 						e.printStackTrace();
 					}
 				}
-				
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
