@@ -19,6 +19,12 @@ jar {
 	}
 }
 
+eclipse {
+	classpath {
+		 downloadSources=true
+	}
+}
+
 repositories { mavenCentral() }
 
 dependencies {

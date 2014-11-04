@@ -7,7 +7,12 @@ public class TweetToConsolePrinter implements TweetHandler {
 	@Override
 	public void HandleStatusTweet(Status status, String tweet) {
 		System.out.println(tweet);
-		System.out.println(status.getUser().getName());
+		System.out.print(status.getUser().getName() + " : ");
+		System.out.print(status.isRetweet() ? " RT " : "");
+		System.out.print(status.isFavorited() ? " FV " : "");
+		System.out.println(status.getInReplyToScreenName() != null ? " InReplyToUserId: " + status.getInReplyToScreenName()
+				: " ");
+
 	}
 
 	@Override
