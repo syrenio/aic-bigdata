@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.commons.lang3.StringUtils;
+
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
@@ -20,7 +22,6 @@ import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
 import com.twitter.hbc.core.event.Event;
 import com.twitter.hbc.core.processor.StringDelimitedProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
-import com.twitter.hbc.httpclient.auth.OAuth1;
 
 public class TwitterStreamJob implements TweetProvider {
 
@@ -73,9 +74,11 @@ public class TwitterStreamJob implements TweetProvider {
 		List<String> terms = config.getTerms();
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
+		System.out.println("Followers: " + StringUtils.join(followings, ","));
+		System.out.println("Terms: " + StringUtils.join(terms, ","));
 
 		// These secrets should be read from a config file
-		Authentication hosebirdAuth = createOAuth();
+		Authentication hosebirdAuth = config.createOAuth();
 
 		ClientBuilder builder = new ClientBuilder().name("AIC-BigData-Client-01")
 				// optional: mainly for the logs
@@ -84,12 +87,6 @@ public class TwitterStreamJob implements TweetProvider {
 
 		Client hosebirdClient = builder.build();
 		return hosebirdClient;
-	}
-
-	private OAuth1 createOAuth() {
-		return new OAuth1(config.getTwitter().getProperty("oauth.consumerKey"), config.getTwitter().getProperty(
-				"oauth.consumerSecret"), config.getTwitter().getProperty("oauth.accessToken"), config.getTwitter().getProperty(
-				"oauth.accessTokenSecret"));
 	}
 
 	public void run() {

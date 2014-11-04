@@ -4,13 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
 import com.google.common.collect.Lists;
+import com.twitter.hbc.httpclient.auth.OAuth1;
 
 public class ServerConfig {
 
 	private Properties twitter;
 	private Properties server;
 	private Properties mongo;
+
+	private Twitter tw = null;
 
 	public Properties getTwitter() {
 		return twitter;
@@ -38,11 +51,39 @@ public class ServerConfig {
 		return new Integer(server.getProperty("aic.bigdata.stream.maxTweetCount"));
 	}
 
+	private Long getTwitterUserId(String name) throws TwitterException {
+		if (tw == null) {
+			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
+			tw = twf.getInstance();
+		}
+		Query query = new Query("from:" + name).count(1);
+		QueryResult res = tw.search(query);
+		if (res.getTweets().size() > 0) {
+			Long id = res.getTweets().get(0).getUser().getId();
+			System.out.println("User found " + name + ": " + id);
+			return id;
+		}
+		System.out.println("User not found " + name + "!");
+		return null;
+	}
+
 	public List<Long> getFollowers() {
+
 		String[] strlist = server.getProperty("aic.bigdata.stream.followers").split(",");
 		List<Long> longlist = new ArrayList<Long>();
 		for (int i = 0; i < strlist.length; i++) {
-			longlist.add(Long.valueOf(strlist[i]));
+			String entry = strlist[i];
+			if (StringUtils.isNumeric(entry)) {
+				longlist.add(Long.valueOf(entry));
+			} else {
+				try {
+					Long id = getTwitterUserId(entry);
+					if (id != null)
+						longlist.add(id);
+				} catch (TwitterException e) {
+					System.err.println("error with twitter-username: " + entry);
+				}
+			}
 		}
 		return longlist;
 	}
@@ -62,5 +103,21 @@ public class ServerConfig {
 
 	public String getMongoCollection() {
 		return mongo.getProperty("mongo.collection");
+
 	}
+
+	private Configuration getConfigForTwitter4J() {
+		ConfigurationBuilder builder = new ConfigurationBuilder();
+		builder.setOAuthConsumerKey(twitter.getProperty("oauth.consumerKey"));
+		builder.setOAuthConsumerSecret(twitter.getProperty("oauth.consumerSecret"));
+		builder.setOAuthAccessToken(twitter.getProperty("oauth.accessToken"));
+		builder.setOAuthAccessTokenSecret(twitter.getProperty("oauth.accessTokenSecret"));
+		return builder.build();
+	}
+
+	public OAuth1 createOAuth() {
+		return new OAuth1(twitter.getProperty("oauth.consumerKey"), twitter.getProperty("oauth.consumerSecret"),
+				twitter.getProperty("oauth.accessToken"), twitter.getProperty("oauth.accessTokenSecret"));
+	}
+
 }
