@@ -1,15 +1,18 @@
 apply plugin: 'java'
 apply plugin: "war"
 apply plugin: "eclipse-wtp"
+apply plugin: 'org.akhikhl.gretty'
 
 
 buildscript {
 	repositories { jcenter() }
 	dependencies {
-		classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
+		classpath 'org.akhikhl.gretty:gretty:+'
+		//classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
 	}
 }
-apply plugin: 'jettyEclipse'
+//apply plugin: 'jettyEclipse'
+apply plugin: "org.akhikhl.gretty"
 
 sourceCompatibility = 1.7
 version = '1.0'
