@@ -78,19 +78,24 @@ public class TwitterStreamJob implements TweetProvider {
 
 		// read from additional users form mongoDB
 		MongoDatabase m = new MongoDatabase(config);
-		List<Long> users;
-		try {
-			users = m.readUserIds();
-			followings.addAll(users);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+
+		if (config.isAddDBUsers()) {
+			List<Long> users;
+			try {
+				users = m.readUserIds(config.getMaxFollowersFromDB());
+				followings.addAll(users);
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			}
 		}
 
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
 		hosebirdEndpoint.languages(langs);
 
-		System.out.println("Followers: " + StringUtils.join(followings, ","));
+		String s = String.format("Followers(%s): %s ", followings.size(), StringUtils.join(followings, ","));
+		System.out.println(s);
+		// System.out.println("Followers: " + StringUtils.join(followings, ","));
 		System.out.println("Terms: " + StringUtils.join(terms, ","));
 		System.out.println("Languages: " + StringUtils.join(langs, ","));
 

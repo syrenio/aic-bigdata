@@ -63,7 +63,7 @@ public class MongoDatabase {
 		}
 	}
 
-	public List<Long> readUserIds() throws UnknownHostException {
+	public List<Long> readUserIds(Integer limit) throws UnknownHostException {
 		if (!init)
 			intialize();
 
@@ -71,7 +71,7 @@ public class MongoDatabase {
 		DBObject f = new BasicDBObject();
 		DBObject k = new BasicDBObject();
 		k.put("id", 1);
-		DBCursor find = this.users.find(f, k);
+		DBCursor find = this.users.find(f, k).limit(limit);
 		for (DBObject o : find) {
 			Long val = ((Number) o.get("id")).longValue();
 			list.add(val);

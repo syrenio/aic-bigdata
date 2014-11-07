@@ -54,6 +54,16 @@ public class ServerConfig {
 		return new Integer(server.getProperty("aic.bigdata.stream.maxTweetCount"));
 	}
 
+	// aic.bigdata.stream.addDBUsers
+	public Boolean isAddDBUsers() {
+		return new Boolean(server.getProperty("aic.bigdata.stream.addDBUsers"));
+	}
+
+	// aic.bigdata.stream.maxFollowersFromDB
+	public Integer getMaxFollowersFromDB() {
+		return new Integer(server.getProperty("aic.bigdata.stream.maxFollowersFromDB"));
+	}
+
 	private Long getTwitterUserId(String name) throws TwitterException {
 		if (tw == null) {
 			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());

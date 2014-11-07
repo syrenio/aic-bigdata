@@ -44,7 +44,9 @@ public class ExtractionRunner {
 		// p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
 
 		TweetHandler handler = CreateUserToMongoDBHandler();
+		TweetHandler handler2 = CreateTweetToMongoDBHandler();
 		p.addTweetHandler(handler);
+		p.addTweetHandler(handler2);
 
 		p.run();
 		// System.out.print("Logged Tweets: "+ handler.getCount());
