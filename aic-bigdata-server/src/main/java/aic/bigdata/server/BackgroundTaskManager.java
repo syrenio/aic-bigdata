@@ -3,7 +3,7 @@ package aic.bigdata.server;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import aic.bigdata.extraction.TweetToConsolePrinter;
+import aic.bigdata.extraction.handler.TweetToConsolePrinter;
 
 public class BackgroundTaskManager {
 

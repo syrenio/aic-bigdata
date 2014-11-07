@@ -1,7 +1,9 @@
-package aic.bigdata.extraction;
+package aic.bigdata.extraction.handler;
 
 import java.net.UnknownHostException;
 
+import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.extraction.TweetHandler;
 import twitter4j.Status;
 
 public class TweetoToMongoDBHandler implements TweetHandler {

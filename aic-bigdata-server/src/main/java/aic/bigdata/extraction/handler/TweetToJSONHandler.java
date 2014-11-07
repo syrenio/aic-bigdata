@@ -3,6 +3,7 @@ package aic.bigdata.extraction.handler;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.nio.file.Path;
 
 import twitter4j.JSONArray;
 import twitter4j.JSONException;
@@ -26,8 +27,17 @@ public class TweetToJSONHandler implements TweetHandler {
 		if (counter > 100) {
 			PrintStream out;
 			try {
-				out = new PrintStream(new FileOutputStream(path + "_" + page + ".json"));
+				String file = path + "_" + page + ".json";
+				Path p = java.nio.file.Paths.get(file);
+				while (java.nio.file.Files.exists(p)) {
+					page++;
+					file = path + "_" + page + ".json";
+					p = java.nio.file.Paths.get(file);
+				}
+
+				out = new PrintStream(new FileOutputStream(file));
 				out.print(array.toString());
+				System.out.println("write to file: " + file);
 				array = new JSONArray();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

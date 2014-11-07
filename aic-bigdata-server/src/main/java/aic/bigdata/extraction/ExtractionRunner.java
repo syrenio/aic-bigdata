@@ -1,5 +1,8 @@
 package aic.bigdata.extraction;
 
+import aic.bigdata.extraction.handler.TweetToJSONHandler;
+import aic.bigdata.extraction.handler.TweetoToMongoDBHandler;
+import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 import aic.bigdata.server.ServerConfig;
 import aic.bigdata.server.TwitterStreamJob;
 
@@ -31,7 +34,8 @@ public class ExtractionRunner {
 
 		TweetProvider p = CreateTweetProviderForTwitterExtraction();
 		// TweetProvider p = CreateMongoDbTweetProvier();
-		p.addTweetHandler(new TweetToConsolePrinter());
+		// p.addTweetHandler(new TweetToFileHandler(config.getOutputFile()));
+		p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
 
 		// TweetoToMongoDBHandler handler = CreateTweetToMongoDBHandler();
 		// p.addTweetHandler(handler);

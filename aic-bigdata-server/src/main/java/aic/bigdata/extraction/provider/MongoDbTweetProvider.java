@@ -1,4 +1,4 @@
-package aic.bigdata.extraction;
+package aic.bigdata.extraction.provider;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -7,6 +7,9 @@ import java.util.List;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
+import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.extraction.TweetHandler;
+import aic.bigdata.extraction.TweetProvider;
 
 import com.mongodb.DBObject;
 import com.mongodb.DBCursor;

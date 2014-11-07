@@ -1,5 +1,6 @@
-package aic.bigdata.extraction;
+package aic.bigdata.extraction.handler;
 
+import aic.bigdata.extraction.TweetHandler;
 import twitter4j.Status;
 
 public class TweetToConsolePrinter implements TweetHandler {
