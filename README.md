@@ -8,7 +8,8 @@ Start
 
 - Install Gradle http://www.gradle.org/
 - gradle build
-- gradle jettyEclipseRun
+- gradle appRun   <-- WebServer
+- gradle main   <-- start Console version
 
 MongoDB
 -----------
