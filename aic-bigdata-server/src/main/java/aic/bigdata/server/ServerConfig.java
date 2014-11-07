@@ -131,6 +131,10 @@ public class ServerConfig {
 		return mongo.getProperty("mongo.collection");
 	}
 
+	public String getMongoCollectionUsers() {
+		return mongo.getProperty("mongo.collection.users");
+	}
+
 	private Configuration getConfigForTwitter4J() {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		builder.setOAuthConsumerKey(twitter.getProperty("oauth.consumerKey"));

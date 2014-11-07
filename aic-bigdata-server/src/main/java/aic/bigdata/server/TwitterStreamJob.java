@@ -112,6 +112,7 @@ public class TwitterStreamJob implements TweetProvider {
 				msg = msgQueue.take();
 				for (TweetHandler t : this.tweethandlers) {
 					try {
+
 						Status status = TwitterObjectFactory.createStatus(msg);
 						t.HandleStatusTweet(status, msg);
 						counter++;
