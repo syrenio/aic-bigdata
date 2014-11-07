@@ -2,8 +2,11 @@ package aic.bigdata.extraction;
 
 import java.net.UnknownHostException;
 
+import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
 
+import com.google.gson.Gson;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -19,8 +22,10 @@ public class MongoDatabase {
 	private DBCollection collection;
 	private boolean init = false;
 	private DBCollection users;
+	private Gson gson;
 
 	public MongoDatabase(ServerConfig cfg) {
+		this.gson = new Gson();
 		this.cfg = cfg;
 	}
 
@@ -38,11 +43,22 @@ public class MongoDatabase {
 		return c;
 	}
 
-	public void writeUser(String user) throws UnknownHostException {
+	public boolean checkUserExists(User user) {
+		DBObject f = new BasicDBObject();
+		f.put("name", user.getName());
+		DBObject o = this.users.findOne(f);
+		return o != null;
+	}
+
+	public void writeUser(User user) throws UnknownHostException {
 		if (!init)
 			intialize();
-		DBObject o = (DBObject) JSON.parse(user);
-		this.users.insert(o);
+
+		if (!checkUserExists(user)) {
+			String json = gson.toJson(user);
+			DBObject o = (DBObject) JSON.parse(json);
+			this.users.insert(o);
+		}
 	}
 
 	private void intialize() throws UnknownHostException {

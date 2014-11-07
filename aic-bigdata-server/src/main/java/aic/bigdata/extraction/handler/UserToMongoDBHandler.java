@@ -7,15 +7,11 @@ import twitter4j.User;
 import aic.bigdata.extraction.MongoDatabase;
 import aic.bigdata.extraction.TweetHandler;
 
-import com.google.gson.Gson;
-
 public class UserToMongoDBHandler implements TweetHandler {
 
 	private MongoDatabase mongodb;
-	private Gson gson;
 
 	public UserToMongoDBHandler(MongoDatabase b) {
-		this.gson = new Gson();
 		mongodb = b;
 	}
 
@@ -32,8 +28,7 @@ public class UserToMongoDBHandler implements TweetHandler {
 
 	private void internalHandleTweet(User user) {
 		try {
-			String json = gson.toJson(user);
-			this.mongodb.writeUser(json);
+			this.mongodb.writeUser(user);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
