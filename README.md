@@ -3,6 +3,9 @@ aic-bigdata
 
 AIC Group Project Big Data
 
+Architecture:
+https://www.dropbox.com/s/lqbvh8k3ydv8mqv/AIC_Architektur_Vorschlag.pdf?dl=0
+
 Start
 -----------
 
