@@ -1,5 +1,6 @@
 package aic.bigdata.server;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
+import aic.bigdata.extraction.MongoDatabase;
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 
@@ -73,6 +75,17 @@ public class TwitterStreamJob implements TweetProvider {
 		List<Long> followings = config.getFollowers();
 		List<String> terms = config.getTerms();
 		List<String> langs = config.getLanguages();
+
+		// read from additional users form mongoDB
+		MongoDatabase m = new MongoDatabase(config);
+		List<Long> users;
+		try {
+			users = m.readUserIds();
+			followings.addAll(users);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
 		hosebirdEndpoint.languages(langs);

@@ -1,6 +1,8 @@
 package aic.bigdata.extraction;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
@@ -59,6 +61,22 @@ public class MongoDatabase {
 			DBObject o = (DBObject) JSON.parse(json);
 			this.users.insert(o);
 		}
+	}
+
+	public List<Long> readUserIds() throws UnknownHostException {
+		if (!init)
+			intialize();
+
+		List<Long> list = new ArrayList<Long>();
+		DBObject f = new BasicDBObject();
+		DBObject k = new BasicDBObject();
+		k.put("id", 1);
+		DBCursor find = this.users.find(f, k);
+		for (DBObject o : find) {
+			Long val = ((Number) o.get("id")).longValue();
+			list.add(val);
+		}
+		return list;
 	}
 
 	private void intialize() throws UnknownHostException {

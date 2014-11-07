@@ -1,7 +1,7 @@
 package aic.bigdata.extraction;
 
-import aic.bigdata.extraction.handler.TweetToJSONHandler;
 import aic.bigdata.extraction.handler.TweetoToMongoDBHandler;
+import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 import aic.bigdata.server.ServerConfig;
 import aic.bigdata.server.TwitterStreamJob;
@@ -30,15 +30,21 @@ public class ExtractionRunner {
 		return handler;
 	}
 
+	private static TweetHandler CreateUserToMongoDBHandler() {
+		MongoDatabase b = new MongoDatabase(config);
+		TweetHandler handler = new UserToMongoDBHandler(b);
+		return handler;
+	}
+
 	public static void main(String[] args) {
 
 		TweetProvider p = CreateTweetProviderForTwitterExtraction();
 		// TweetProvider p = CreateMongoDbTweetProvier();
 		// p.addTweetHandler(new TweetToFileHandler(config.getOutputFile()));
-		p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
+		// p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
 
-		// TweetoToMongoDBHandler handler = CreateTweetToMongoDBHandler();
-		// p.addTweetHandler(handler);
+		TweetHandler handler = CreateUserToMongoDBHandler();
+		p.addTweetHandler(handler);
 
 		p.run();
 		// System.out.print("Logged Tweets: "+ handler.getCount());
