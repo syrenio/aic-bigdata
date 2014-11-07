@@ -3,6 +3,8 @@ package aic.bigdata.server;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import aic.bigdata.extraction.TweetToConsolePrinter;
+
 public class BackgroundTaskManager {
 
 	private static TwitterStreamJob job;
@@ -24,6 +26,7 @@ public class BackgroundTaskManager {
 
 	public static void startServices(ServerConfig config) {
 		job = new TwitterStreamJob(config);
+		job.addTweetHandler(new TweetToConsolePrinter());
 
 		if (config.getStreamOnStartup()) {
 			Singleton.INSTANCE.executor.execute(job);

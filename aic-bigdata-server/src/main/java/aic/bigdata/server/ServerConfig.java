@@ -23,6 +23,9 @@ public class ServerConfig {
 	private Properties server;
 	private Properties mongo;
 
+	private final String OUTPUTFILE = "default_output.log";
+	private final String OUTPUTJSON = "default_output.json";
+
 	private Twitter tw = null;
 
 	public Properties getTwitter() {
@@ -98,6 +101,22 @@ public class ServerConfig {
 	// aic.bigdata.stream.languages
 	public List<String> getLanguages() {
 		return Lists.newArrayList(server.getProperty("aic.bigdata.stream.languages").split(","));
+	}
+
+	// aic.bigdata.stream.outputFile
+	public String getOutputFile() {
+		String tmp = server.getProperty("aic.bigdata.stream.outputFile");
+		if (StringUtils.isEmpty(tmp))
+			return OUTPUTFILE;
+		return tmp;
+	}
+
+	// aic.bigdata.stream.outputJSON
+	public String getOutputJSON() {
+		String tmp = server.getProperty("aic.bigdata.stream.outputJSON");
+		if (StringUtils.isEmpty(tmp))
+			return OUTPUTJSON;
+		return tmp;
 	}
 
 	public void setMongo(Properties propsMongo) {
