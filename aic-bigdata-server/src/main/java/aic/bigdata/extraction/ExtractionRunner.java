@@ -1,6 +1,6 @@
 package aic.bigdata.extraction;
 
-import aic.bigdata.extraction.handler.TweetoToMongoDBHandler;
+import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
@@ -25,9 +25,9 @@ public class ExtractionRunner {
 		return provider;
 	}
 
-	private static TweetoToMongoDBHandler CreateTweetToMongoDBHandler() {
+	private static TweetHandler CreateTweetToMongoDBHandler() {
 		MongoDatabase b = new MongoDatabase(config);
-		TweetoToMongoDBHandler handler = new TweetoToMongoDBHandler(b);
+		TweetHandler handler = new TweetToMongoDBHandler(b);
 		return handler;
 	}
 

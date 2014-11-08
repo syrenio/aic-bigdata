@@ -6,12 +6,12 @@ import aic.bigdata.extraction.MongoDatabase;
 import aic.bigdata.extraction.TweetHandler;
 import twitter4j.Status;
 
-public class TweetoToMongoDBHandler implements TweetHandler {
+public class TweetToMongoDBHandler implements TweetHandler {
 
 	private MongoDatabase mongodb;
 	private int tweetsLogged = 0;
 
-	public TweetoToMongoDBHandler(MongoDatabase b) {
+	public TweetToMongoDBHandler(MongoDatabase b) {
 		mongodb = b;
 	}
 
