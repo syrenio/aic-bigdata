@@ -29,6 +29,14 @@ public class ServerConfig {
 
 	private Twitter tw = null;
 
+	public Twitter getTwitter4JInstance(){
+		if (tw == null) {
+			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
+			tw = twf.getInstance();
+		}
+		return tw;
+	}
+	
 	public Properties getTwitter() {
 		return twitter;
 	}
@@ -66,12 +74,8 @@ public class ServerConfig {
 	}
 
 	private Long getTwitterUserId(String name) throws TwitterException {
-		if (tw == null) {
-			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
-			tw = twf.getInstance();
-		}
 		Query query = new Query("from:" + name).count(1);
-		QueryResult res = tw.search(query);
+		QueryResult res = getTwitter4JInstance().search(query);
 		if (res.getTweets().size() > 0) {
 			Long id = res.getTweets().get(0).getUser().getId();
 			System.out.println("User found " + name + ": " + id);
