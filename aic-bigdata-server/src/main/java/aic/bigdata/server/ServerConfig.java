@@ -21,7 +21,8 @@ public class ServerConfig {
 
 	private Properties twitter;
 	private Properties server;
-	private Properties mongo;
+        private Properties mongo;
+        private Properties neo4j;
 
 	private final String OUTPUTFILE = "default_output.log";
 	private final String OUTPUTJSON = "default_output.json";
@@ -157,6 +158,18 @@ public class ServerConfig {
 	public OAuth1 createOAuth() {
 		return new OAuth1(twitter.getProperty("oauth.consumerKey"), twitter.getProperty("oauth.consumerSecret"),
 				twitter.getProperty("oauth.accessToken"), twitter.getProperty("oauth.accessTokenSecret"));
+	}
+
+	public Properties getNeo4J() {
+		return neo4j;
+	}
+
+	public void setNeo4J(Properties neo4j) {
+		this.neo4j = neo4j;
+	}
+
+	public String getNeo4JDbName() {
+		return neo4j.getProperty("neo4j.database");
 	}
 
 }

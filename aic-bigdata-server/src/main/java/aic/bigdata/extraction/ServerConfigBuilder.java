@@ -13,6 +13,7 @@ public class ServerConfigBuilder {
 		Properties propsTwitter = new Properties();
 		Properties propsServer = new Properties();
 		Properties propsMongo = new Properties();
+		Properties propsNeo4J = new Properties();
 		try {
 			InputStream isTwitter =  getClass().getClassLoader().getResourceAsStream("twitter.properties");
 			propsTwitter.load(isTwitter);
@@ -20,6 +21,8 @@ public class ServerConfigBuilder {
 			propsServer.load(isServer);
 			InputStream isMongo =getClass().getClassLoader().getResourceAsStream("mongo.properties");
 			propsMongo.load(isMongo);
+			InputStream isNeo4J =getClass().getClassLoader().getResourceAsStream("neo4j.properties");
+			propsNeo4J.load(isNeo4J);
 		} catch (IOException e) {
 			System.err.println("could not load twitter properties");
 			e.printStackTrace();
@@ -28,6 +31,7 @@ public class ServerConfigBuilder {
 		s.setServer(propsServer);
 		s.setTwitter(propsTwitter);
 		s.setMongo(propsMongo);
+		s.setNeo4J(propsNeo4J);
 		return s;
 	}
 
