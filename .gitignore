@@ -17,3 +17,5 @@ quartz-web-test/
 .classpath
 .settings/
 .idea/
+
+*~
