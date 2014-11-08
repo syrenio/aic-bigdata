@@ -88,10 +88,10 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 	private void addFriends(User user) {
 		try {
-			IDs ids = config.getTwitterImpl().getFriendsIDs(user.getId(), -1);
+			IDs ids = config.getTwitter4JInstance().getFriendsIDs(user.getId(), -1);
 			addFriendsFromIDs(user, ids.getIDs());
 			while (ids.hasNext()) {
-				ids = config.getTwitterImpl().getFriendsIDs(user.getId(), ids.getNextCursor());
+				ids = config.getTwitter4JInstance().getFriendsIDs(user.getId(), ids.getNextCursor());
 				addFriendsFromIDs(user, ids.getIDs());
 			}
 		}

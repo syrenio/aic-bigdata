@@ -21,7 +21,7 @@ public class MongoDatabase {
 	private ServerConfig cfg;
 	private MongoClient mongoclient;
 	private DB database;
-	private DBCollection collection;
+	private DBCollection tweets;
 	private boolean init = false;
 	private DBCollection users;
 	private Gson gson;
@@ -35,13 +35,13 @@ public class MongoDatabase {
 		if (!init)
 			intialize();
 		DBObject o = (DBObject) JSON.parse(tweet);
-		this.collection.insert(o);
+		this.tweets.insert(o);
 	}
 
 	public DBCursor getCursorForTweets() throws UnknownHostException {
 		if (!init)
 			intialize();
-		DBCursor c = collection.find();
+		DBCursor c = tweets.find();
 		return c;
 	}
 
@@ -79,13 +79,28 @@ public class MongoDatabase {
 		return list;
 	}
 
+	private void createTweetsIndex(){
+		DBObject idx = new BasicDBObject("id", 1);
+		DBObject opt = new BasicDBObject("unique",true);
+		opt.put("name", "uq_id_idx");
+		//index exists
+		List<DBObject> list =  this.tweets.getIndexInfo();
+		for(DBObject i : list){
+			if(i.get("name").equals("uq_id_idx")){
+				return;
+			}
+		}
+		this.tweets.createIndex(idx,opt);
+	}
+	
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
 		System.out.println(mongodbname);
 		this.database = mongoclient.getDB(mongodbname);
-		this.collection = database.getCollection(cfg.getMongoCollection());
+		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
+		createTweetsIndex();
 		this.init = true;
 	}
 

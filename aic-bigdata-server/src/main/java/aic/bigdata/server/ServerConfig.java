@@ -29,6 +29,14 @@ public class ServerConfig {
 
 	private Twitter tw = null;
 
+	public Twitter getTwitter4JInstance(){
+		if (tw == null) {
+			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
+			tw = twf.getInstance();
+		}
+		return tw;
+	}
+	
 	public Properties getTwitter() {
 		return twitter;
 	}
@@ -65,18 +73,9 @@ public class ServerConfig {
 		return new Integer(server.getProperty("aic.bigdata.stream.maxFollowersFromDB"));
 	}
 
-	public Twitter getTwitterImpl() {
-		if (tw == null) {
-			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
-			tw = twf.getInstance();
-		}
-		return tw;
-	}
-
 	private Long getTwitterUserId(String name) throws TwitterException {
-
 		Query query = new Query("from:" + name).count(1);
-		QueryResult res = tw.search(query);
+		QueryResult res = getTwitter4JInstance().search(query);
 		if (res.getTweets().size() > 0) {
 			Long id = res.getTweets().get(0).getUser().getId();
 			System.out.println("User found " + name + ": " + id);
@@ -87,8 +86,6 @@ public class ServerConfig {
 	}
 
 	public List<Long> getFollowers() {
-		tw = getTwitterImpl(); // yes, this DOES assign tw to tw, but it also ensures it is not null
-
 		String[] strlist = server.getProperty("aic.bigdata.stream.followers").split(",");
 		List<Long> longlist = new ArrayList<Long>();
 		for (int i = 0; i < strlist.length; i++) {
