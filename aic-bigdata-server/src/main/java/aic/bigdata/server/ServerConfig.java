@@ -21,8 +21,8 @@ public class ServerConfig {
 
 	private Properties twitter;
 	private Properties server;
-        private Properties mongo;
-        private Properties neo4j;
+    private Properties mongo;
+    private Properties neo4j;
 
 	private final String OUTPUTFILE = "default_output.log";
 	private final String OUTPUTJSON = "default_output.json";
@@ -65,11 +65,16 @@ public class ServerConfig {
 		return new Integer(server.getProperty("aic.bigdata.stream.maxFollowersFromDB"));
 	}
 
-	private Long getTwitterUserId(String name) throws TwitterException {
+	public Twitter getTwitterImpl() {
 		if (tw == null) {
 			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
 			tw = twf.getInstance();
 		}
+		return tw;
+	}
+
+	private Long getTwitterUserId(String name) throws TwitterException {
+
 		Query query = new Query("from:" + name).count(1);
 		QueryResult res = tw.search(query);
 		if (res.getTweets().size() > 0) {
@@ -82,6 +87,7 @@ public class ServerConfig {
 	}
 
 	public List<Long> getFollowers() {
+		tw = getTwitterImpl(); // yes, this DOES assign tw to tw, but it also ensures it is not null
 
 		String[] strlist = server.getProperty("aic.bigdata.stream.followers").split(",");
 		List<Long> longlist = new ArrayList<Long>();
@@ -171,5 +177,4 @@ public class ServerConfig {
 	public String getNeo4JDbName() {
 		return neo4j.getProperty("neo4j.database");
 	}
-
 }

@@ -5,6 +5,8 @@ import aic.bigdata.server.ServerConfig;
 
 import twitter4j.Status;
 import twitter4j.User;
+import twitter4j.IDs;
+import twitter4j.TwitterException;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,6 +26,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	private int tweetsLogged = 0;
 	private GraphDatabaseService graphDb;
 	private Index<Node> userIndex;
+	private ServerConfig config;
 
 /*
 	private static enum RelTypes implements RelationshipType {
@@ -33,6 +36,8 @@ public class TweetToNeo4JHandler implements TweetHandler {
 */
 
 	public TweetToNeo4JHandler(ServerConfig config) {
+		this.config = config;
+
 		try {
 			createDb(config.getNeo4JDbName());
 		}
@@ -52,12 +57,11 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	@Override
 	public void HandleStatusTweet(Status status, String tweet) {
 		User user = status.getUser();
-
 		addUser(user);
+		//addFriends(user);
 
 		tweetsLogged++;
 	}
-
 
 	private void addUser(User user) {
 		try (Transaction tx = graphDb.beginTx()) {
@@ -80,6 +84,24 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			tx.success();
 		}
+	}
+
+	private void addFriends(User user) {
+		try {
+			IDs ids = config.getTwitterImpl().getFriendsIDs(user.getId(), -1);
+			addFriendsFromIDs(user, ids.getIDs());
+			while (ids.hasNext()) {
+				ids = config.getTwitterImpl().getFriendsIDs(user.getId(), ids.getNextCursor());
+				addFriendsFromIDs(user, ids.getIDs());
+			}
+		}
+		catch (TwitterException te) {
+			te.printStackTrace();
+		}
+	}
+
+	private void addFriendsFromIDs(User user, long[] ids) {
+		System.out.println("TweetToNeo4JHandler: Adding " + ids.length + " friends for user \"" + user.getName() + "\"");
 	}
 
 	@Override
