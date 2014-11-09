@@ -21,22 +21,22 @@ public class ServerConfig {
 
 	private Properties twitter;
 	private Properties server;
-        private Properties mongo;
-        private Properties neo4j;
+	private Properties mongo;
+	private Properties neo4j;
 
 	private final String OUTPUTFILE = "default_output.log";
 	private final String OUTPUTJSON = "default_output.json";
 
 	private Twitter tw = null;
 
-	public Twitter getTwitter4JInstance(){
+	public Twitter getTwitter4JInstance() {
 		if (tw == null) {
 			TwitterFactory twf = new TwitterFactory(getConfigForTwitter4J());
 			tw = twf.getInstance();
 		}
 		return tw;
 	}
-	
+
 	public Properties getTwitter() {
 		return twitter;
 	}
@@ -60,7 +60,11 @@ public class ServerConfig {
 
 	// aic.bigdata.stream.maxTweetCount
 	public Integer getMaxTweetCount() {
-		return new Integer(server.getProperty("aic.bigdata.stream.maxTweetCount"));
+		String count = server.getProperty("aic.bigdata.stream.maxTweetCount");
+		if (StringUtils.isEmpty(count)) {
+			return Integer.MAX_VALUE;
+		}
+		return new Integer(count);
 	}
 
 	// aic.bigdata.stream.addDBUsers
