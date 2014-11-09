@@ -92,6 +92,8 @@ public class TwitterStreamJob implements TweetProvider {
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
 		hosebirdEndpoint.languages(langs);
+		hosebirdEndpoint.addQueryParameter("with", "following");
+		hosebirdEndpoint.addQueryParameter("replies","all");
 
 		String s = String.format("Followers(%s): %s ", followings.size(), StringUtils.join(followings, ","));
 		System.out.println(s);
