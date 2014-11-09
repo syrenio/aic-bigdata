@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.Status;
 import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
 
@@ -45,10 +46,23 @@ public class MongoDatabase {
 		return c;
 	}
 
-	public boolean checkUserExists(User user) {
+	public boolean checkUserExists(User user) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
 		DBObject f = new BasicDBObject();
-		f.put("name", user.getName());
+		f.put("id", user.getId());
 		DBObject o = this.users.findOne(f);
+		return o != null;
+	}
+
+	public boolean checkTweetExists(Status status) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
+		DBObject f = new BasicDBObject();
+		f.put("id", status.getId());
+		DBObject o = this.tweets.findOne(f);
 		return o != null;
 	}
 
@@ -79,20 +93,25 @@ public class MongoDatabase {
 		return list;
 	}
 
-	private void createTweetsIndex(){
+	private void createIndexies() {
+		createUniqueIndex("id", this.users);
+		createUniqueIndex("id", this.tweets);
+	}
+
+	private void createUniqueIndex(String name, DBCollection col) {
 		DBObject idx = new BasicDBObject("id", 1);
-		DBObject opt = new BasicDBObject("unique",true);
+		DBObject opt = new BasicDBObject("unique", true);
 		opt.put("name", "uq_id_idx");
-		//index exists
-		List<DBObject> list =  this.tweets.getIndexInfo();
-		for(DBObject i : list){
-			if(i.get("name").equals("uq_id_idx")){
+		// index exists
+		List<DBObject> list = col.getIndexInfo();
+		for (DBObject i : list) {
+			if (i.get("name").equals("uq_id_idx")) {
 				return;
 			}
 		}
-		this.tweets.createIndex(idx,opt);
+		col.createIndex(idx, opt);
 	}
-	
+
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
@@ -100,7 +119,7 @@ public class MongoDatabase {
 		this.database = mongoclient.getDB(mongodbname);
 		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
-		createTweetsIndex();
+		createIndexies();
 		this.init = true;
 	}
 

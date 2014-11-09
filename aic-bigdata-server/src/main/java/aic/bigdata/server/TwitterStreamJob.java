@@ -137,6 +137,9 @@ public class TwitterStreamJob implements TweetProvider {
 					} catch (TwitterException e) {
 						System.err.println("Error creating Status Object: " + msg);
 						e.printStackTrace();
+					} catch (UnknownHostException e) {
+						System.err.println("Error with mongoDB/collections: " + msg);
+						e.printStackTrace();
 					}
 				}
 
