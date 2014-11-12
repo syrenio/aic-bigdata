@@ -111,20 +111,32 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		params.put("aUserId", retweeter.getId());
 		params.put("bUserId", original.getId());
 
-		ExecutionResult result = cypherEngine.execute(getRetweetsCountQ, params);
-		List<String> cols = result.columns();
-		if (cols.size() == 1) {
-			System.out.println("TweetToNeo4JHandler: Creating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
-			result = cypherEngine.execute(createRetweetsRelationshipQ, params);
+		ExecutionResult result;
+		// why do we need a Transaction object we then ignore? ask the neo4j docs, good luck!
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(getRetweetsCountQ, params);
 		}
-		else if (cols.size() > 2) {
-			System.err.println("TweetToNeo4JHandler: More than one relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId() + " in Neo4J DB");
-		}
-		else { // retweets relationship exists, needs to be updated
-			System.out.println("TweetToNeo4JHandler: Updating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
-			//System.out.println(cols.get(1));
-			params.put("currentCount", cols.get(1));
-			result = cypherEngine.execute(updateRetweetsCountQ, params);
+
+		try (Transaction tx = graphDb.beginTx()) {
+			List<String> cols = result.columns();
+			if (cols.size() == 1) {
+				System.out.println("TweetToNeo4JHandler: Creating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
+				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
+			}
+			else if (cols.size() > 2) {
+				System.err.println("TweetToNeo4JHandler: More than one relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId() + " in Neo4J DB");
+			}
+			else { // retweets relationship exists, needs to be updated
+				System.out.println("TweetToNeo4JHandler: Updating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
+				//System.out.println(cols.get(1));
+				params.put("currentCount", cols.get(1));
+				result = cypherEngine.execute(updateRetweetsCountQ, params);
+				if (result.columns().size() != 2) {
+					System.err.println("TweetToNeo4JHandler: Could not update relationship \"retweets\" (?)");
+				}
+			}
+
+			tx.success();
 		}
 
 		//System.out.println("TweetToNeo4JHandler: result: \"" + result.dumpToString() + "\"");
