@@ -16,8 +16,12 @@ public class UserToMongoDBHandler implements TweetHandler {
 	}
 
 	@Override
-	public void HandleStatusTweet(Status status, String tweet) {
-		internalHandleTweet(status.getUser());
+	public void HandleStatusTweet(Status status, String tweet)
+			throws UnknownHostException {
+
+		if (!mongodb.checkUserExists(status.getUser())) {
+			internalHandleTweet(status.getUser());
+		}
 	}
 
 	@Override

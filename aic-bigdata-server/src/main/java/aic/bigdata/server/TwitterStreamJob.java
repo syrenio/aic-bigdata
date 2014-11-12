@@ -92,6 +92,8 @@ public class TwitterStreamJob implements TweetProvider {
 		hosebirdEndpoint.followings(followings);
 		hosebirdEndpoint.trackTerms(terms);
 		hosebirdEndpoint.languages(langs);
+		hosebirdEndpoint.addQueryParameter("with", "following");
+		hosebirdEndpoint.addQueryParameter("replies","all");
 
 		String s = String.format("Followers(%s): %s ", followings.size(), StringUtils.join(followings, ","));
 		System.out.println(s);
@@ -136,6 +138,9 @@ public class TwitterStreamJob implements TweetProvider {
 						counter++;
 					} catch (TwitterException e) {
 						System.err.println("Error creating Status Object: " + msg);
+						e.printStackTrace();
+					} catch (UnknownHostException e) {
+						System.err.println("Error with mongoDB/collections: " + msg);
 						e.printStackTrace();
 					}
 				}

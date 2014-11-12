@@ -16,19 +16,23 @@ public class TweetToMongoDBHandler implements TweetHandler {
 	}
 
 	@Override
-	public void HandleStatusTweet(Status status, String tweet) {
-		internalHandleTweet(tweet);
+	public void HandleStatusTweet(Status status, String tweet)
+			throws UnknownHostException {
+
+		if (!mongodb.checkTweetExists(status)) {
+			internalHandleTweet(tweet);
+		}
 	}
 
 	@Override
 	public void HandleTweet(String tweet) {
 		internalHandleTweet(tweet);
 	}
-	
-	public int getCount()
-	{
+
+	public int getCount() {
 		return this.tweetsLogged;
 	}
+
 	private void internalHandleTweet(String tweet) {
 		try {
 			this.mongodb.writeTweet(tweet);
