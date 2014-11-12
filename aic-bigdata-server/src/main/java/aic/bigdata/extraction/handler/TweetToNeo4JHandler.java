@@ -21,12 +21,15 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.cypher.javacompat.ExecutionEngine;
+import org.neo4j.cypher.javacompat.ExecutionResult;
 
 public class TweetToNeo4JHandler implements TweetHandler {
 	private int tweetsLogged = 0;
 	private GraphDatabaseService graphDb;
 	private Index<Node> userIndex;
 	private ServerConfig config;
+	private ExecutionEngine cypherEngine;
 
 /*
 	private static enum RelTypes implements RelationshipType {
@@ -34,6 +37,9 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		RETWEETS
 	}
 */
+
+	// cypher query strings
+	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = '{aUserId}' AND b.userId = '{bUserId}' CREATE (a)-[r:retweets]-(b) RETURN r";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -52,13 +58,20 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			tx.success();
 		}
+
+		cypherEngine = new ExecutionEngine(graphDb);
 	}
 
 	@Override
 	public void HandleStatusTweet(Status status, String tweet) {
+		System.out.println("TweetToNeo4JHandler: got tweet");
 		User user = status.getUser();
 		addUser(user);
 		//addFriends(user);
+		if (status.isRetweet()) {
+			//addUser(status.getRetweetedStatus().getUser());
+			//addRetweetsRelationship(user, status.getRetweetedStatus().getUser());
+		}
 
 		tweetsLogged++;
 	}
@@ -73,7 +86,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				userNode.setProperty("userName", user.getName());
 				userNode.addLabel(DynamicLabel.label("user"));
 
-				//System.out.println("TweetToNeo4JHandler: Adding user \"" + user.getName() + "\" (" + user.getId() + ")");
+				System.out.println("TweetToNeo4JHandler: Adding user \"" + user.getName() + "\" (" + user.getId() + ")");
 
 				userIndex.add(userNode, "userId", userNode.getProperty("userId"));
 			}
@@ -84,6 +97,16 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			tx.success();
 		}
+	}
+
+	private void addRetweetsRelationship(User retweeter, User original) {
+		System.out.println("TweetToNeo4JHandler: User \"" + retweeter.getName() + "\" retweetet User \"" + original.getName() + "\"");
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("aUserId", retweeter.getId());
+		params.put("bUserId", original.getId());
+
+		ExecutionResult result = cypherEngine.execute(createRetweetsRelationshipQ, params);
 	}
 
 	private void addFriends(User user) {
