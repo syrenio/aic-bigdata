@@ -43,7 +43,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	// cypher query strings
 	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
 	final static private String getRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
-	final static private String updateRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + {currentCount} RETURN r";
+	final static private String updateRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -124,20 +124,24 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			if (iterator.hasNext()) {
 				Map<String, Object> map = iterator.next();
-				params.put("currentCount", map.get("r.count"));
+				//params.put("currentCount", map.get("r.count"));
 				result = cypherEngine.execute(updateRetweetsCountQ, params);
 				if (iterator.hasNext()) {
 					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				}
 				iterator.close();
 				iterator = result.iterator();
-				if (!iterator.hasNext()) {
+				if (iterator.hasNext()) {
+					Map<String, Object> updatedMap = iterator.next();
+					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
+				}
+				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				}
 				iterator.close();
 			}
 			else {
-				//System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
 			}
 
