@@ -11,8 +11,9 @@ Start
 
 - Install Gradle http://www.gradle.org/
 - gradle build
-- gradle appRun   <-- WebServer
-- gradle main   <-- start Console version
+- gradle appRun          <-- WebServer
+- gradle main            <-- start Console version
+- gradle neo4jExtraction <-- extract graph from mongodb
 
 MongoDB
 -----------

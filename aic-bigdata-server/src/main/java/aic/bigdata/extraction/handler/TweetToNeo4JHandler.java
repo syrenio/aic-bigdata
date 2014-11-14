@@ -24,6 +24,7 @@ import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
+import org.neo4j.graphdb.ResourceIterator;
 
 public class TweetToNeo4JHandler implements TweetHandler {
 	private int tweetsLogged = 0;
@@ -42,7 +43,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	// cypher query strings
 	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
 	final static private String getRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
-	final static private String updateRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + {currentCount}";
+	final static private String updateRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + {currentCount} RETURN r";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -112,28 +113,32 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		params.put("bUserId", original.getId());
 
 		ExecutionResult result;
+
 		// why do we need a Transaction object we then ignore? ask the neo4j docs, good luck!
 		try (Transaction ignoreMe = graphDb.beginTx()) {
 			result = cypherEngine.execute(getRetweetsCountQ, params);
 		}
 
 		try (Transaction tx = graphDb.beginTx()) {
-			List<String> cols = result.columns();
-			if (cols.size() == 1) {
-				System.out.println("TweetToNeo4JHandler: Creating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
-				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
-			}
-			else if (cols.size() > 2) {
-				System.err.println("TweetToNeo4JHandler: More than one relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId() + " in Neo4J DB");
-			}
-			else { // retweets relationship exists, needs to be updated
-				System.out.println("TweetToNeo4JHandler: Updating relationship \"retweets\" user " + retweeter.getId() + " -> user " + original.getId());
-				//System.out.println(cols.get(1));
-				params.put("currentCount", cols.get(1));
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+
+			if (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+				params.put("currentCount", map.get("r.count"));
 				result = cypherEngine.execute(updateRetweetsCountQ, params);
-				if (result.columns().size() != 2) {
-					System.err.println("TweetToNeo4JHandler: Could not update relationship \"retweets\" (?)");
+				if (iterator.hasNext()) {
+					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				}
+				iterator.close();
+				iterator = result.iterator();
+				if (!iterator.hasNext()) {
+					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				}
+				iterator.close();
+			}
+			else {
+				//System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
 			}
 
 			tx.success();
