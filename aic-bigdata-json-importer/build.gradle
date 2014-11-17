@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: "groovy"
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+		compile 'com.gmongo:gmongo:1.3'
+		compile 'org.mongodb:mongo-java-driver:2.12.4'
+		compile 'org.codehaus.groovy:groovy-all:2.3.0'
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+
+test {
+    systemProperties 'property': 'value'
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+
+
+task main(type:JavaExec, dependsOn: build){
+	main = "aic.bigdata.importer.Importer"
+	classpath = sourceSets.main.runtimeClasspath
+}
