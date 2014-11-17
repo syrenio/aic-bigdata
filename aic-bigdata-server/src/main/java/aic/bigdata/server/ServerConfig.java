@@ -1,6 +1,7 @@
 package aic.bigdata.server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -90,10 +91,14 @@ public class ServerConfig {
 	}
 
 	public List<Long> getFollowers() {
-		String[] strlist = server.getProperty("aic.bigdata.stream.followers").split(",");
+		List<String> fol = new ArrayList<String>();
+		String strFol = server.getProperty("aic.bigdata.stream.followers");
+		if(!StringUtils.isEmpty(strFol)){
+			fol = Arrays.asList(strFol.split(","));
+		}
 		List<Long> longlist = new ArrayList<Long>();
-		for (int i = 0; i < strlist.length; i++) {
-			String entry = strlist[i];
+		for (int i = 0; i < fol.size(); i++) {
+			String entry = fol.get(i);
 			if ("".equals(entry))
 				continue;
 
@@ -151,6 +156,14 @@ public class ServerConfig {
 
 	public String getMongoCollectionUsers() {
 		return mongo.getProperty("mongo.collection.users");
+	}
+	
+	public String getMongoCollectionAds() {
+		return mongo.getProperty("mongo.collection.ads");
+	}
+	
+	public String getMongoCollectionTopics() {
+		return mongo.getProperty("mongo.collection.topics");
 	}
 
 	private Configuration getConfigForTwitter4J() {
