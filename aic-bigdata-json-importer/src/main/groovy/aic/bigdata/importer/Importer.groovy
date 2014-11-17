@@ -13,6 +13,7 @@ class Importer {
 	private static Integer mongoPort = 27017
 	private static String mongoDB = "ImportDB"
 	private static String tweetsColleciton = "ImportTweets"
+	private static Integer stepSize = 1000000 // 1.000.000
 
 
 
@@ -22,16 +23,18 @@ class Importer {
 		def db  = mongo.getDB(mongoDB)
 		def col = db.getCollection(tweetsColleciton)
 		def slurp = new JsonSlurper()
-
+		
 		def f = new File(file)
+		def count = 0
 		f.eachLine {
-			println it
 			if(!it.isNumber()){
 				DBObject obj = JSON.parse(it)
-				//println obj
 				col.insert(obj)
-				//sleep(1000)
 			}
+			if(count%stepSize==0){
+				println count/stepSize
+			}
+			count++
 		}
 	}
 }
