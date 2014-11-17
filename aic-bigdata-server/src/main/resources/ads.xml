@@ -1,0 +1,77 @@
+<ads>
+	<ad id="1">
+		<name>Bacon Vodka</name>
+		<company>Bakon Vodka</company>
+		<campaign></campaign>
+		<text>Bakon, a bacon-infused vodka, is a sure sign of the end times for the bacon craze. The taste of bacon is meant to fill your stomach and please your palate, not empty the former and obliterate the latter.</text>
+		<topic>Beverages</topic>
+		<topic>Alcohol</topic>
+		<credits>100</credits>
+		<picture>http://d2xkgi1p28g9gr.cloudfront.net/lc4EL00Ya9scC9uS1hh1YW3k138=/992x744/smart/etch-production.s3.amazonaws.com/assets/posts/67/86/00/6786000000000000.jpg</picture>
+	</ad>
+	<ad id="2">
+		<name>Bacon Air Freshener</name>
+		<company></company>
+		<campaign></campaign>
+		<text>Bacon smells great, but only when you're about to eat it, eating it or just finished eating it. The smell of bacon, on the other hand, freshens nothing sans cooking, eating or some combination of the two.</text>
+		<topic>Fun</topic>
+		<topic>Home</topic>
+		<credits>50</credits>
+		<picture>http://d2xkgi1p28g9gr.cloudfront.net/8_cSPqspulhrk0DAIhPLDjOmtGo=/992x744/smart/etch-production.s3.amazonaws.com/assets/posts/ab/56/00/ab56000000000000.jpg</picture>
+	</ad>
+	<ad id="3">
+		<name>Bacon Toothpaste</name>
+		<company></company>
+		<campaign></campaign>
+		<text>Like the lip balm, we're pretty sure you'll eat the entire tube before any of it touches your teeth with the intent to clean. Yes, it's real toothpaste and will actually clean your mouth and fight cavities, but gross.</text>
+		<topic>Cleaning</topic>
+		<topic>Home</topic>
+		<credits>50</credits>
+		<picture>http://d2xkgi1p28g9gr.cloudfront.net/J9l-TPyycABFUy0wF9CcdcCf5EY=/992x744/smart/etch-production.s3.amazonaws.com/assets/posts/2c/56/00/2c56000000000000.jpg</picture>
+	</ad>
+	<ad id="4">
+		<name>Volkswagen USA</name>
+		<company>Volkswagen USA</company>
+		<campaign>Big 2014 car campaign</campaign>
+		<text>The 21st Century #VWBeetle was just revealed. Check out the revolutionary new take on the iconic design at http://vwoa.us/hZdaLm</text>
+		<topic>Car</topic>
+		<topic>Automobile</topic>
+		<credits>50</credits>
+	</ad>
+	<ad id="5">
+		<name>Google</name>
+		<company>Google</company>
+		<campaign></campaign>
+		<text>Search: now faster than the speed of type. Introducing Google Instant http://bit.ly/cgHv2Y</text>
+		<topic>Internet</topic>
+		<topic>Computer</topic>
+		<credits>500</credits>
+	</ad>
+	<ad id="6">
+		<name>Old Spice</name>
+		<company>Old Spice</company>
+		<campaign></campaign>
+		<text>Hello ladies! Let my newest commercial take you on a scent vacation. http://www.youtube.com/OldSpice #scentvacation</text>
+		<topic>Fragrance</topic>
+		<topic>Care</topic>
+		<credits>150</credits>
+	</ad>
+	<ad id="7">
+		<name>Ford</name>
+		<company>Ford Motor Company</company>
+		<campaign></campaign>
+		<text>Have you heard? The 2012 @Ford Mustang Boss 302 was revealed today! http://cot.ag/cegLYB</text>
+		<topic>Car</topic>
+		<topic>Automobile</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="8">
+		<name>Papa John's Pizza</name>
+		<company>Papa John's</company>
+		<campaign></campaign>
+		<text>Happy Valentine's Day!! Show some love for your Valentine with a #HeartShapedPizza. Order at http://bit.ly/ff0Oc0 http://twitpic.com/3zl47p</text>
+		<topic>Food</topic>
+		<topic>Fast Food</topic>
+		<credits>40</credits>
+	</ad>
+</ads>

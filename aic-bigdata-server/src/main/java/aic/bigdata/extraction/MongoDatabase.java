@@ -26,12 +26,14 @@ public class MongoDatabase {
 	private boolean init = false;
 	private DBCollection users;
 	private Gson gson;
+	private DBCollection ads;
+	private DBCollection topics;
 
 	public MongoDatabase(ServerConfig cfg) {
 		this.gson = new Gson();
 		this.cfg = cfg;
 	}
-
+	
 	public void writeTweet(String tweet) throws UnknownHostException {
 		if (!init)
 			intialize();
@@ -92,10 +94,24 @@ public class MongoDatabase {
 		}
 		return list;
 	}
+	
+	public void writeAd(String ad) throws UnknownHostException {
+		if (!init)
+			intialize();
+		DBObject o = (DBObject) JSON.parse(ad);
+		this.ads.insert(o);
+	}
+	
+	public List<String> readAllTopics(String topic) throws UnknownHostException {
+		//TODO fetch all topics available in the db
+		return null;
+	}
 
 	private void createIndexies() {
 		createUniqueIndex("id", this.users);
 		createUniqueIndex("id", this.tweets);
+		createUniqueIndex("id", this.ads);
+		createUniqueIndex("name", this.topics);
 	}
 
 	private void createUniqueIndex(String name, DBCollection col) {
@@ -111,7 +127,7 @@ public class MongoDatabase {
 		}
 		col.createIndex(idx, opt);
 	}
-
+	
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
@@ -119,6 +135,8 @@ public class MongoDatabase {
 		this.database = mongoclient.getDB(mongodbname);
 		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
+		this.ads = database.getCollection(cfg.getMongoCollectionAds());
+		this.topics= database.getCollection(cfg.getMongoCollectionTopics());
 		createIndexies();
 		this.init = true;
 	}

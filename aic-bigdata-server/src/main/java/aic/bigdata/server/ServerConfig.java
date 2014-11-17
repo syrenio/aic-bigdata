@@ -157,6 +157,14 @@ public class ServerConfig {
 	public String getMongoCollectionUsers() {
 		return mongo.getProperty("mongo.collection.users");
 	}
+	
+	public String getMongoCollectionAds() {
+		return mongo.getProperty("mongo.collection.ads");
+	}
+	
+	public String getMongoCollectionTopics() {
+		return mongo.getProperty("mongo.collection.topics");
+	}
 
 	private Configuration getConfigForTwitter4J() {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
