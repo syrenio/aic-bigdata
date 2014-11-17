@@ -1,5 +1,12 @@
 package aic.bigdata.extraction;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import aic.bigdata.enrichment.AdsTopicsToMongoDBFiller;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
@@ -41,14 +48,25 @@ public class ExtractionRunner {
 	        TweetHandler handler = new TweetToNeo4JHandler(config);
 		return handler;
 	}
+	
+	private static void FillAdsTopicDatabase() {
+		AdsTopicsToMongoDBFiller filler = new AdsTopicsToMongoDBFiller(new MongoDatabase(config));
+        try {
+			filler.fillDatabase();
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
-
+		FillAdsTopicDatabase();
+		
 		TweetProvider p = CreateTweetProviderForTwitterExtraction();
 		// TweetProvider p = CreateMongoDbTweetProvier();
 		// p.addTweetHandler(new TweetToFileHandler(config.getOutputFile()));
 		// p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
-
+		
 		TweetHandler handler = CreateUserToMongoDBHandler();
 		TweetHandler handler2 = CreateTweetToMongoDBHandler();
 		TweetHandler neo4jHandler = CreateTweetToNeo4JHandler();
@@ -57,6 +75,7 @@ public class ExtractionRunner {
 		p.addTweetHandler(neo4jHandler);
 
 		p.run();
+
 		// System.out.print("Logged Tweets: "+ handler.getCount());
 	}
 
