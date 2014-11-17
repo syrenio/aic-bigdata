@@ -19,3 +19,4 @@ quartz-web-test/
 .idea/
 
 *~
+mongodata/
