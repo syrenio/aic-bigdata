@@ -80,18 +80,26 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			Status retweeted = status.getRetweetedStatus();
 			addUser(retweeted.getUser());
 			addRetweetsRelationship(user, retweeted.getUser());
+			//searchTweetForTopics(status); // ?
 			HandleStatusTweet(retweeted, retweeted.getSource());
 		}
 
 		tweetsLogged++;
 	}
 
-	private void addUser(User user) {
-		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> hits = userIndex.get("userId", user.getId());
+/*
+	private void searchTweetForTopics(Status status) {
+		for topic in topics
+			if topic in tweet
+				addMentionsRelationship(status.getUser(), topic);
+	}
+*/
 
-			if (hits.size() == 0) {
+	private void addUser(User user) {
+		if (nodeForUserExists(user)) {
+			try (Transaction tx = graphDb.beginTx()) {
 				Node userNode = graphDb.createNode();
+
 				userNode.setProperty("userId", user.getId());
 				userNode.setProperty("userName", user.getName());
 				userNode.setProperty("friendsCount", user.getFriendsCount());
@@ -101,18 +109,22 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				//System.out.println("TweetToNeo4JHandler: Adding user \"" + user.getName() + "\" (" + user.getId() + ")");
 
 				userIndex.add(userNode, "userId", userNode.getProperty("userId"));
-			}
-			else if (hits.size() > 1) {
-				System.err.println("TweetToNeo4JHandler: more than one user with userId " + user.getId() + " in Neo4J DB");
-			}
-			// if hits.size() was 1 we already had a node for that user
 
-			tx.success();
+				tx.success();
+			}
+		}
+		else {
+			System.err.println("TweetToNeo4JHandler: more than one user with userId " + user.getId() + " in Neo4J DB");
 		}
 	}
 
 	private void addRetweetsRelationship(User retweeter, User original) {
 		//System.out.println("TweetToNeo4JHandler: User \"" + retweeter.getName() + "\" retweeted User \"" + original.getName() + "\"");
+
+		if (!nodeForUserExists(retweeter) && !nodeForUserExists(original)) {
+			System.err.println("TweetToNeo4JHandler: Cannot create relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") because one of the users does not exist in the graph");
+			return;
+		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("aUserId", retweeter.getId());
@@ -155,27 +167,55 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		}
 	}
 
-	private void addTopic(String topic) {
+	private boolean nodeForTopicExists(String topic) {
+		boolean exists = false;
+
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> hits = topicIndex.get("topic", topic);
 
-			if (hits.size() == 0) {
+			exists = hits.size() == 0;
+			tx.success();
+		}
+
+		return exists;
+	}
+
+	private boolean nodeForUserExists(User user) {
+		boolean exists = false;
+
+		try (Transaction tx = graphDb.beginTx()) {
+			IndexHits<Node> hits = userIndex.get("userId", user.getId());
+
+			exists = hits.size() == 0;
+			tx.success();
+		}
+
+		return exists;
+	}
+
+	private void addTopic(String topic) {
+		if (nodeForTopicExists(topic)) {
+			try (Transaction tx = graphDb.beginTx()) {
 				Node topicNode = graphDb.createNode();
 				topicNode.setProperty("topic", topic);
 				topicNode.addLabel(DynamicLabel.label("topic"));
 
 				topicIndex.add(topicNode, "topic", topicNode.getProperty("topic"));
-			}
-			else if (hits.size() > 1) {
-				System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
-			}
-			// if hits.size() was 1 we already had a node for that topic
 
-			tx.success();
+				tx.success();
+			}
+		}
+		else  {
+			System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
 		}
 	}
 
 	private void addMentionsRelationship(User user, String topic) {
+		if (!nodeForUserExists(user) && !nodeForTopicExists(topic)) {
+			System.err.println("TweetToNeo4JHandler: Cannot create relationship (user " + user.getId() + ")-[mentions]->(topic " + topic + ") because either the user or the topic does not exist in the graph");
+			return;
+		}
+
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", user.getId());
 		params.put("topic", topic);
@@ -218,7 +258,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 	@Override
 	public void HandleTweet(String tweet) {
-		System.out.println("TweetToNeo4JHandler: Warning: Somebody called HandleTweet on me, but I won't do anything with the tweet you gave me.");
+		System.out.println("TweetToNeo4JHandler: Warning: Somebody called HandleTweet on me, but I won't do anything with the tweet you gave me");
 	}
 
 	public int getCount() {
