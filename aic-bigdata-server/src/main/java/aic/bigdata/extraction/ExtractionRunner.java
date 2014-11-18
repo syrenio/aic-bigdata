@@ -9,7 +9,6 @@ import org.xml.sax.SAXException;
 import aic.bigdata.enrichment.AdsTopicsToMongoDBFiller;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.UserToMongoDBHandler;
-import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 import aic.bigdata.server.ServerConfig;
 import aic.bigdata.server.TwitterStreamJob;
@@ -43,11 +42,6 @@ public class ExtractionRunner {
 		TweetHandler handler = new UserToMongoDBHandler(b);
 		return handler;
 	}
-
-	private static TweetHandler CreateTweetToNeo4JHandler() {
-	        TweetHandler handler = new TweetToNeo4JHandler(config);
-		return handler;
-	}
 	
 	private static void FillAdsTopicDatabase() {
 		AdsTopicsToMongoDBFiller filler = new AdsTopicsToMongoDBFiller(new MongoDatabase(config));
@@ -69,10 +63,8 @@ public class ExtractionRunner {
 		
 		TweetHandler handler = CreateUserToMongoDBHandler();
 		TweetHandler handler2 = CreateTweetToMongoDBHandler();
-		TweetHandler neo4jHandler = CreateTweetToNeo4JHandler();
 		p.addTweetHandler(handler);
 		p.addTweetHandler(handler2);
-		p.addTweetHandler(neo4jHandler);
 
 		p.run();
 
