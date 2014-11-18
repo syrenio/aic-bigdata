@@ -30,15 +30,9 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	private int tweetsLogged = 0;
 	private GraphDatabaseService graphDb;
 	private Index<Node> userIndex;
+	private Index<Node> topicIndex;
 	private ServerConfig config;
 	private ExecutionEngine cypherEngine;
-
-/*
-	private static enum RelTypes implements RelationshipType {
-		FOLLOWS,
-		RETWEETS
-	}
-*/
 
 	// cypher query strings
 	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
@@ -59,6 +53,12 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 		try (Transaction tx = graphDb.beginTx()) {
 			userIndex = indexManager.forNodes("users");
+
+			tx.success();
+		}
+
+		try (Transaction tx = graphDb.beginTx()) {
+			topicIndex = indexManager.forNodes("topics");
 
 			tx.success();
 		}
@@ -90,6 +90,8 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				Node userNode = graphDb.createNode();
 				userNode.setProperty("userId", user.getId());
 				userNode.setProperty("userName", user.getName());
+				userNode.setProperty("friendsCount", user.getFriendsCount());
+				userNode.setProperty("followersCount", user.getFollowersCount());
 				userNode.addLabel(DynamicLabel.label("user"));
 
 				//System.out.println("TweetToNeo4JHandler: Adding user \"" + user.getName() + "\" (" + user.getId() + ")");
@@ -129,11 +131,11 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				if (iterator.hasNext()) {
 					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				}
-				iterator.close();
+				iterator.close();	
 				iterator = result.iterator();
 				if (iterator.hasNext()) {
 					Map<String, Object> updatedMap = iterator.next();
-					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
+					//System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
 				}
 				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
@@ -141,34 +143,32 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				iterator.close();
 			}
 			else {
-				System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				//System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
 			}
 
 			tx.success();
 		}
-
-		//System.out.println("TweetToNeo4JHandler: result: \"" + result.dumpToString() + "\"");
 	}
 
-/*
-	private void addFriends(User user) {
-		try {
-			IDs ids = config.getTwitter4JInstance().getFriendsIDs(user.getId(), -1);
-			addFriendsFromIDs(user, ids.getIDs());
-			while (ids.hasNext()) {
-				ids = config.getTwitter4JInstance().getFriendsIDs(user.getId(), ids.getNextCursor());
-				addFriendsFromIDs(user, ids.getIDs());
+	private void addTopic(String topic) {
+		try (Transaction tx = graphDb.beginTx()) {
+			IndexHits<Node> hits = topicIndex.get("topic", topic);
+
+			if (hits.size() == 0) {
+				Node topicNode = graphDb.createNode();
+				topicNode.setProperty("topic", topic);
+				topicNode.addLabel(DynamicLabel.label("topic"));
+
+				topicIndex.add(topicNode, "topic", topicNode.getProperty("topic"));
 			}
-		}
-		catch (TwitterException te) {
-			te.printStackTrace();
-		}
-	}
-*/
+			else if (hits.size() > 1) {
+				System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
+			}
+			// if hits.size() was 1 we already had a node for that topic
 
-	private void addFriendsFromIDs(User user, long[] ids) {
-		System.out.println("TweetToNeo4JHandler: Adding " + ids.length + " friends for user \"" + user.getName() + "\"");
+			tx.success();
+		}
 	}
 
 	@Override
