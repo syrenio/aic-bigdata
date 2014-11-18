@@ -36,8 +36,12 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 	// cypher query strings
 	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
-	final static private String getRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
-	final static private String updateRetweetsCountQ = "MATCH (a)-[r:retweets]->(b) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
+	final static private String getRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
+	final static private String updateRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
+
+	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
+	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
+	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -170,6 +174,47 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			tx.success();
 		}
 	}
+
+	private void addMentionsRelationship(User user, String topic) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", user.getId());
+		params.put("topic", topic);
+
+		ExecutionResult result;
+
+		// why do we need a Transaction object we then ignore? ask the neo4j docs, good luck!
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(getMentionsCountQ, params);
+		}
+
+		try (Transaction tx = graphDb.beginTx()) {
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+
+			if (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+
+				result = cypherEngine.execute(updateMentionsCountQ, params);
+				if (iterator.hasNext()) {
+					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + user.getId() + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
+				}
+				iterator.close();	
+				iterator = result.iterator();
+				if (iterator.hasNext()) {
+					Map<String, Object> updatedMap = iterator.next();
+				}
+				else {
+					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + user.getId() + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
+				}
+				iterator.close();
+			}
+			else {
+				result = cypherEngine.execute(createMentionsRelationshipQ, params);
+			}
+
+			tx.success();
+		}
+	}
+
 
 	@Override
 	public void HandleTweet(String tweet) {
