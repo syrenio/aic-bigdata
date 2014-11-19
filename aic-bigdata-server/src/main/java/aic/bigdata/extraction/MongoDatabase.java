@@ -102,16 +102,43 @@ public class MongoDatabase {
 		this.ads.insert(o);
 	}
 	
+	public void writeTopic(String topic) throws UnknownHostException {
+		if (!init)
+			intialize();
+		DBObject o = (DBObject) JSON.parse(topic);
+		this.topics.insert(o);
+	}
+	
 	public List<String> readAllTopics(String topic) throws UnknownHostException {
 		//TODO fetch all topics available in the db
 		return null;
 	}
+	
+	public boolean checkTopicExists(String name) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
+		DBObject f = new BasicDBObject();
+		f.put("id", name);
+		DBObject o = this.topics.findOne(f);
+		return o != null;
+	} 
+	
+	public boolean checkAdExists(int id) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
+		DBObject f = new BasicDBObject();
+		f.put("id", id);
+		DBObject o = this.ads.findOne(f);
+		return o != null;
+	} 
 
 	private void createIndexies() {
 		createUniqueIndex("id", this.users);
 		createUniqueIndex("id", this.tweets);
 		createUniqueIndex("id", this.ads);
-		createUniqueIndex("name", this.topics);
+		createUniqueIndex("id", this.topics);
 	}
 
 	private void createUniqueIndex(String name, DBCollection col) {
