@@ -1,6 +1,7 @@
 package aic.bigdata.extraction;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -48,12 +49,23 @@ public class ExtractionRunner {
         try {
 			filler.fillDatabase();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void DeleteSampleAdsTopics() {
+		MongoDatabase b = new MongoDatabase(config);
+		try {
+			b.removeAdsTopics();
+		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args) {
+		//for testing purposes
+		//DeleteSampleAdsTopics();
+		
 		FillAdsTopicDatabase();
 		
 		TweetProvider p = CreateTweetProviderForTwitterExtraction();

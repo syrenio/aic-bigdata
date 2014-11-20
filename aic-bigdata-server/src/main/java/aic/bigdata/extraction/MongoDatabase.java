@@ -9,6 +9,7 @@ import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
 
 import com.google.gson.Gson;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -109,6 +110,49 @@ public class MongoDatabase {
 		this.topics.insert(o);
 	}
 	
+	/**
+	 * Updates a topic by adding or removing an ad id in the "ad" field
+	 * 
+	 * @param topicname
+	 * @param adId
+	 * @param adding Adds an ad id, if true, removes an ad id, if false.
+	 */
+	public void updateTopicAd(String topicname, int adId, boolean adding) {
+		BasicDBObject upd = new BasicDBObject();
+		upd.put("id", topicname);
+		
+		DBObject dbOut =  topics.findOne(upd);
+		BasicDBList adsList = (BasicDBList) dbOut.get("ads");
+		boolean changed = false;
+		
+		if(adding) {
+			if(!adsList.contains(adId)) {
+				adsList.add(adId);
+				changed = true;
+			}
+		} else {
+			if(adsList.contains(adId)) {
+				adsList.remove(new Integer(adId));
+				changed = true;
+			}
+		}
+		
+		//field was modified, thus update db
+		if(changed) {
+			dbOut.put("ads", adsList);
+			topics.findAndModify(upd, dbOut);
+		}
+	}
+	
+	public void removeAdsTopics() throws UnknownHostException {
+		if (!init)
+			intialize();
+
+		ads.remove(new BasicDBObject());
+		topics.remove(new BasicDBObject());
+		
+	}
+
 	public List<String> readAllTopics(String topic) throws UnknownHostException {
 		//TODO fetch all topics available in the db
 		return null;

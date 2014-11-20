@@ -2,7 +2,11 @@ package aic.bigdata.enrichment;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,18 +18,18 @@ import org.xml.sax.SAXException;
 
 import aic.bigdata.extraction.MongoDatabase;
 
+import com.google.gson.Gson;
+
 /**
  * Adds some custom ads and their corresponding topics to MongoDB.
- * 
- * TODO
- * 1. cleaner way to build JSON strings
- * 2. handle multiple topic fields in ad
  */
 public class AdsTopicsToMongoDBFiller {
 	private MongoDatabase mongodb;
+	private Gson gson;
 
 	public AdsTopicsToMongoDBFiller(MongoDatabase mongodb) {
 		this.mongodb = mongodb;
+		this.gson = new Gson();
 	}
 
 	public void fillDatabase() throws ParserConfigurationException, SAXException, IOException {
@@ -36,14 +40,23 @@ public class AdsTopicsToMongoDBFiller {
         
         for(int i=0; i<doc.getChildNodes().item(0).getChildNodes().getLength(); i++) {
         	if(doc.getChildNodes().item(0).getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
-        		this.addAdToDatabase(doc.getChildNodes().item(0).getChildNodes().item(i));
+        		this.addToDatabase(doc.getChildNodes().item(0).getChildNodes().item(i));
         	}
         	
         }
+        System.out.println("Sample ads and topics added to MongoDB");
 	}
 	
-	public void addAdToDatabase(Node node) throws UnknownHostException {
-		String json = this.buildAdJSON(node);
+	private void addToDatabase(Node node) throws UnknownHostException {
+		AdObject ad = this.getAd(node);
+		String json = gson.toJson(ad);
+
+		if(ad.getTopics() != null) {
+			for(int i=0; i<ad.getTopics().size(); i++) {
+				this.addAdToTopic(ad.getTopics().get(i), ad.getId());
+			}
+		}
+		
 		if(json != null) {
 			mongodb.writeAd(json);
 		}
@@ -52,48 +65,35 @@ public class AdsTopicsToMongoDBFiller {
 	private void addAdToTopic(String topic, int adId) {
 		try {
 			if(mongodb.checkTopicExists(topic)) {
-				//TODO check if ad if is already in list, if not add ad id to "ads:" property
-				//list: propertyname: [ "Turing machine", "Turing test", "Turingery" ],
+				mongodb.updateTopicAd(topic, adId, true);
 			} else {
-				
-				String json = "{\"id\": \"" + topic + "\", \"ads\": ["+adId+"]}";
-				System.out.println(json);
-				mongodb.writeTopic(json);
-				System.out.println("WROTE");
+				ArrayList<Integer> adList = new ArrayList<>();
+				adList.add(adId);
+				TopicObject topicObject = new TopicObject(topic, adList);
+				mongodb.writeTopic(gson.toJson(topicObject));
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private String buildAdJSON(Node node) {
-		String json = null;
+
+	private AdObject getAd(Node node) {
+		AdObject ad = null;
 		
 		int id = Integer.parseInt(node.getAttributes().getNamedItem("id").getNodeValue());
 		
 		try {
 			if(!mongodb.checkAdExists(id)) {
-				json = "{\"id\": " + id;
+				JAXBContext jc = JAXBContext.newInstance(AdObject.class);
+				Unmarshaller u = jc.createUnmarshaller();
 				
-				for(int i=0; i<node.getChildNodes().getLength(); i++) {
-					if(node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE && !node.getChildNodes().item(i).getTextContent().isEmpty()) {
-						if(node.getChildNodes().item(i).getNodeName().toLowerCase().equals("topic")) {
-							this.addAdToTopic(node.getChildNodes().item(i).getTextContent().toLowerCase(), id);
-						}
-						json += ", \""+node.getChildNodes().item(i).getNodeName()+"\": \""+node.getChildNodes().item(i).getTextContent()+"\"";
-					}
-					
-				}
-				
-				json += "}";
+				ad = (AdObject)u.unmarshal(node);
 
-				System.out.println("ad: "+json);
 			}
-		} catch (UnknownHostException | DOMException e) {
+		} catch (UnknownHostException | DOMException | JAXBException e) {
 			e.printStackTrace();
 		}
-		
-		
-		return json;
+
+		return ad;
 	}	
 }
