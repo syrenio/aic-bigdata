@@ -82,3 +82,8 @@ task neo4jExtraction(type:JavaExec, dependsOn: build){
 	main = "aic.bigdata.extraction.Neo4JExtractionRunner"
 	classpath = sourceSets.main.runtimeClasspath
 }
+
+task tanalysis(type:JavaExec, dependsOn: build){
+	main = "aic.bigdata.enrichment.AnalysisRunner"
+	classpath = sourceSets.main.runtimeClasspath
+}

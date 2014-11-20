@@ -79,6 +79,27 @@ public class MongoDatabase {
 			this.users.insert(o);
 		}
 	}
+	
+	public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
+		BasicDBObject usr = new BasicDBObject();
+		usr.put("user.id", userId);
+		
+		BasicDBObject sort = new BasicDBObject();
+		sort.put("timestamp_ms", -1);
+		
+		DBCursor c = this.tweets.find(usr).sort(sort).limit(latest);
+		String result = "";
+
+		while(c.hasNext()) {
+			String tweet = (String) c.next().get("text");
+			result = new StringBuilder(result).append(" ").append(tweet).toString();
+		}
+		
+		return result;
+	}
 
 	public List<Long> readUserIds(Integer limit) throws UnknownHostException {
 		if (!init)
@@ -116,8 +137,12 @@ public class MongoDatabase {
 	 * @param topicname
 	 * @param adId
 	 * @param adding Adds an ad id, if true, removes an ad id, if false.
+	 * @throws UnknownHostException 
 	 */
-	public void updateTopicAd(String topicname, int adId, boolean adding) {
+	public void updateTopicAd(String topicname, int adId, boolean adding) throws UnknownHostException {
+		if (!init)
+			intialize();
+		
 		BasicDBObject upd = new BasicDBObject();
 		upd.put("id", topicname);
 		
@@ -153,9 +178,19 @@ public class MongoDatabase {
 		
 	}
 
-	public List<String> readAllTopics(String topic) throws UnknownHostException {
-		//TODO fetch all topics available in the db
-		return null;
+	public List<String> readAllTopicsInLowercase() throws UnknownHostException {
+		if (!init)
+			intialize();
+		
+		DBCursor c = topics.find();
+		List<String> topicsList = new ArrayList<String>();
+		
+		while(c.hasNext()) {
+			String topic = (String) c.next().get("id");
+			topicsList.add(topic.toLowerCase());
+		}
+		
+		return topicsList;
 	}
 	
 	public boolean checkTopicExists(String name) throws UnknownHostException {

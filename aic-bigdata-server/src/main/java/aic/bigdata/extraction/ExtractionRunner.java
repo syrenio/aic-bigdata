@@ -7,7 +7,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-import aic.bigdata.enrichment.AdsTopicsToMongoDBFiller;
+import aic.bigdata.enrichment.AdsTopicsToDatabaseFiller;
+import aic.bigdata.enrichment.TopicAnalyzer;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
@@ -43,31 +44,8 @@ public class ExtractionRunner {
 		TweetHandler handler = new UserToMongoDBHandler(b);
 		return handler;
 	}
-	
-	private static void FillAdsTopicDatabase() {
-		AdsTopicsToMongoDBFiller filler = new AdsTopicsToMongoDBFiller(new MongoDatabase(config));
-        try {
-			filler.fillDatabase();
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private static void DeleteSampleAdsTopics() {
-		MongoDatabase b = new MongoDatabase(config);
-		try {
-			b.removeAdsTopics();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public static void main(String[] args) {
-		//for testing purposes
-		//DeleteSampleAdsTopics();
-		
-		FillAdsTopicDatabase();
-		
 		TweetProvider p = CreateTweetProviderForTwitterExtraction();
 		// TweetProvider p = CreateMongoDbTweetProvier();
 		// p.addTweetHandler(new TweetToFileHandler(config.getOutputFile()));

@@ -180,11 +180,11 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		return exists;
 	}
 
-	private boolean nodeForUserExists(User user) {
+	private boolean nodeForUserExists(long userId) {
 		boolean exists = false;
 
 		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> hits = userIndex.get("userId", user.getId());
+			IndexHits<Node> hits = userIndex.get("userId", userId);
 
 			exists = hits.size() == 0;
 			tx.success();
@@ -192,8 +192,12 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 		return exists;
 	}
+	
+	private boolean nodeForUserExists(User user) {
+		return this.nodeForUserExists(user.getId());
+	}
 
-	private void addTopic(String topic) {
+	public void addTopic(String topic) {
 		if (nodeForTopicExists(topic)) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node topicNode = graphDb.createNode();
@@ -206,11 +210,57 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			}
 		}
 		else  {
-			System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
+			//do nothing
+			//System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
 		}
 	}
 
-	private void addMentionsRelationship(User user, String topic) {
+	public void addMentionsRelationship(long userId, String topic) {
+		if (!nodeForUserExists(userId) && !nodeForTopicExists(topic)) {
+			System.err.println("TweetToNeo4JHandler: Cannot create relationship (user " +userId + ")-[mentions]->(topic " + topic + ") because either the user or the topic does not exist in the graph");
+			return;
+		}
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		params.put("topic", topic);
+
+		ExecutionResult result;
+
+		// why do we need a Transaction object we then ignore? ask the neo4j docs, good luck!
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(getMentionsCountQ, params);
+		}
+
+		try (Transaction tx = graphDb.beginTx()) {
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+
+			if (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+
+				result = cypherEngine.execute(updateMentionsCountQ, params);
+				if (iterator.hasNext()) {
+					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + userId + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
+				}
+				iterator.close();	
+				iterator = result.iterator();
+				if (iterator.hasNext()) {
+					Map<String, Object> updatedMap = iterator.next();
+				}
+				else {
+					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + userId + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
+				}
+				iterator.close();
+			}
+			else {
+				result = cypherEngine.execute(createMentionsRelationshipQ, params);
+			}
+
+			tx.success();
+		}
+	}
+	
+	/*public void addMentionsRelationship(User user, String topic) {
 		if (!nodeForUserExists(user) && !nodeForTopicExists(topic)) {
 			System.err.println("TweetToNeo4JHandler: Cannot create relationship (user " + user.getId() + ")-[mentions]->(topic " + topic + ") because either the user or the topic does not exist in the graph");
 			return;
@@ -253,7 +303,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			tx.success();
 		}
-	}
+	}*/
 
 
 	@Override

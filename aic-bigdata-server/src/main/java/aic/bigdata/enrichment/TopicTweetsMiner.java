@@ -3,55 +3,69 @@ package aic.bigdata.enrichment;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
- * Given a list of topics, find all topics that an user is interested in based on his/her tweets content.
+ * Given a list of topics, find all topics that an user is interested in based on 
+ * his/her tweets content.
  * 
  */
 public class TopicTweetsMiner {
 	private List<String> topics;
 	
 	/* 
-	 * Any time the topic surpasses or matches the interest threshold, 
-	 * it can be assumed that the user is interested in that topic.
+	 * Number of times a topic word has to appear in tweets to 
+	 * be considered as interesting for user
 	 */
-	private Integer interestThreshold = 3;
-	private Integer weight = 1;
+	private Integer interestThreshold = 2;
 
 	public TopicTweetsMiner(List<String> topics) {
 		this.topics = topics;
 	}
 	
-	public List<String> getInterestedTopics(List<String> tweetsText) {
-		return this.mineTweetsContents(tweetsText);
+	//additional method, in case there is some other mining/processing stuff to do
+	public List<String> getInterestedTopics(String concatTweet) {
+		return this.mineTweetsContents(concatTweet);
 	}
 	
-	private List<String> mineTweetsContents(List<String> tweetsText) {
+	private List<String> mineTweetsContents(String concatTweet) {
 		List<String> interestedTopics = new ArrayList<String>();
-		
-		//concatenate all tweets to one long string -> performance win?
-		String bigTweet = "";
 
-		for(int i=0; i<tweetsText.size(); i++) {
-			bigTweet += tweetsText.get(i);
-		}
-		
-		//count how many times topics appears in the concatenated tweet
-		
 		for(int i=0; i<topics.size(); i++) {
-			//TODO how to get the amount of times a topic appears in text
+			String substrRem = concatTweet;
+			String substrFirst = "";
+			int count = 0;
+			int lastIndex = concatTweet.indexOf(topics.get(i));
 			
-			//topic matches
-			if(true) {
-				Integer count = 0;
-				count =+ this.weight;
+			while(lastIndex != -1 && count<interestThreshold) {
+				substrFirst = substrRem.substring(0, lastIndex);
+				substrRem = substrRem.substring(lastIndex+topics.get(i).length());
 
-				//if topic count surpasses the interest threshold, it's concluded that user is interested in topic
-				//thus stop counting and go to next topic
-				if(count >= interestThreshold) {
-					interestedTopics.add(topics.get(i));
-					continue;
+				lastIndex = substrRem.indexOf(topics.get(i));
+				
+				boolean isStartLetter = false;
+				boolean isEndLetter = false;
+				
+				//check, if letter after and before the match is another letter
+				//done to avoid matching similar words (e.g. searching for 'car' and getting 'care')
+				if(substrRem.length()>0 && Character.isLetter(substrRem.charAt(0))) {
+					isEndLetter = true;
+				}
+				
+				if(substrFirst.length()>0 && Character.isLetter(substrFirst.charAt(substrFirst.length()-1))) {
+					isStartLetter = true;
+				}
+					
+				if(!isStartLetter && !isEndLetter) {
+					count++;
 				}
 			}
+			
+			if(count >= interestThreshold) {
+				interestedTopics.add(topics.get(i));
+				//System.out.println("user is interested in: "+topics.get(i)+" *** all latest tweets: "+concatTweet);
+				//System.out.println("----------------");
+			}
+			
 		}
 		
 		return interestedTopics;
