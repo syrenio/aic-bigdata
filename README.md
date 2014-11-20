@@ -14,6 +14,7 @@ Start
 - gradle appRun          <-- WebServer
 - gradle main            <-- start Console version
 - gradle neo4jExtraction <-- extract graph from mongodb
+- gradle tanalysis <-- add ads/topics and mine topics
 
 MongoDB
 -----------
