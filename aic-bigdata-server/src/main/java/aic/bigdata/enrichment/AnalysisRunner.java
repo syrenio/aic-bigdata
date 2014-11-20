@@ -9,16 +9,18 @@ import org.xml.sax.SAXException;
 
 import aic.bigdata.extraction.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
+import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
 
 public class AnalysisRunner {
 	private static ServerConfig config;
+	
 	static {
 		config = new ServerConfigBuilder().getConfig();
 	}
 	
-	private static void FillAdsTopicDatabase() {
-		AdsTopicsToDatabaseFiller filler = new AdsTopicsToDatabaseFiller(config);
+	private static void FillAdsTopicDatabase(TweetToNeo4JHandler neo4jHandler) {
+		AdsTopicsToDatabaseFiller filler = new AdsTopicsToDatabaseFiller(config, neo4jHandler);
         try {
 			filler.fillDatabase();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -35,8 +37,8 @@ public class AnalysisRunner {
 		}
 	}
 	
-	private static void AnalyzeTweets() {
-		TopicAnalyzer analyzer = new TopicAnalyzer(config);
+	private static void AnalyzeTweets(TweetToNeo4JHandler neo4jHandler) {
+		TopicAnalyzer analyzer = new TopicAnalyzer(config, neo4jHandler);
 		try {
 			analyzer.analyzeTweets();
 		} catch (UnknownHostException e) {
@@ -45,10 +47,11 @@ public class AnalysisRunner {
 	}
 	
 	public static void main(String[] args) {
+		TweetToNeo4JHandler neo4jHandler = new TweetToNeo4JHandler(config);
 		DeleteSampleAdsTopics();
 		
-		FillAdsTopicDatabase();
+		FillAdsTopicDatabase(neo4jHandler);
 
-		AnalyzeTweets();
+		AnalyzeTweets(neo4jHandler);
 	}
 }

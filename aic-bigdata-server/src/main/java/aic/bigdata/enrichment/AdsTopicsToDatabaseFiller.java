@@ -32,10 +32,10 @@ public class AdsTopicsToDatabaseFiller {
 	private String xmlFilename = "ads.xml";
 	private TweetToNeo4JHandler neo4j;
 
-	public AdsTopicsToDatabaseFiller(ServerConfig config) {
+	public AdsTopicsToDatabaseFiller(ServerConfig config, TweetToNeo4JHandler neo4jHandler) {
 		this.mongodb = new MongoDatabase(config);
 		this.gson = new Gson();
-		this.neo4j = new TweetToNeo4JHandler(config);
+		this.neo4j = neo4jHandler;
 	}
 
 	/**

@@ -23,12 +23,12 @@ public class TopicAnalyzer {
 	/**
 	 * Analyze only the most recent tweets to keep performance manageable.
 	 */
-	private int latestTweetsLimit = 1000;
+	private int latestTweetsLimit = 100;
 	
 	
-	public TopicAnalyzer(ServerConfig config) {
+	public TopicAnalyzer(ServerConfig config, TweetToNeo4JHandler neo4jHandler) {
 		this.mongodb = new MongoDatabase(config);
-		this.neo4jHandler = new TweetToNeo4JHandler(config);
+		this.neo4jHandler = neo4jHandler;
 	}
 	
 	/**
@@ -50,7 +50,6 @@ public class TopicAnalyzer {
 			
 			for(int j=0; j<interests.size(); j++) {
 				neo4jHandler.addMentionsRelationship(userIds.get(i), interests.get(j));
-				System.out.println("user "+userIds.get(i)+" mentioned: "+interests.get(j));
 			}
 		}
 		

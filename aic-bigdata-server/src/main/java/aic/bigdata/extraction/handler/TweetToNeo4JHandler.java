@@ -256,6 +256,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				result = cypherEngine.execute(createMentionsRelationshipQ, params);
 			}
 
+			System.out.println("Relationship between topic " + topic + " and user " + userId + " added to Neo4J.");
 			tx.success();
 		}
 	}
