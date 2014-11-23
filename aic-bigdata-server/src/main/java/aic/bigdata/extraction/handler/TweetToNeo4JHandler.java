@@ -96,7 +96,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 */
 
 	private void addUser(User user) {
-		if (nodeForUserExists(user)) {
+		if (!nodeForUserExists(user)) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node userNode = graphDb.createNode();
 
@@ -114,7 +114,8 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			}
 		}
 		else {
-			System.err.println("TweetToNeo4JHandler: more than one user with userId " + user.getId() + " in Neo4J DB");
+			// turns out this happens a lot. but it is not an error, no need to print this
+			//System.out.println("TweetToNeo4JHandler: User " + user.getId() + " already exists (it is okay to see this message once in a while)");
 		}
 	}
 
@@ -173,7 +174,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> hits = topicIndex.get("topic", topic);
 
-			exists = hits.size() == 0;
+			exists = hits.size() == 1;
 			tx.success();
 		}
 
@@ -186,7 +187,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		try (Transaction tx = graphDb.beginTx()) {
 			IndexHits<Node> hits = userIndex.get("userId", userId);
 
-			exists = hits.size() == 0;
+			exists = hits.size() == 1;
 			tx.success();
 		}
 
