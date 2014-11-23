@@ -34,7 +34,7 @@ public class MongoDatabase {
 		this.gson = new Gson();
 		this.cfg = cfg;
 	}
-	
+
 	public void writeTweet(String tweet) throws UnknownHostException {
 		if (!init)
 			intialize();
@@ -52,7 +52,7 @@ public class MongoDatabase {
 	public boolean checkUserExists(User user) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		DBObject f = new BasicDBObject();
 		f.put("id", user.getId());
 		DBObject o = this.users.findOne(f);
@@ -62,7 +62,7 @@ public class MongoDatabase {
 	public boolean checkTweetExists(Status status) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		DBObject f = new BasicDBObject();
 		f.put("id", status.getId());
 		DBObject o = this.tweets.findOne(f);
@@ -79,25 +79,25 @@ public class MongoDatabase {
 			this.users.insert(o);
 		}
 	}
-	
+
 	public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		BasicDBObject usr = new BasicDBObject();
 		usr.put("user.id", userId);
-		
+
 		BasicDBObject sort = new BasicDBObject();
 		sort.put("timestamp_ms", -1);
-		
+
 		DBCursor c = this.tweets.find(usr).sort(sort).limit(latest);
 		String result = "";
 
-		while(c.hasNext()) {
+		while (c.hasNext()) {
 			String tweet = (String) c.next().get("text");
 			result = new StringBuilder(result).append(" ").append(tweet).toString();
 		}
-		
+
 		return result;
 	}
 
@@ -116,102 +116,103 @@ public class MongoDatabase {
 		}
 		return list;
 	}
-	
+
 	public void writeAd(String ad) throws UnknownHostException {
 		if (!init)
 			intialize();
 		DBObject o = (DBObject) JSON.parse(ad);
 		this.ads.insert(o);
 	}
-	
+
 	public void writeTopic(String topic) throws UnknownHostException {
 		if (!init)
 			intialize();
 		DBObject o = (DBObject) JSON.parse(topic);
 		this.topics.insert(o);
 	}
-	
+
 	/**
 	 * Updates a topic by adding or removing an ad id in the "ad" field
 	 * 
 	 * @param topicname
 	 * @param adId
-	 * @param adding Adds an ad id, if true, removes an ad id, if false.
-	 * @throws UnknownHostException 
+	 * @param adding
+	 *          Adds an ad id, if true, removes an ad id, if false.
+	 * @throws UnknownHostException
 	 */
 	public void updateTopicAd(String topicname, int adId, boolean adding) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		BasicDBObject upd = new BasicDBObject();
 		upd.put("id", topicname);
-		
-		DBObject dbOut =  topics.findOne(upd);
+
+		DBObject dbOut = topics.findOne(upd);
 		BasicDBList adsList = (BasicDBList) dbOut.get("ads");
 		boolean changed = false;
-		
-		if(adding) {
-			if(!adsList.contains(adId)) {
+
+		if (adding) {
+			if (!adsList.contains(adId)) {
 				adsList.add(adId);
 				changed = true;
 			}
 		} else {
-			if(adsList.contains(adId)) {
+			if (adsList.contains(adId)) {
 				adsList.remove(new Integer(adId));
 				changed = true;
 			}
 		}
-		
-		//field was modified, thus update db
-		if(changed) {
+
+		// field was modified, thus update db
+		if (changed) {
 			dbOut.put("ads", adsList);
 			topics.findAndModify(upd, dbOut);
 		}
 	}
-	
+
 	public void removeAdsTopics() throws UnknownHostException {
 		if (!init)
 			intialize();
 
 		ads.remove(new BasicDBObject());
 		topics.remove(new BasicDBObject());
-		
+
 	}
 
 	public List<String> readAllTopicsInLowercase() throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		DBCursor c = topics.find();
 		List<String> topicsList = new ArrayList<String>();
-		
-		while(c.hasNext()) {
+
+		while (c.hasNext()) {
 			String topic = (String) c.next().get("id");
 			topicsList.add(topic.toLowerCase());
 		}
-		
+
 		return topicsList;
 	}
-	
+
 	public boolean checkTopicExists(String name) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		DBObject f = new BasicDBObject();
 		f.put("id", name);
 		DBObject o = this.topics.findOne(f);
 		return o != null;
-	} 
-	
+	}
+
 	public boolean checkAdExists(int id) throws UnknownHostException {
 		if (!init)
 			intialize();
-		
+
 		DBObject f = new BasicDBObject();
 		f.put("id", id);
 		DBObject o = this.ads.findOne(f);
 		return o != null;
-	} 
+	}
 
 	private void createIndexies() {
 		createUniqueIndex("id", this.users);
@@ -233,7 +234,7 @@ public class MongoDatabase {
 		}
 		col.createIndex(idx, opt);
 	}
-	
+
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
@@ -242,9 +243,23 @@ public class MongoDatabase {
 		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
 		this.ads = database.getCollection(cfg.getMongoCollectionAds());
-		this.topics= database.getCollection(cfg.getMongoCollectionTopics());
+		this.topics = database.getCollection(cfg.getMongoCollectionTopics());
 		createIndexies();
 		this.init = true;
+	}
+
+	public List<DBObject> getUsers(int pageNumber, int size) throws UnknownHostException {
+		if (!init)
+			intialize();
+
+		DBObject sort = new BasicDBObject("name", 1);
+		DBCursor cur = this.users.find().sort(sort).skip(pageNumber > 0 ? ((pageNumber - 1) * size) : 0).limit(size);
+
+		List<DBObject> list = new ArrayList<DBObject>();
+		for (DBObject dbObject : cur) {
+			list.add(dbObject);
+		}
+		return list;
 	}
 
 }

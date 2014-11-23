@@ -4,40 +4,83 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
+	
+	<head>
+		<link href="css/loading-bar.min.css">	
+	</head>
 
 <body>
 	<div ng-app="bigdataApp">
 		<div ng-controller="ServiceCtrl">
-
 			<button ng-click="startService()">Start Service</button>
 			<button ng-click="stopService()">Stop Service</button>
 			<button ng-click="getStatus()">Get Status</button>
-
 			<div>{{result}}</div>
+		</div>
+		<hr>
+		<div ng-controller="UserCtrl">
+			Page:<input ng-model="pageNumber" /> PageSize:<input ng-model="pageSize" />
+			<button ng-click="updateUsers()">Get Users!</button>
+			<table>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tr ng-repeat="usr in users.result">
+					<td>{{usr.id}}</td>
+					<td>{{usr.name}}</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 
 
 	<script src="scripts/angular.js"></script>
+	<script src="scripts/loading-bar.min.js"></script>
+	<script src="scripts/sigma.min.js"></script>
 	<script>
-		var app = angular.module("bigdataApp", []);
+		var app = angular.module("bigdataApp", ['angular-loading-bar']);
 
-		app.controller("ServiceCtrl", function($scope,$http) {
+		app.controller("ServiceCtrl", function($scope, $http) {
 			$scope.startService = function() {
-				$http.get("api/service?command=start").success(function(data){
+				$http.get("api/service?command=start").success(function(data) {
 					$scope.result = data;
 				});
 			};
 			$scope.stopService = function() {
-				$http.get("api/service?command=stop").success(function(data){
+				$http.get("api/service?command=stop").success(function(data) {
 					$scope.result = data;
 				});
 			};
 			$scope.getStatus = function() {
-				$http.get("api/service/status",{}).success(function(data){
+				$http.get("api/service/status", {}).success(function(data) {
 					$scope.result = data;
 				});
 			};
+		});
+
+		app.controller("UserCtrl", function($scope, $http) {
+			$scope.pageSize = 100;
+			$scope.pageNumber = 0;
+			
+			function _init(){
+				getUsers();
+			}
+			
+			function getUsers() {
+				var url = "api/users?size=" + $scope.pageSize + "&page="
+						+ $scope.pageNumber;
+				$http.get(url).success(function(data) {
+					$scope.users = data;
+				});
+			}
+			$scope.updateUsers = function() {
+				getUsers();
+			}
+			
+			_init();
 		});
 	</script>
 </body>
