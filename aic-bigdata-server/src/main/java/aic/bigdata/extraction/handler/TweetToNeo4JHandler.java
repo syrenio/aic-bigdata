@@ -152,7 +152,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				iterator = result.iterator();
 				if (iterator.hasNext()) {
 					Map<String, Object> updatedMap = iterator.next();
-					//System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
+					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
 				}
 				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
@@ -172,7 +172,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		boolean exists = false;
 
 		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> hits = topicIndex.get("topic", topic);
+			IndexHits<Node> hits = topicIndex.get("topic", topic.toLowerCase());
 
 			exists = hits.size() == 1;
 			tx.success();
@@ -199,10 +199,10 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	}
 
 	public void addTopic(String topic) {
-		if (nodeForTopicExists(topic)) {
+		if (!nodeForTopicExists(topic)) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node topicNode = graphDb.createNode();
-				topicNode.setProperty("topic", topic);
+				topicNode.setProperty("topic", topic.toLowerCase());
 				topicNode.addLabel(DynamicLabel.label("topic"));
 
 				topicIndex.add(topicNode, "topic", topicNode.getProperty("topic"));
@@ -210,9 +210,8 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				tx.success();
 			}
 		}
-		else  {
-			//do nothing
-			//System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
+		else {
+			//System.out.println("TweetToNeo4JHandler: Topic " + topic + " already exists (it is okay to see this message once in a while)");
 		}
 	}
 
@@ -224,7 +223,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
-		params.put("topic", topic);
+		params.put("topic", topic.toLowerCase());
 
 		ExecutionResult result;
 
@@ -247,6 +246,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				iterator = result.iterator();
 				if (iterator.hasNext()) {
 					Map<String, Object> updatedMap = iterator.next();
+					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + userId + ")-[mentions]->(topic " + topic + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
 				}
 				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + userId + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
@@ -255,9 +255,19 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			}
 			else {
 				result = cypherEngine.execute(createMentionsRelationshipQ, params);
+				int numCreated = result.getQueryStatistics().getRelationshipsCreated();
+				if (numCreated == 1) {
+					System.out.println("TweetToNeo4JHandler: Created relationship (user " + userId + ")-[mentions]->(topic " + topic + ")");
+				}
+				else if (numCreated > 1) {
+					System.err.println("TweetToNeo4JHandler: Created morer than one relationship (user " + userId + ")-[mentions]->(topic " + topic + ")!");
+				}
+				else {
+					System.out.println("TweetToNeo4JHandler: Failed to create relationship (user " + userId + ")-[mentions]->(topic " + topic + ")");
+				}
 			}
 
-			System.out.println("Relationship between topic " + topic + " and user " + userId + " added to Neo4J.");
+			System.out.println("TweetToNeo4JHandler: Relationship between topic " + topic + " and user " + userId + " added to Neo4J.");
 			tx.success();
 		}
 	}
