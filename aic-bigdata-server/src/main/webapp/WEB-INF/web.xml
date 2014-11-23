@@ -17,6 +17,10 @@
 			<param-value>aic.bigdata.rest</param-value>
 		</init-param>
 		<init-param>
+			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-value>org.codehaus.jackson.jaxrs</param-value>
+		</init-param>
+		<init-param>
 			<param-name>twitter</param-name>
 			<param-value>/WEB-INF/twitter.properties</param-value>
 		</init-param>
