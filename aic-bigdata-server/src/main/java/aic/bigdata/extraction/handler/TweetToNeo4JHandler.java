@@ -39,9 +39,9 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	final static private String getRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
 	final static private String updateRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
 
-	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
-	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
-	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
+	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = \"{topic}\" CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
+	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = \"{topic}\" RETURN r.count";
+	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = \"{topic}\" SET r.count = r.count + 1 RETURN r.count";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -152,7 +152,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				iterator = result.iterator();
 				if (iterator.hasNext()) {
 					Map<String, Object> updatedMap = iterator.next();
-					//System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
+					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
 				}
 				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
@@ -199,7 +199,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	}
 
 	public void addTopic(String topic) {
-		if (nodeForTopicExists(topic)) {
+		if (!nodeForTopicExists(topic)) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node topicNode = graphDb.createNode();
 				topicNode.setProperty("topic", topic);
@@ -210,9 +210,8 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				tx.success();
 			}
 		}
-		else  {
-			//do nothing
-			//System.err.println("TweetToNeo4JHandler: found more than one topic in Neo4J DB");
+		else {
+			//System.out.println("TweetToNeo4JHandler: Topic " + topic + " already exists (it is okay to see this message once in a while)");
 		}
 	}
 
@@ -247,6 +246,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				iterator = result.iterator();
 				if (iterator.hasNext()) {
 					Map<String, Object> updatedMap = iterator.next();
+					System.out.println("TweetToNeo4JHandler: Updating relationship (user " + userId + ")-[mentions]->(topic " + topic + ") from count = " + map.get("r.count") + " to count = " + updatedMap.get("r.count"));
 				}
 				else {
 					System.err.println("TweetToNeo4JHandler: Could not update relationship (user " + userId + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
@@ -255,9 +255,10 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			}
 			else {
 				result = cypherEngine.execute(createMentionsRelationshipQ, params);
+				System.out.println("TweetToNeo4JHandler: Creading relationship (user " + userId + ")-[mentions]->(topic " + topic + ")");
 			}
 
-			System.out.println("Relationship between topic " + topic + " and user " + userId + " added to Neo4J.");
+			System.out.println("TweetToNeo4JHandler: Relationship between topic " + topic + " and user " + userId + " added to Neo4J.");
 			tx.success();
 		}
 	}
