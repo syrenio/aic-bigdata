@@ -7,10 +7,8 @@ buildscript {
 	repositories { jcenter() }
 	dependencies {
 		classpath 'org.akhikhl.gretty:gretty:+'
-		//classpath (group: 'com.sahlbach.gradle', name: 'gradle-jetty-eclipse-plugin', version: '1.9.+')
 	}
 }
-//apply plugin: 'jettyEclipse'
 apply plugin: "org.akhikhl.gretty"
 
 sourceCompatibility = 1.7
@@ -29,6 +27,9 @@ eclipse {
 
 repositories { mavenCentral() }
 
+def jerseyVersion = "1.13"
+def jettyVersion = "9.3.0.M0"
+
 dependencies {
 	compile group: 'commons-collections', name: 'commons-collections', version: '3.2'
 	compile 'org.slf4j:slf4j-api:1.7.7'
@@ -42,14 +43,14 @@ dependencies {
 	compile 'org.apache.commons:commons-lang3:3.3.2'
 	
 	//jetty
-	compile 'org.eclipse.jetty:jetty-server:9.3.0.M0'
-	compile 'org.eclipse.jetty:jetty-servlet:9.3.0.M0'
+	compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+	compile "org.eclipse.jetty:jetty-servlet:$jettyVersion"
 
-	//jersey jaxrs
+	//jersey jars
 	compile "javax.ws.rs:jsr311-api:1.1.1"
-	compile 'com.sun.jersey:jersey-server:1.13'
-	compile 'com.sun.jersey:jersey-core:1.13'
-	compile 'com.sun.jersey:jersey-servlet:1.13'
+	compile "com.sun.jersey:jersey-server:$jerseyVersion"
+	compile "com.sun.jersey:jersey-core:$jerseyVersion"
+	compile "com.sun.jersey:jersey-servlet:$jerseyVersion"
 
 	//twitter
 	compile 'com.twitter:hbc-core:2.2.0'
