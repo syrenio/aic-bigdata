@@ -14,13 +14,13 @@ public class MainRestServlet extends ServletContainer {
 		// TODO Auto-generated method stub
 		super.init(config);
 
-		ServerConfig cf = new ServerConfigBuilder().getConfig();
-		BackgroundTaskManager.startServices(cf);
+		//ServerConfig cf = new ServerConfigBuilder().getConfig();
+//		TaskManager.startServices(cf);
 	}
 
 	@Override
 	public void destroy() {
-		BackgroundTaskManager.stopServices();
+//		TaskManager.stopServices();
 		// TODO Auto-generated method stub
 		super.destroy();
 	}

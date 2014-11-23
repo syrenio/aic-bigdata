@@ -33,9 +33,19 @@
 		</init-param>
 	</servlet>
 
+	<servlet>
+		<servlet-name>bigdata</servlet-name>
+		<servlet-class>aic.bigdata.server.MainServerServlet</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>rest</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
 
+	<servlet-mapping>
+		<servlet-name>bigdata</servlet-name>
+		<url-pattern>/*</url-pattern>
+
+	</servlet-mapping>
 </web-app>    
