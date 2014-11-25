@@ -11,6 +11,8 @@ import twitter4j.TwitterException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 
 //import org.neo4j.graphdb.RelationshipType;
@@ -42,6 +44,9 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
 	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
 	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
+
+	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {userId} return b.userId";
+	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.userId = {userId} return b.userId";
 
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
@@ -346,5 +351,41 @@ public class TweetToNeo4JHandler implements TweetHandler {
 				graphDb.shutdown();
 			}
 		});
+	}
+
+	public Set<Long> getRetweeted(User user) {
+		return getRetweeted(user.getId());
+	}
+
+	public Set<Long> getRetweeted(long userId) {
+		return getIdsForQuery(userId, getRetweetedQ);
+	}
+
+	public Set<Long> getRetweeters(User user) {
+		return getRetweeters(user.getId());
+	}
+
+	public Set<Long> getRetweeters(long userId) {
+		return getIdsForQuery(userId, getRetweetersQ);
+	}
+
+	private Set<Long> getIdsForQuery(long userId, String query) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+
+		ExecutionResult result;
+
+		HashSet<Long> ids = new HashSet<Long>();
+
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(query, params);
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+			while (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+				ids.add((Long) map.get("b.userId"));
+			}
+		}
+
+		return ids;
 	}
 }
