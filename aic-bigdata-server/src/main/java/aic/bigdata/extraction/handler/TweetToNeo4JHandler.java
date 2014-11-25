@@ -162,6 +162,16 @@ public class TweetToNeo4JHandler implements TweetHandler {
 			else {
 				//System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
+				int numCreated = result.getQueryStatistics().getRelationshipsCreated();
+				if (numCreated == 1) {
+					System.out.println("TweetToNeo4JHandler: Created relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				}
+				else if (numCreated > 1) {
+					System.err.println("TweetToNeo4JHandler: Created morer than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				}
+				else {
+					System.out.println("TweetToNeo4JHandler: Failed to create relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				}
 			}
 
 			tx.success();
