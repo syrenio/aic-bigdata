@@ -3,7 +3,7 @@ package aic.bigdata.enrichment;
 import java.net.UnknownHostException;
 import java.util.List;
 
-import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
 

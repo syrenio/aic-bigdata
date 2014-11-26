@@ -4,7 +4,7 @@ import java.net.UnknownHostException;
 
 import twitter4j.Status;
 import twitter4j.User;
-import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.TweetHandler;
 
 public class UserToMongoDBHandler implements TweetHandler {

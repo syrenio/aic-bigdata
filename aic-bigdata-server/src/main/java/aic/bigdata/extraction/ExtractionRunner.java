@@ -7,6 +7,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.enrichment.AdsTopicsToDatabaseFiller;
 import aic.bigdata.enrichment.TopicAnalyzer;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;

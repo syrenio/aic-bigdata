@@ -1,4 +1,4 @@
-package aic.bigdata.extraction;
+package aic.bigdata.database;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;

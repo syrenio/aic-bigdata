@@ -7,7 +7,7 @@ import java.util.List;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
-import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 

@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import aic.bigdata.extraction.MongoDatabase;
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.rest.model.ResultEntry;
 import aic.bigdata.rest.model.ResultPage;

@@ -48,9 +48,6 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {userId} return b.userId";
 	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.userId = {userId} return b.userId";
 
-	final static private String getMentionedTopicsQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} return t.topic";
-	final static private String getUsersMentioningQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE t.topic = {topic} return u.userId";
-
 	public TweetToNeo4JHandler(ServerConfig config) {
 		this.config = config;
 
@@ -392,47 +389,4 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		return ids;
 	}
 
-	public Set<String> getMentionedTopics(User user) {
-		return getMentionedTopics(user.getId());
-	}
-
-	public Set<String> getMentionedTopics(long userId) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("userId", userId);
-
-		ExecutionResult result;
-
-		HashSet<String> topics = new HashSet<String>();
-
-		try (Transaction ignoreMe = graphDb.beginTx()) {
-			result = cypherEngine.execute(getMentionedTopicsQ, params);
-			ResourceIterator<Map<String, Object>> iterator = result.iterator();
-			while (iterator.hasNext()) {
-				Map<String, Object> map = iterator.next();
-				topics.add((String) map.get("t.topic"));
-			}
-		}
-
-		return topics;
-	}
-
-	public Set<Long> getUsersMentioning(String topic) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("topic", topic);
-
-		ExecutionResult result;
-
-		HashSet<Long> ids = new HashSet<Long>();
-
-		try (Transaction ignoreMe = graphDb.beginTx()) {
-			result = cypherEngine.execute(getUsersMentioningQ, params);
-			ResourceIterator<Map<String, Object>> iterator = result.iterator();
-			while (iterator.hasNext()) {
-				Map<String, Object> map = iterator.next();
-				ids.add((Long) map.get("u.userId"));
-			}
-		}
-
-		return ids;
-	}
 }
