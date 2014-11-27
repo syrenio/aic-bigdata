@@ -10,6 +10,7 @@ import org.xml.sax.SAXException;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.enrichment.AdsTopicsToDatabaseFiller;
 import aic.bigdata.enrichment.TopicAnalyzer;
+import aic.bigdata.extraction.handler.TweetToConsolePrinter;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
@@ -56,6 +57,9 @@ public class ExtractionRunner {
 		TweetHandler handler2 = CreateTweetToMongoDBHandler();
 		p.addTweetHandler(handler);
 		p.addTweetHandler(handler2);
+		
+		TweetHandler con = new TweetToConsolePrinter();
+		p.addTweetHandler(con);
 
 		p.run();
 
