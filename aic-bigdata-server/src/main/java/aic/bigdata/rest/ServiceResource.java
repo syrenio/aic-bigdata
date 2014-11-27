@@ -35,14 +35,17 @@ public class ServiceResource {
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	public String commandService(@QueryParam("command") String command) {
+		ServerConfig cf = new ServerConfigBuilder().getConfig();
 		switch (command.toLowerCase()) {
 		case "start":
-			ServerConfig cf = new ServerConfigBuilder().getConfig();
 			getTaskManager().startService(cf);
 			return "Service starting...";
 		case "stop":
 			getTaskManager().stopService();
 			return "Service stopping...";
+		case "analyse":
+			getTaskManager().startAnalyse(cf);
+			return "Analysis started...";
 		default:
 			break;
 		}

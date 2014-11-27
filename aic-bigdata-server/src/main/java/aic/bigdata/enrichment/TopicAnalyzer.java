@@ -10,7 +10,7 @@ import aic.bigdata.server.ServerConfig;
 /**
  *  Determines topics that the user is interested in and stores them in Neo4J.
  */
-public class TopicAnalyzer {
+public class TopicAnalyzer implements Runnable {
 
 	private MongoDatabase mongodb;
 	private TweetToNeo4JHandler neo4jHandler;
@@ -54,5 +54,15 @@ public class TopicAnalyzer {
 		}
 		
 		System.out.println("mining done. processing time: "+(System.currentTimeMillis()-time)+"ms for "+userIds.size()+" users.");
+	}
+
+	@Override
+	public void run() {
+		try {
+			this.analyzeTweets();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

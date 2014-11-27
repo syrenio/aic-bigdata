@@ -16,6 +16,11 @@ app.controller("ServiceCtrl", function($scope, $http) {
 			$scope.result = data;
 		});
 	};
+	$scope.startAnalyse = function() {
+		$http.get("api/service?command=analyse", {}).success(function(data) {
+			$scope.result = data;
+		});
+	};
 });
 
 app.factory("UserService",function($http){

@@ -4,6 +4,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.enrichment.TopicAnalyzer;
 import aic.bigdata.extraction.handler.TweetToConsolePrinter;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
@@ -14,6 +15,10 @@ public class TaskManager {
 	private TwitterStreamJob job;
 	public ThreadPoolExecutor executor;
 
+	public TaskManager() {
+		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+	}
+	
 	public void startService(ServerConfig config) {
 		MongoDatabase mongo = new MongoDatabase(config);
 		
@@ -24,7 +29,6 @@ public class TaskManager {
 		job.addTweetHandler(new TweetToNeo4JHandler(config));
 
 		if (config.getStreamOnStartup()) {
-			executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 			executor.execute(job);
 		}
 
@@ -41,6 +45,13 @@ public class TaskManager {
 
 	public String getTweetCount() {
 		return "Tweets found: " + job.getCounter();
+	}
+
+	public void startAnalyse(ServerConfig cf) {
+		TweetToNeo4JHandler handler = new TweetToNeo4JHandler(cf);
+		TopicAnalyzer ta = new TopicAnalyzer(cf, handler);
+		
+		executor.execute(ta);
 	}
 
 }

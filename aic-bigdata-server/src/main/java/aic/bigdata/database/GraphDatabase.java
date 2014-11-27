@@ -12,23 +12,21 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexManager;
 
-import sun.security.jca.GetInstance;
 import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
 
 public class GraphDatabase {
 
-	private static GraphDatabase isntance;
+	private static GraphDatabase instance;
 	
 	public static GraphDatabase getSingleton(ServerConfig config){
-		if(isntance == null)
-			isntance = new GraphDatabase(config);
-		return isntance;
+		if(instance == null)
+			instance = new GraphDatabase(config);
+		return instance;
 	}
 	
 	
