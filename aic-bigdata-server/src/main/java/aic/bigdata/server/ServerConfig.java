@@ -191,4 +191,15 @@ public class ServerConfig {
 	public String getNeo4JDbName() {
 		return neo4j.getProperty("neo4j.database");
 	}
+
+	public String getNeo4JDbPath() {
+		String path = neo4j.getProperty("neo4j.path");
+		if(!path.endsWith("/"))
+			return path+"/";
+		return path;
+	}
+	
+	public String getNeo4jFullDbName(){
+		return this.getNeo4JDbPath().concat(this.getNeo4JDbName());
+	}
 }

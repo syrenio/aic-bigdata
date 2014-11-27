@@ -35,7 +35,7 @@
 							<th>Name</th>
 						</tr>
 					</thead>
-					<tr ng-repeat="usr in users.result">
+					<tr ng-repeat="usr in users.result" ng-click="selectUser(usr)">
 						<td>{{usr.id}}</td>
 						<td>{{usr.name}}</td>
 					</tr>

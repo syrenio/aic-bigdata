@@ -16,7 +16,7 @@ public class MainRestServlet extends ServletContainer {
 	public void init(ServletConfig config) throws ServletException {
 		// TODO Auto-generated method stub
 		super.init(config);
-
+		
 		//ServerConfig cf = new ServerConfigBuilder().getConfig();
 //		TaskManager.startServices(cf);
 	}
