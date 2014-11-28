@@ -43,7 +43,7 @@ public class GraphDatabase {
 		this.config = config;
 
 		try {
-			createDb(config.getNeo4jFullDbName());
+			createDb(config.getNeo4JDbName());
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -65,9 +65,9 @@ public class GraphDatabase {
 		cypherEngine = new ExecutionEngine(graphDb);
 	}
 
-	private void createDb(String fullName) throws IOException {
-		graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(fullName).newGraphDatabase();
-		//graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(fullName);
+	private void createDb(String name) throws IOException {
+		//graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(fullName).newGraphDatabase();
+		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(name);
 
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
