@@ -31,6 +31,13 @@ app.factory("UserService",function($http){
 			return resp.data;
 		});
 	};
+
+	srv.findUsersByTopic = function(topic) {
+		return $http.get("api/connections/topics/"+ topic + "/users", {}).success(function(data) {
+			console.log(data);
+			return data;
+		});
+	};
 	
 	return srv;
 });
@@ -50,6 +57,10 @@ app.controller("UserCtrl", function($scope, $http, UserService) {
 			$scope.users = data;
 		});
 	}
+	
+	UserService.findUsersByTopic("car").then(function(data){
+		$scope.topicConnections = data.connections;
+	});
 	
 	$scope.selectUser = function(user){
 		console.log(user);

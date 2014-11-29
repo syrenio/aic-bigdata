@@ -1,14 +1,19 @@
 package aic.bigdata.rest;
 
+import java.net.UnknownHostException;
 import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.mongodb.DBObject;
+
 import aic.bigdata.database.GraphDatabase;
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.rest.model.Connection;
 import aic.bigdata.rest.model.Connections;
@@ -18,20 +23,27 @@ import aic.bigdata.server.ServerConfig;
 public class ConnectionResource {
 
 	@GET
+	@Path("topics/{topic}/users")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Connections getConnections(@QueryParam("topic") String topicName) {
+	public Connections getTopicUsers(@PathParam("topic") String topicName) throws UnknownHostException {
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 
 		// FIXME CREATE NEO4J DB Instance and get Connections
 		// MongoDatabase mongo = new MongoDatabase(config);
-		Set<Long> usersMentioning = GraphDatabase.getSingleton(config).getUsersMentioning(topicName);
-		for (Long id : usersMentioning) {
-			System.out.println(id);
-		}
+		
+		MongoDatabase mdb = new MongoDatabase(config);
 		
 		Connections con = new Connections();
-		con.getConnections().add(new Connection("n0", "test", 0, 0, 1));
+		Set<Long> usersMentioning = GraphDatabase.getSingleton(config).getUsersMentioning(topicName);
+		for (Long id : usersMentioning) {
+			DBObject o = mdb.getUserById(id);
+			System.out.println(id);
+			con.getConnections().add(new Connection(id.toString(), o.get("name").toString(), 0, 0, 1));
+		}
+		
+		
+		
 		con.setTotalSize(1);
 		return con;
 	}
