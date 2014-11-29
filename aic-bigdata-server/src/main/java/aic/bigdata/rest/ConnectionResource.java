@@ -1,6 +1,7 @@
 package aic.bigdata.rest;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
@@ -26,18 +27,17 @@ import aic.bigdata.server.ServerConfig;
 @Path("connections")
 public class ConnectionResource {
 
-	
 	@GET
 	@Path("topics")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<String> getTopicNames() throws UnknownHostException{
+	public List<String> getTopicNames() throws UnknownHostException {
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 		MongoDatabase mdb = new MongoDatabase(config);
 
 		return mdb.getTopicNames();
 	}
-	
+
 	@GET
 	@Path("topics/{topic}/users")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -46,27 +46,28 @@ public class ConnectionResource {
 		ServerConfig config = scb.getConfig();
 
 		MongoDatabase mdb = new MongoDatabase(config);
-		
+
 		Connections con = new Connections();
 		Set<Long> usersMentioning = GraphDatabase.getInstance().getUsersMentioning(topicName);
 		String baseEdgeName = "e";
 		long edgeCounter = 0;
 		for (Long id : usersMentioning) {
 			DBObject o = mdb.getUserById(id);
-			if(o==null){
+			if (o == null) {
 				System.err.println(id + " UserId not found!");
-			}else{
-				BigDecimal x = new BigDecimal(Math.random()*10);
-				BigDecimal y = new BigDecimal(Math.random()*10);
-				SigmaNode node = new SigmaNode(id.toString(), o.get("name").toString(), x.intValue(), y.intValue(), 1);
-				SigmaEdge edge = new SigmaEdge(baseEdgeName+edgeCounter, node.getId(), topicName);
+			} else {
+				BigDecimal x = new BigDecimal(Math.random() * 10);
+				BigDecimal y = new BigDecimal(Math.random() * 10);
+				SigmaNode node = new SigmaNode(id.toString(), o.get("name").toString(), x.setScale(2,
+						RoundingMode.HALF_DOWN).doubleValue(), y.setScale(2, RoundingMode.HALF_DOWN).doubleValue(), 1);
+				SigmaEdge edge = new SigmaEdge(baseEdgeName + edgeCounter, node.getId(), topicName);
 				con.getNodes().add(node);
 				con.getEdges().add(edge);
 			}
 			edgeCounter++;
 		}
 		con.getNodes().add(new SigmaNode(topicName, topicName, 5, 5, 2));
-		
+
 		con.setTotalSize(1);
 		return con;
 	}

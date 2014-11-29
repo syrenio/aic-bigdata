@@ -6,11 +6,11 @@ public class SigmaNode {
 	 */
 	private String id;
 	private String label;
-	private int x;
-	private int y;
-	private int size;
+	private double x;
+	private double y;
+	private double size;
 
-	public SigmaNode(String id, String label, int x, int y, int size) {
+	public SigmaNode(String id, String label, double x, double y, double size) {
 		this.id = id;
 		this.label = label;
 		this.x = x;
@@ -26,15 +26,15 @@ public class SigmaNode {
 		return label;
 	}
 
-	public int getX() {
+	public double getX() {
 		return x;
 	}
 
-	public int getY() {
+	public double getY() {
 		return y;
 	}
 
-	public int getSize() {
+	public double getSize() {
 		return size;
 	}
 

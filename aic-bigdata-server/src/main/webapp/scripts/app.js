@@ -80,15 +80,11 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 					}
 					sig = new sigma({
 						graph: data,
-						container: "graphContainer"
+						container: "graphContainer",
+						settings : {
+							defaultNodeColor : '#ec5148'
+						}
 					});	
-//					sigma.parsers.json(data, {
-//						container : 'container',
-//						settings : {
-//							defaultNodeColor : '#ec5148'
-//						}
-//					});
-
 				});
 	}
 });
