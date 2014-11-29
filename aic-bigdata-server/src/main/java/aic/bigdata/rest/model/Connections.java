@@ -13,7 +13,7 @@ public class Connections {
 		return nodes.size();
 	}
 
-	public List<SigmaNode> getConnections() {
+	public List<SigmaNode> getNodes() {
 		return nodes;
 	}
 	

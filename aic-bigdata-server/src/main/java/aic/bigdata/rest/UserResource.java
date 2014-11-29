@@ -84,7 +84,7 @@ public class UserResource {
 
 		Connections con = new Connections();
 		for (String string : mentionedTopics) {
-			con.getConnections().add(new SigmaNode(string, string, 0, 0, 1));
+			con.getNodes().add(new SigmaNode(string, string, 0, 0, 1));
 		}
 		return con;
 	}

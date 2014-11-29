@@ -1,5 +1,6 @@
 package aic.bigdata.rest;
 
+import java.math.BigDecimal;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import com.mongodb.util.JSON;
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
+import aic.bigdata.rest.model.SigmaEdge;
 import aic.bigdata.rest.model.SigmaNode;
 import aic.bigdata.rest.model.Connections;
 import aic.bigdata.server.ServerConfig;
@@ -47,16 +49,23 @@ public class ConnectionResource {
 		
 		Connections con = new Connections();
 		Set<Long> usersMentioning = GraphDatabase.getInstance().getUsersMentioning(topicName);
+		String baseEdgeName = "e";
+		long edgeCounter = 0;
 		for (Long id : usersMentioning) {
 			DBObject o = mdb.getUserById(id);
 			if(o==null){
 				System.err.println(id + " UserId not found!");
 			}else{
-				con.getConnections().add(new SigmaNode(id.toString(), o.get("name").toString(), 0, 0, 1));
+				BigDecimal x = new BigDecimal(Math.random()*10);
+				BigDecimal y = new BigDecimal(Math.random()*10);
+				SigmaNode node = new SigmaNode(id.toString(), o.get("name").toString(), x.intValue(), y.intValue(), 1);
+				SigmaEdge edge = new SigmaEdge(baseEdgeName+edgeCounter, node.getId(), topicName);
+				con.getNodes().add(node);
+				con.getEdges().add(edge);
 			}
+			edgeCounter++;
 		}
-		
-		
+		con.getNodes().add(new SigmaNode(topicName, topicName, 5, 5, 2));
 		
 		con.setTotalSize(1);
 		return con;

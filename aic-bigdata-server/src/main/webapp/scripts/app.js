@@ -60,16 +60,36 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 	$scope.topics = [];
 	$scope.selTopic;
 	$scope.connectedUsers = [];
+	
+	var sig = null;
+	var g = null;
 
 	ConnectionService.getAllTopics().then(function(data) {
 		$scope.topics = data;
 	});
-	
-	$scope.findUsers = function(){
-		ConnectionService.findUsersByTopic($scope.selTopic).then(function(data){
-			console.log(data);
-			$scope.connectedUsers = data.nodes;
-		});
+
+	$scope.findUsers = function() {
+		ConnectionService.findUsersByTopic($scope.selTopic).then(
+				function(data) {
+					console.log(data);
+					$scope.connectedUsers = data.nodes;
+
+					
+					if(sig != null){
+						sig.kill();
+					}
+					sig = new sigma({
+						graph: data,
+						container: "graphContainer"
+					});	
+//					sigma.parsers.json(data, {
+//						container : 'container',
+//						settings : {
+//							defaultNodeColor : '#ec5148'
+//						}
+//					});
+
+				});
 	}
 });
 
