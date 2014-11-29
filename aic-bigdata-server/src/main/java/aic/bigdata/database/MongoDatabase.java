@@ -128,6 +128,17 @@ public class MongoDatabase {
 		DBObject o = (DBObject) JSON.parse(topic);
 		this.topics.insert(o);
 	}
+	
+	public List<String> getTopicNames() throws UnknownHostException{
+		if (!init)
+			intialize();
+		List<String> names = new ArrayList<String>();
+		DBCursor cursor = this.topics.find();
+		for (DBObject o : cursor) {
+			names.add(o.get("id").toString()); //id == name
+		}
+		return names;
+	}
 
 	/**
 	 * Updates a topic by adding or removing an ad id in the "ad" field
@@ -265,5 +276,4 @@ public class MongoDatabase {
 		DBObject o = this.users.findOne(f);
 		return o;
 	}
-
 }

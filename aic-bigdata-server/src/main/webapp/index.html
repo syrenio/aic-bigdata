@@ -26,10 +26,6 @@
 		<hr>
 		<div class="row">
 			<div class="col-md-6" ng-controller="UserCtrl">
-				<ul>
-					<li ng-repeat="c in topicConnections">{{c.label}}</li>
-				</ul>
-			
 				Page:<input ng-model="pageNumber" /> PageSize:<input
 					ng-model="pageSize" />
 				<button ng-click="updateUsers()">Get Users!</button>
@@ -46,11 +42,16 @@
 					</tr>
 				</table>
 			</div>
+			<div class="col-md-6" ng-controller="ConnectionCtrl">
+				<select ng-model="selTopic" ng-options="t for t in topics">
+				</select>
+			</div>
 		</div>
 	</div>
 
 
 	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	<script
 		src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
 	<script src="bower_components/sigma.js/sigma.min.js"></script>

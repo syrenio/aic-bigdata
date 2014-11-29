@@ -1,6 +1,7 @@
 package aic.bigdata.rest;
 
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -22,6 +23,18 @@ import aic.bigdata.server.ServerConfig;
 @Path("connections")
 public class ConnectionResource {
 
+	
+	@GET
+	@Path("topics")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getTopicNames() throws UnknownHostException{
+		ServerConfigBuilder scb = new ServerConfigBuilder();
+		ServerConfig config = scb.getConfig();
+		MongoDatabase mdb = new MongoDatabase(config);
+
+		return mdb.getTopicNames();
+	}
+	
 	@GET
 	@Path("topics/{topic}/users")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -29,9 +42,6 @@ public class ConnectionResource {
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 
-		// FIXME CREATE NEO4J DB Instance and get Connections
-		// MongoDatabase mongo = new MongoDatabase(config);
-		
 		MongoDatabase mdb = new MongoDatabase(config);
 		
 		Connections con = new Connections();
