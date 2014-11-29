@@ -17,15 +17,19 @@ import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexManager;
 
 import twitter4j.User;
+import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.server.ServerConfig;
 
 public class GraphDatabase {
 
 	private static GraphDatabase instance;
 	
-	public static GraphDatabase getSingleton(ServerConfig config){
-		if(instance == null)
-			instance = new GraphDatabase(config);
+	public static GraphDatabase getInstance(){
+		
+		if(instance == null){
+			ServerConfigBuilder b = new ServerConfigBuilder();
+			instance = new GraphDatabase(b.getConfig()); 
+		}
 		return instance;
 	}
 	

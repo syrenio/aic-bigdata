@@ -80,7 +80,7 @@ public class UserResource {
 		
 		// FIXME CREATE NEO4J DB Instance and get Connections
 		// MongoDatabase mongo = new MongoDatabase(config);
-		Set<String> mentionedTopics = GraphDatabase.getSingleton(config).getMentionedTopics(userId);
+		Set<String> mentionedTopics = GraphDatabase.getInstance().getMentionedTopics(userId);
 
 		Connections con = new Connections();
 		for (String string : mentionedTopics) {

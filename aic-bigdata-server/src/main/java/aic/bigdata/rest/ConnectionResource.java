@@ -46,7 +46,7 @@ public class ConnectionResource {
 		MongoDatabase mdb = new MongoDatabase(config);
 		
 		Connections con = new Connections();
-		Set<Long> usersMentioning = GraphDatabase.getSingleton(config).getUsersMentioning(topicName);
+		Set<Long> usersMentioning = GraphDatabase.getInstance().getUsersMentioning(topicName);
 		for (Long id : usersMentioning) {
 			DBObject o = mdb.getUserById(id);
 			if(o==null){
