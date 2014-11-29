@@ -11,10 +11,18 @@ Start
 
 - Install Gradle http://www.gradle.org/
 - gradle build
-- gradle appRun          <-- WebServer   (vorher in den webapp folder wechseln und bower install ausführen (zuvor http://bower.io/ installieren)
 - gradle main            <-- start Console version
 - gradle neo4jExtraction <-- extract graph from mongodb
 - gradle tanalysis <-- add ads/topics and mine topics
+
+Web
+----------
+- Install Node.js http://nodejs.org/
+- Install Bower http://bower.io/  "npm install -g bower"
+- cd src/main/webapp 
+- "bower install"
+- go back to project root-folder 
+- gradle appRun  <-- starts WebServer
 
 MongoDB
 -----------
