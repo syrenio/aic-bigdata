@@ -1,6 +1,6 @@
 package aic.bigdata.rest.model;
 
-public class Connection {
+public class SigmaNode {
 	/*
 	 * { "id": "n0", "label": "A node", "x": 0, "y": 0, "size": 3 },
 	 */
@@ -10,7 +10,7 @@ public class Connection {
 	private int y;
 	private int size;
 
-	public Connection(String id, String label, int x, int y, int size) {
+	public SigmaNode(String id, String label, int x, int y, int size) {
 		this.id = id;
 		this.label = label;
 		this.x = x;

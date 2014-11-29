@@ -17,7 +17,7 @@ import com.mongodb.util.JSON;
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
-import aic.bigdata.rest.model.Connection;
+import aic.bigdata.rest.model.SigmaNode;
 import aic.bigdata.rest.model.Connections;
 import aic.bigdata.server.ServerConfig;
 
@@ -52,7 +52,7 @@ public class ConnectionResource {
 			if(o==null){
 				System.err.println(id + " UserId not found!");
 			}else{
-				con.getConnections().add(new Connection(id.toString(), o.get("name").toString(), 0, 0, 1));
+				con.getConnections().add(new SigmaNode(id.toString(), o.get("name").toString(), 0, 0, 1));
 			}
 		}
 		

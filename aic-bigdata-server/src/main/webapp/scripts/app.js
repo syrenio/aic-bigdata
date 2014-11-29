@@ -68,7 +68,7 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 	$scope.findUsers = function(){
 		ConnectionService.findUsersByTopic($scope.selTopic).then(function(data){
 			console.log(data);
-			$scope.connectedUsers = data.connections;
+			$scope.connectedUsers = data.nodes;
 		});
 	}
 });

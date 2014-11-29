@@ -17,7 +17,7 @@ import javax.ws.rs.core.MediaType;
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.ServerConfigBuilder;
-import aic.bigdata.rest.model.Connection;
+import aic.bigdata.rest.model.SigmaNode;
 import aic.bigdata.rest.model.Connections;
 import aic.bigdata.rest.model.ResultEntry;
 import aic.bigdata.rest.model.ResultPage;
@@ -84,7 +84,7 @@ public class UserResource {
 
 		Connections con = new Connections();
 		for (String string : mentionedTopics) {
-			con.getConnections().add(new Connection(string, string, 0, 0, 1));
+			con.getConnections().add(new SigmaNode(string, string, 0, 0, 1));
 		}
 		return con;
 	}

@@ -6,14 +6,19 @@ import java.util.List;
 public class Connections {
 
 	private int totalSize;
-	private List<Connection> connections = new ArrayList<Connection>();
+	private List<SigmaNode> nodes = new ArrayList<SigmaNode>();
+	private List<SigmaEdge> edges = new ArrayList<SigmaEdge>();
 
 	public int getSize() {
-		return connections.size();
+		return nodes.size();
 	}
 
-	public List<Connection> getConnections() {
-		return connections;
+	public List<SigmaNode> getConnections() {
+		return nodes;
+	}
+	
+	public List<SigmaEdge> getEdges(){
+		return edges;
 	}
 
 	public int getTotalSize() {
