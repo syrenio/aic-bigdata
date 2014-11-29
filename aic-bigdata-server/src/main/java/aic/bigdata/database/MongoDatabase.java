@@ -53,9 +53,7 @@ public class MongoDatabase {
 		if (!init)
 			intialize();
 
-		DBObject f = new BasicDBObject();
-		f.put("id", user.getId());
-		DBObject o = this.users.findOne(f);
+		DBObject o = getUserById(user.getId());
 		return o != null;
 	}
 
@@ -91,14 +89,14 @@ public class MongoDatabase {
 		sort.put("timestamp_ms", -1);
 
 		DBCursor c = this.tweets.find(usr).sort(sort).limit(latest);
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		while (c.hasNext()) {
 			String tweet = (String) c.next().get("text");
-			result = new StringBuilder(result).append(" ").append(tweet).toString();
+			result.append(" ").append(tweet);
 		}
 
-		return result;
+		return result.toString();
 	}
 
 	public List<Long> readUserIds(Integer limit) throws UnknownHostException {
@@ -137,7 +135,7 @@ public class MongoDatabase {
 	 * @param topicname
 	 * @param adId
 	 * @param adding
-	 *          Adds an ad id, if true, removes an ad id, if false.
+	 *            Adds an ad id, if true, removes an ad id, if false.
 	 * @throws UnknownHostException
 	 */
 	public void updateTopicAd(String topicname, int adId, boolean adding) throws UnknownHostException {
@@ -219,20 +217,40 @@ public class MongoDatabase {
 		createUniqueIndex("id", this.tweets);
 		createUniqueIndex("id", this.ads);
 		createUniqueIndex("id", this.topics);
+
+		createIndex("user.id", this.tweets, 1);
+		createIndex("timestamp_ms", this.tweets, -1);
+	}
+
+	private void createIndex(String name, DBCollection col, int order) {
+		String indexName = name + "_idx";
+		DBObject idx = new BasicDBObject(name, order);
+		DBObject opt = new BasicDBObject();
+		opt.put("name", indexName);
+		if (!checkIndexExists(indexName, col)) {
+			col.createIndex(idx, opt);
+		}
 	}
 
 	private void createUniqueIndex(String name, DBCollection col) {
-		DBObject idx = new BasicDBObject("id", 1);
+		String indexName = "uq_" + name + "_idx";
+		DBObject idx = new BasicDBObject(name, 1);
 		DBObject opt = new BasicDBObject("unique", true);
-		opt.put("name", "uq_id_idx");
+		opt.put("name", indexName);
 		// index exists
+		if (!checkIndexExists(indexName, col)) {
+			col.createIndex(idx, opt);
+		}
+	}
+
+	private boolean checkIndexExists(String name, DBCollection col) {
 		List<DBObject> list = col.getIndexInfo();
 		for (DBObject i : list) {
-			if (i.get("name").equals("uq_id_idx")) {
-				return;
+			if (i.get("name").equals(name)) {
+				return true;
 			}
 		}
-		col.createIndex(idx, opt);
+		return false;
 	}
 
 	private void intialize() throws UnknownHostException {
@@ -260,6 +278,16 @@ public class MongoDatabase {
 			list.add(dbObject);
 		}
 		return list;
+	}
+
+	public DBObject getUserById(Long id) throws UnknownHostException {
+		if (!init)
+			intialize();
+
+		DBObject f = new BasicDBObject();
+		f.put("id", id);
+		DBObject o = this.users.findOne(f);
+		return o;
 	}
 
 }
