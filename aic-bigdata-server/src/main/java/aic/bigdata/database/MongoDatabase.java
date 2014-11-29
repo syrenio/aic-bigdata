@@ -213,50 +213,26 @@ public class MongoDatabase {
 	}
 
 	private void createIndexies() {
-		createUniqueIndex("id", this.users);
-		createUniqueIndex("id", this.tweets);
-		createUniqueIndex("id", this.ads);
-		createUniqueIndex("id", this.topics);
+		MongoDatabaseHelper helper = new MongoDatabaseHelper();
+		
+		helper.createUniqueIndex("id", this.users);
+		helper.createUniqueIndex("id", this.tweets);
+		helper.createUniqueIndex("id", this.ads);
+		helper.createUniqueIndex("id", this.topics);
 
-		createIndex("user.id", this.tweets, 1);
-		createIndex("timestamp_ms", this.tweets, -1);
+		helper.createIndex("user.id", this.tweets, 1);
+		helper.createIndex("timestamp_ms", this.tweets, -1);
 	}
 
-	private void createIndex(String name, DBCollection col, int order) {
-		String indexName = name + "_idx";
-		DBObject idx = new BasicDBObject(name, order);
-		DBObject opt = new BasicDBObject();
-		opt.put("name", indexName);
-		if (!checkIndexExists(indexName, col)) {
-			col.createIndex(idx, opt);
-		}
-	}
 
-	private void createUniqueIndex(String name, DBCollection col) {
-		String indexName = "uq_" + name + "_idx";
-		DBObject idx = new BasicDBObject(name, 1);
-		DBObject opt = new BasicDBObject("unique", true);
-		opt.put("name", indexName);
-		// index exists
-		if (!checkIndexExists(indexName, col)) {
-			col.createIndex(idx, opt);
-		}
-	}
-
-	private boolean checkIndexExists(String name, DBCollection col) {
-		List<DBObject> list = col.getIndexInfo();
-		for (DBObject i : list) {
-			if (i.get("name").equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
 		System.out.println(mongodbname);
+		MongoDatabaseHelper dbBuilder = new MongoDatabaseHelper();
+		
+		
 		this.database = mongoclient.getDB(mongodbname);
 		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
