@@ -28,7 +28,7 @@ public class ServiceResource {
 	@Path("/status")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String showServiceStatus() {
-		return sm.getStatus();
+		return getTaskManager().getStatus();
 	}
 
 	
@@ -56,7 +56,7 @@ public class ServiceResource {
 	@Path("/tweet")
 	@Produces(MediaType.TEXT_PLAIN)
 	public String showTweetCount() {
-		return sm.getTweetCount();
+		return getTaskManager().getTweetCount();
 	}
 
 }

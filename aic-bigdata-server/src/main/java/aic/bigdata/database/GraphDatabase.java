@@ -103,7 +103,7 @@ public class GraphDatabase {
 
 	public Set<Long> getUsersMentioning(String topic) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("topic", topic);
+		params.put("topic", topic.toLowerCase());
 
 		ExecutionResult result;
 
@@ -120,4 +120,5 @@ public class GraphDatabase {
 
 		return ids;
 	}
+	
 }

@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.mongodb.DBObject;
+import com.mongodb.util.JSON;
 
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
@@ -48,8 +49,11 @@ public class ConnectionResource {
 		Set<Long> usersMentioning = GraphDatabase.getSingleton(config).getUsersMentioning(topicName);
 		for (Long id : usersMentioning) {
 			DBObject o = mdb.getUserById(id);
-			System.out.println(id);
-			con.getConnections().add(new Connection(id.toString(), o.get("name").toString(), 0, 0, 1));
+			if(o==null){
+				System.err.println(id + " UserId not found!");
+			}else{
+				con.getConnections().add(new Connection(id.toString(), o.get("name").toString(), 0, 0, 1));
+			}
 		}
 		
 		

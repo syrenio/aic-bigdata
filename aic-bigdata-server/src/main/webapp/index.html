@@ -26,6 +26,8 @@
 		<hr>
 		<div class="row">
 			<div class="col-md-6" ng-controller="UserCtrl">
+				<h3>Users</h3>
+			
 				Page:<input ng-model="pageNumber" /> PageSize:<input
 					ng-model="pageSize" />
 				<button ng-click="updateUsers()">Get Users!</button>
@@ -43,8 +45,23 @@
 				</table>
 			</div>
 			<div class="col-md-6" ng-controller="ConnectionCtrl">
-				<select ng-model="selTopic" ng-options="t for t in topics">
+				<h3>Connections</h3>
+				<select ng-model="selTopic" ng-options="t for t in topics" ng-change="findUsers(t)">
 				</select>
+				<div class="topicConnectedUsers">
+				<table class="table table-condensed table-hover table-striped">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+						</tr>
+					</thead>
+					<tr ng-repeat="con in connectedUsers">
+						<td>{{con.id}}</td>
+						<td>{{con.label}}</td>
+					</tr>
+				</table>	
+				</div>
 			</div>
 		</div>
 	</div>

@@ -3,3 +3,7 @@
 body{
 	padding-top: 20px;
 }
+.topicConnectedUsers{
+	height: 400px;
+	overflow: auto;
+}
