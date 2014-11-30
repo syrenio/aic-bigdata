@@ -34,7 +34,7 @@ public class MongoDbTweetProvider implements TweetProvider {
 		this.running = true;
 		long counter = 0;
 		long stepCounter = 0;
-		long stepSize = 10000;
+		long stepSize = 1000;
 
 		try {
 			for (DBObject c : db.getCursorForTweets()) {

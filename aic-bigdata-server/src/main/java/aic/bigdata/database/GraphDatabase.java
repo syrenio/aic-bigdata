@@ -11,6 +11,7 @@ import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
@@ -39,6 +40,7 @@ public class GraphDatabase {
 	private GraphDatabaseService graphDb;
 	private Index<Node> userIndex;
 	private Index<Node> topicIndex;
+	private Index<Relationship> retweetsIndex;
 	private ServerConfig config;
 	private ExecutionEngine cypherEngine;
 
@@ -77,6 +79,12 @@ public class GraphDatabase {
 
 		try (Transaction tx = graphDb.beginTx()) {
 			topicIndex = indexManager.forNodes("topics");
+
+			tx.success();
+		}
+
+		try (Transaction tx = graphDb.beginTx()) {
+			retweetsIndex = indexManager.forRelationships("retweets");
 
 			tx.success();
 		}
@@ -185,6 +193,25 @@ public class GraphDatabase {
 		return exists;
 	}
 	
+	private Relationship getRetweetsRelationship(long retweeterId, long originalId) {
+		Relationship found = null;
+
+		try (Transaction tx = graphDb.beginTx()) {
+			IndexHits<Relationship> hits = retweetsIndex.get("retweeterId", retweeterId);
+
+			for (Relationship r: hits) {
+				Node endNode = r.getEndNode();
+				Long endId = (Long) endNode.getProperty("userId");
+				if (endId.equals(originalId)) {
+					found = r;
+				}
+			}
+			tx.success();
+		}
+
+		return found;
+	}
+
 	private boolean nodeForUserExists(User user) {
 		return this.nodeForUserExists(user.getId());
 	}
@@ -272,6 +299,54 @@ public class GraphDatabase {
 	}
 
 	public void addRetweetsRelationship(User retweeter, User original) {
+		Relationship relationship = getRetweetsRelationship(retweeter.getId(), original.getId());
+		if (relationship == null) {
+			createRetweetsRelationship(retweeter, original);
+		}
+		else {
+			System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+			Long count = (Long) relationship.getProperty("count");
+			System.out.println("count was " + count);
+			relationship.setProperty("count", count+1);
+		}
+	}
+
+	private void createRetweetsRelationship(User retweeter, User original) {
+		try (Transaction tx = graphDb.beginTx()) {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("aUserId", retweeter.getId());
+			params.put("bUserId", original.getId());
+
+			ExecutionResult result = cypherEngine.execute(createRetweetsRelationshipQ, params);
+
+			ResourceIterator<Map<String, Object>> resourceIterator = result.iterator();
+			if (!resourceIterator.hasNext()) {
+				System.err.println("TweetToNeo4JHandler: Failed to create relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+			}
+			else {
+				Map<String, Object> map = resourceIterator.next();
+				Relationship relationship = (Relationship) map.get("r");
+				retweetsIndex.add(relationship, "userId", retweeter.getId());
+			}
+
+		/*
+		int numCreated = result.getQueryStatistics().getRelationshipsCreated();
+		if (numCreated == 1) {
+			System.out.println("TweetToNeo4JHandler: Created relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+		}
+		else if (numCreated > 1) {
+			System.err.println("TweetToNeo4JHandler: Created morer than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+		}
+		else {
+			System.err.println("TweetToNeo4JHandler: Failed to create relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+		}
+		*/
+
+			tx.success();
+		}
+	}
+
+	public void addRetweetsRelationshipOLD(User retweeter, User original) {
 		//System.out.println("TweetToNeo4JHandler: User \"" + retweeter.getName() + "\" retweeted User \"" + original.getName() + "\"");
 
 		if (!nodeForUserExists(retweeter) && !nodeForUserExists(original)) {
@@ -314,6 +389,17 @@ public class GraphDatabase {
 			else {
 				//System.out.println("TweetToNeo4JHandler: Creating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				result = cypherEngine.execute(createRetweetsRelationshipQ, params);
+
+				ResourceIterator<Map<String, Object>> resourceIterator = result.iterator();
+				if (!resourceIterator.hasNext()) {
+					System.err.println("TweetToNeo4JHandler: Failed to create relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+				}
+				else {
+					Map<String, Object> map = resourceIterator.next();
+					Relationship relationship = (Relationship) map.get("r");
+					retweetsIndex.add(relationship, "userId", retweeter.getId());
+				}
+
 				int numCreated = result.getQueryStatistics().getRelationshipsCreated();
 				if (numCreated == 1) {
 					System.out.println("TweetToNeo4JHandler: Created relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
