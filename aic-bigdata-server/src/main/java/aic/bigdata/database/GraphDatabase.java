@@ -46,8 +46,8 @@ public class GraphDatabase {
 
 
 	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
-	final static private String getRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
-	final static private String updateRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
+//	final static private String getRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
+//	final static private String updateRetweetsCountQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
 
 	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {userId} return b.userId";
 	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.userId = {userId} return b.userId";
@@ -346,6 +346,7 @@ public class GraphDatabase {
 		}
 	}
 
+/*
 	public void addRetweetsRelationshipOLD(User retweeter, User original) {
 		//System.out.println("TweetToNeo4JHandler: User \"" + retweeter.getName() + "\" retweeted User \"" + original.getName() + "\"");
 
@@ -415,7 +416,7 @@ public class GraphDatabase {
 			tx.success();
 		}
 	}
-	
+*/	
 
 	public int getCount() {
 		return this.tweetsLogged;
