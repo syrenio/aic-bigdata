@@ -304,10 +304,14 @@ public class GraphDatabase {
 			createRetweetsRelationship(retweeter, original);
 		}
 		else {
-			System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
-			Long count = (Long) relationship.getProperty("count");
-			System.out.println("count was " + count);
-			relationship.setProperty("count", count+1);
+			//System.out.println("TweetToNeo4JHandler: Updating relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
+			try (Transaction tx = graphDb.beginTx()) {
+				Long count = (Long) relationship.getProperty("count");
+				//System.out.println("TweetToNeo4JHandler: Count was " + count);
+				relationship.setProperty("count", count+1);
+
+				tx.success();
+			}
 		}
 	}
 
