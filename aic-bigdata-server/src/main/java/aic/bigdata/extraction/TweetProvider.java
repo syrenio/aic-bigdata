@@ -4,6 +4,6 @@ public interface TweetProvider extends Runnable{
 	
 	public void addTweetHandler(TweetHandler t);
 	
-	
+	public void stopProvider();
 
 }

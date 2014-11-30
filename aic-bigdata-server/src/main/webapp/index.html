@@ -18,9 +18,11 @@
 	<div ng-app="bigdataApp" class="container">
 		<div ng-controller="ServiceCtrl" class="row">
 			<button ng-click="startService()">Start Service</button>
-			<button ng-click="stopService()">Stop Service</button>
+			<button ng-click="startExtraction()">Start Extraction</button>
 			<button ng-click="startAnalyse()">Start Analyse</button>
 			<button ng-click="getStatus()">Get Status</button>
+			
+			<button ng-click="stopService()">Stop Service</button>
 			<div>{{result}}</div>
 		</div>
 		<hr>

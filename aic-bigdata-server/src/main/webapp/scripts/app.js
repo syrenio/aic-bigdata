@@ -16,6 +16,11 @@ app.controller("ServiceCtrl", function($scope, $http) {
 			$scope.result = data;
 		});
 	};
+	$scope.startExtraction = function() {
+		$http.get("api/service?command=extraction", {}).success(function(data) {
+			$scope.result = data;
+		});
+	};
 	$scope.startAnalyse = function() {
 		$http.get("api/service?command=analyse", {}).success(function(data) {
 			$scope.result = data;

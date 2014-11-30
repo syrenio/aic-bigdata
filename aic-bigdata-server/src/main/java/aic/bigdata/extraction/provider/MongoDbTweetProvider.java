@@ -18,6 +18,7 @@ public class MongoDbTweetProvider implements TweetProvider{
 
 	private MongoDatabase db;
 	private List<TweetHandler> handler = new ArrayList<TweetHandler>();
+	private boolean running;
 	
 	public MongoDbTweetProvider(MongoDatabase db) {
 		this.db=db;
@@ -25,9 +26,13 @@ public class MongoDbTweetProvider implements TweetProvider{
 	
 	@Override
 	public void run() {
+		this.running = true;
 		try {
 			for(DBObject c : db.getCursorForTweets())
 			{
+				if(!running)
+					break;
+				
 				String message = c.toString();
 				Status status = null;
 				try {
@@ -42,7 +47,11 @@ public class MongoDbTweetProvider implements TweetProvider{
 		} catch (UnknownHostException e) {			
 			e.printStackTrace();
 		}
-		
+	}
+	
+	@Override
+	public void stopProvider() {
+		this.running = false;
 	}
 
 	@Override

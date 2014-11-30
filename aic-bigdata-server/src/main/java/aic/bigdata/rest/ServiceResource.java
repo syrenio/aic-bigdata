@@ -43,6 +43,9 @@ public class ServiceResource {
 		case "stop":
 			getTaskManager().stopService();
 			return "Service stopping...";
+		case "extraction":
+			getTaskManager().startExtraction(cf);
+			return "Extraction started...";
 		case "analyse":
 			getTaskManager().startAnalyse(cf);
 			return "Analysis started...";
