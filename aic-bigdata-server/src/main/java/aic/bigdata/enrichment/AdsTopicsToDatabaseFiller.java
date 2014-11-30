@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
@@ -30,12 +31,12 @@ public class AdsTopicsToDatabaseFiller {
 	private MongoDatabase mongodb;
 	private Gson gson;
 	private String xmlFilename = "ads.xml";
-	private TweetToNeo4JHandler neo4j;
+	private GraphDatabase neo4j;
 
-	public AdsTopicsToDatabaseFiller(ServerConfig config, TweetToNeo4JHandler neo4jHandler) {
+	public AdsTopicsToDatabaseFiller(ServerConfig config, GraphDatabase neo) {
 		this.mongodb = new MongoDatabase(config);
 		this.gson = new Gson();
-		this.neo4j = neo4jHandler;
+		this.neo4j = neo;
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package aic.bigdata.extraction;
 
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
@@ -20,7 +21,7 @@ public class Neo4JExtractionRunner {
 	}
 
 	private static TweetHandler CreateTweetToNeo4JHandler() {
-	        TweetHandler handler = new TweetToNeo4JHandler(config);
+		TweetHandler handler = new TweetToNeo4JHandler(config, GraphDatabase.getInstance());
 		return handler;
 	}
 

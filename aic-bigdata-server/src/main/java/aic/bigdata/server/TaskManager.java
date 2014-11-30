@@ -3,6 +3,7 @@ package aic.bigdata.server;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.enrichment.TopicAnalyzer;
 import aic.bigdata.extraction.handler.TweetToConsolePrinter;
@@ -13,29 +14,36 @@ import aic.bigdata.extraction.handler.UserToMongoDBHandler;
 public class TaskManager {
 
 	private TwitterStreamJob job;
-	public ThreadPoolExecutor executor;
+	private TopicAnalyzer analyseJob;
+	public ThreadPoolExecutor executor = null;
 
 	public TaskManager() {
 		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 	}
-	
+
 	public void startService(ServerConfig config) {
-		MongoDatabase mongo = new MongoDatabase(config);
 		
+		MongoDatabase mongo = new MongoDatabase(config);
+
 		job = new TwitterStreamJob(config);
 		job.addTweetHandler(new TweetToConsolePrinter());
 		job.addTweetHandler(new TweetToMongoDBHandler(mongo));
 		job.addTweetHandler(new UserToMongoDBHandler(mongo));
-		job.addTweetHandler(new TweetToNeo4JHandler(config));
+		// job.addTweetHandler(new TweetToNeo4JHandler());
 
 		if (config.getStreamOnStartup()) {
+			if(executor.isShutdown())
+				executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
 			executor.execute(job);
 		}
 
 	}
 
 	public void stopService() {
-		job.stopTwitterJob();
+		if (job != null)
+			job.stopTwitterJob();
+		if(analyseJob != null)
+			analyseJob.stopAnalyze();
 		executor.shutdown();
 	}
 
@@ -48,10 +56,11 @@ public class TaskManager {
 	}
 
 	public void startAnalyse(ServerConfig cf) {
-		TweetToNeo4JHandler handler = new TweetToNeo4JHandler(cf);
-		TopicAnalyzer ta = new TopicAnalyzer(cf, handler);
-		
-		executor.execute(ta);
+		analyseJob = new TopicAnalyzer(cf, GraphDatabase.getInstance());
+
+		if(executor.isShutdown())
+			executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+		executor.execute(analyseJob);
 	}
 
 }

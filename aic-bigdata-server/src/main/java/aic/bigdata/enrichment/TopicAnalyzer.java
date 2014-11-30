@@ -3,6 +3,7 @@ package aic.bigdata.enrichment;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
@@ -13,7 +14,9 @@ import aic.bigdata.server.ServerConfig;
 public class TopicAnalyzer implements Runnable {
 
 	private MongoDatabase mongodb;
-	private TweetToNeo4JHandler neo4jHandler;
+	private GraphDatabase graphDB;
+	
+	private boolean running = false;
 	
 	/**
 	 * Maximum amount of users that are analyzed.
@@ -26,9 +29,9 @@ public class TopicAnalyzer implements Runnable {
 	private int latestTweetsLimit = 100;
 	
 	
-	public TopicAnalyzer(ServerConfig config, TweetToNeo4JHandler neo4jHandler) {
+	public TopicAnalyzer(ServerConfig config, GraphDatabase graphDB) {
 		this.mongodb = new MongoDatabase(config);
-		this.neo4jHandler = neo4jHandler;
+		this.graphDB = graphDB;
 	}
 	
 	/**
@@ -37,19 +40,20 @@ public class TopicAnalyzer implements Runnable {
 	 * @throws UnknownHostException
 	 */
 	public void analyzeTweets() throws UnknownHostException {
+		this.running = true;
 		long time = System.currentTimeMillis();
 		List<String> topics = mongodb.readAllTopicsInLowercase();
 		List<Long> userIds = mongodb.readUserIds(userLimit); //TODO SLOW
 		TopicTweetsMiner miner = new TopicTweetsMiner(topics);
 		String bigTweet = null;
 		
-		for(int i=0; i<userIds.size(); i++) {
+		for(int i=0; i<userIds.size() && running; i++) {
 			bigTweet = mongodb.readLatestTweetsAsOneString(userIds.get(i), latestTweetsLimit);
 
 			List<String> interests = miner.getInterestedTopics(bigTweet);
 			
 			for(int j=0; j<interests.size(); j++) {
-				neo4jHandler.addMentionsRelationship(userIds.get(i), interests.get(j));
+				graphDB.addMentionsRelationship(userIds.get(i), interests.get(j));
 			}
 		}
 		
@@ -64,5 +68,9 @@ public class TopicAnalyzer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void stopAnalyze(){
+		this.running = false;
 	}
 }
