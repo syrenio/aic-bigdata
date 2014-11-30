@@ -39,7 +39,7 @@ public class TopicAnalyzer implements Runnable {
 	public void analyzeTweets() throws UnknownHostException {
 		long time = System.currentTimeMillis();
 		List<String> topics = mongodb.readAllTopicsInLowercase();
-		List<Long> userIds = mongodb.readUserIds(userLimit);
+		List<Long> userIds = mongodb.readUserIds(userLimit); //TODO SLOW
 		TopicTweetsMiner miner = new TopicTweetsMiner(topics);
 		String bigTweet = null;
 		

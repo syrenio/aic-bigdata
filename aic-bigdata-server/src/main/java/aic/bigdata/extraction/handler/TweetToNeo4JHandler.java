@@ -2,18 +2,20 @@ package aic.bigdata.extraction.handler;
 
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.server.ServerConfig;
-
 import twitter4j.Status;
 import twitter4j.User;
 import twitter4j.IDs;
 import twitter4j.TwitterException;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+
+
 
 //import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -21,6 +23,7 @@ import org.neo4j.graphdb.factory.GraphDatabaseFactory;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.schema.IndexDefinition;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.DynamicLabel;
 import org.neo4j.graphdb.Transaction;
@@ -62,7 +65,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 		try (Transaction tx = graphDb.beginTx()) {
 			userIndex = indexManager.forNodes("users");
-
+			
 			tx.success();
 		}
 
@@ -71,7 +74,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 			tx.success();
 		}
-
+		
 		cypherEngine = new ExecutionEngine(graphDb);
 	}
 
@@ -84,7 +87,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		if (status.isRetweet()) {
 			Status retweeted = status.getRetweetedStatus();
 			addUser(retweeted.getUser());
-			addRetweetsRelationship(user, retweeted.getUser());
+			addRetweetsRelationship(user, retweeted.getUser()); //TODO SLOW
 			//searchTweetForTopics(status); // ?
 			HandleStatusTweet(retweeted, retweeted.getSource());
 		}
@@ -140,16 +143,16 @@ public class TweetToNeo4JHandler implements TweetHandler {
 
 		// why do we need a Transaction object we then ignore? ask the neo4j docs, good luck!
 		try (Transaction ignoreMe = graphDb.beginTx()) {
-			result = cypherEngine.execute(getRetweetsCountQ, params);
+			result = cypherEngine.execute(getRetweetsCountQ, params); //TODO SLOW
 		}
 
 		try (Transaction tx = graphDb.beginTx()) {
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 
-			if (iterator.hasNext()) {
-				Map<String, Object> map = iterator.next();
+			if (iterator.hasNext()) { //TODO SLOW
+				Map<String, Object> map = iterator.next(); //TODO SLOW
 				//params.put("currentCount", map.get("r.count"));
-				result = cypherEngine.execute(updateRetweetsCountQ, params);
+				result = cypherEngine.execute(updateRetweetsCountQ, params); //TODO SLOW
 				if (iterator.hasNext()) {
 					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + retweeter.getId() + ")-[retweets]->(user " + original.getId() + ") in Neo4J DB");
 				}
@@ -231,6 +234,7 @@ public class TweetToNeo4JHandler implements TweetHandler {
 	}
 
 	public void addMentionsRelationship(long userId, String topic) {
+		
 		if (!nodeForUserExists(userId) && !nodeForTopicExists(topic)) {
 			System.err.println("TweetToNeo4JHandler: Cannot create relationship (user " +userId + ")-[mentions]->(topic " + topic + ") because either the user or the topic does not exist in the graph");
 			return;
@@ -250,10 +254,10 @@ public class TweetToNeo4JHandler implements TweetHandler {
 		try (Transaction tx = graphDb.beginTx()) {
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 
-			if (iterator.hasNext()) {
-				Map<String, Object> map = iterator.next();
+			if (iterator.hasNext()) { //TODO SLOW
+				Map<String, Object> map = iterator.next(); //TODO SLOW
 
-				result = cypherEngine.execute(updateMentionsCountQ, params);
+				result = cypherEngine.execute(updateMentionsCountQ, params); //TODO SLOW
 				if (iterator.hasNext()) {
 					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + userId + ")-[mentions]->(topic " + topic + ") in Neo4J DB");
 				}
