@@ -326,7 +326,7 @@ public class GraphDatabase {
 			else {
 				Map<String, Object> map = resourceIterator.next();
 				Relationship relationship = (Relationship) map.get("r");
-				retweetsIndex.add(relationship, "userId", retweeter.getId());
+				retweetsIndex.add(relationship, "retweeterId", retweeter.getId());
 			}
 
 		/*
