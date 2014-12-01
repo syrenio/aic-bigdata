@@ -30,8 +30,8 @@ public class TaskManager {
 
 		streamJob = new TwitterStreamJob(config);
 		streamJob.addTweetHandler(new TweetToConsolePrinter());
-		streamJob.addTweetHandler(new TweetToMongoDBHandler(mongo));
-		streamJob.addTweetHandler(new UserToMongoDBHandler(mongo));
+		//streamJob.addTweetHandler(new TweetToMongoDBHandler(mongo));
+		//streamJob.addTweetHandler(new UserToMongoDBHandler(mongo));
 		// job.addTweetHandler(new TweetToNeo4JHandler());
 
 		if (config.getStreamOnStartup()) {
