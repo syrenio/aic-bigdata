@@ -21,7 +21,7 @@ public class TopicAnalyzer implements Runnable {
 	/**
 	 * Maximum amount of users that are analyzed.
 	 */
-	private int userLimit = 100000;
+	private int userLimit = 1500000;
 	
 	/**
 	 * Analyze only the most recent tweets to keep performance manageable.
