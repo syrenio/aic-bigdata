@@ -49,6 +49,13 @@ public class MongoDatabase {
 		return c;
 	}
 
+	public DBCursor getCursorForUsers() throws UnknownHostException {
+		if (!init)
+			intialize();
+		DBCursor c = users.find();
+		return c;
+	}
+
 	public boolean checkUserExists(User user) throws UnknownHostException {
 		if (!init)
 			intialize();
@@ -128,14 +135,14 @@ public class MongoDatabase {
 		DBObject o = (DBObject) JSON.parse(topic);
 		this.topics.insert(o);
 	}
-	
-	public List<String> getTopicNames() throws UnknownHostException{
+
+	public List<String> getTopicNames() throws UnknownHostException {
 		if (!init)
 			intialize();
 		List<String> names = new ArrayList<String>();
 		DBCursor cursor = this.topics.find();
 		for (DBObject o : cursor) {
-			names.add(o.get("id").toString()); //id == name
+			names.add(o.get("id").toString()); // id == name
 		}
 		return names;
 	}
@@ -225,7 +232,7 @@ public class MongoDatabase {
 
 	private void createIndexies() {
 		MongoDatabaseHelper helper = new MongoDatabaseHelper();
-		
+
 		helper.createUniqueIndex("id", this.users);
 		helper.createUniqueIndex("id", this.tweets);
 		helper.createUniqueIndex("id", this.ads);
@@ -235,15 +242,12 @@ public class MongoDatabase {
 		helper.createIndex("timestamp_ms", this.tweets, -1);
 	}
 
-
-
 	private void intialize() throws UnknownHostException {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
 		System.out.println(mongodbname);
 		MongoDatabaseHelper dbBuilder = new MongoDatabaseHelper();
-		
-		
+
 		this.database = mongoclient.getDB(mongodbname);
 		this.tweets = database.getCollection(cfg.getMongoCollection());
 		this.users = database.getCollection(cfg.getMongoCollectionUsers());
