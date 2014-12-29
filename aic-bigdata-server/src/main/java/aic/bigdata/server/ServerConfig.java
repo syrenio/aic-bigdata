@@ -24,6 +24,7 @@ public class ServerConfig {
 	private Properties server;
 	private Properties mongo;
 	private Properties neo4j;
+	private Properties sql;
 
 	private final String OUTPUTFILE = "default_output.log";
 	private final String OUTPUTJSON = "default_output.json";
@@ -201,5 +202,25 @@ public class ServerConfig {
 	
 	public String getNeo4jFullDbName(){
 		return this.getNeo4JDbPath().concat(this.getNeo4JDbName());
+	}
+
+	public Properties getSql() {
+		return sql;
+	}
+
+	public void setSql(Properties sql) {
+		this.sql = sql;
+	}	
+	
+	public String getSqlDatabaseName(){
+		return sql.getProperty("sql.databaseName");
+	}
+	
+	public Boolean getSqlCleanOnStart(){
+		return new Boolean(sql.getProperty("sql.cleanOnStart"));
+	}
+	
+	public String getSqlStartScriptPath(){
+		return sql.getProperty("sql.create");
 	}
 }
