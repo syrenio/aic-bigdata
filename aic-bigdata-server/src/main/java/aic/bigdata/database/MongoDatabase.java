@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import twitter4j.Status;
-import twitter4j.User;
 import aic.bigdata.server.ServerConfig;
 
-import com.google.gson.Gson;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -26,12 +24,10 @@ public class MongoDatabase {
 	private DBCollection tweets;
 	private boolean init = false;
 	private DBCollection users;
-	private Gson gson;
 	private DBCollection ads;
 	private DBCollection topics;
 
 	public MongoDatabase(ServerConfig cfg) {
-		this.gson = new Gson();
 		this.cfg = cfg;
 	}
 
@@ -56,14 +52,6 @@ public class MongoDatabase {
 		return c;
 	}
 
-	public boolean checkUserExists(User user) throws UnknownHostException {
-		if (!init)
-			intialize();
-
-		DBObject o = getUserById(user.getId());
-		return o != null;
-	}
-
 	public boolean checkTweetExists(Status status) throws UnknownHostException {
 		if (!init)
 			intialize();
@@ -72,17 +60,6 @@ public class MongoDatabase {
 		f.put("id", status.getId());
 		DBObject o = this.tweets.findOne(f);
 		return o != null;
-	}
-
-	public void writeUser(User user) throws UnknownHostException {
-		if (!init)
-			intialize();
-
-		if (!checkUserExists(user)) {
-			String json = gson.toJson(user);
-			DBObject o = (DBObject) JSON.parse(json);
-			this.users.insert(o);
-		}
 	}
 
 	public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
@@ -246,7 +223,6 @@ public class MongoDatabase {
 		this.mongoclient = new MongoClient(); // use local started one
 		String mongodbname = cfg.getMongoDbName();
 		System.out.println(mongodbname);
-		MongoDatabaseHelper dbBuilder = new MongoDatabaseHelper();
 
 		this.database = mongoclient.getDB(mongodbname);
 		this.tweets = database.getCollection(cfg.getMongoCollection());

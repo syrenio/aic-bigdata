@@ -1,18 +1,12 @@
 package aic.bigdata.extraction;
 
-import java.io.IOException;
-import java.net.UnknownHostException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
+import java.sql.SQLException;
 
 import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.enrichment.AdsTopicsToDatabaseFiller;
-import aic.bigdata.enrichment.TopicAnalyzer;
+import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.extraction.handler.TweetToConsolePrinter;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
-import aic.bigdata.extraction.handler.UserToMongoDBHandler;
+import aic.bigdata.extraction.handler.UserToDBHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 import aic.bigdata.server.ServerConfig;
 import aic.bigdata.server.TwitterStreamJob;
@@ -41,9 +35,16 @@ public class ExtractionRunner {
 		return handler;
 	}
 
-	private static TweetHandler CreateUserToMongoDBHandler() {
-		MongoDatabase b = new MongoDatabase(config);
-		TweetHandler handler = new UserToMongoDBHandler(b);
+	private static TweetHandler CreateUserToDBHandler() {
+		SqlDatabase db;
+		TweetHandler handler = null;
+		try {
+			db = new SqlDatabase(config);
+			handler = new UserToDBHandler(db);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.err.println("Error creating UserToDBHandler");
+		}
 		return handler;
 	}
 
@@ -52,12 +53,12 @@ public class ExtractionRunner {
 		// TweetProvider p = CreateMongoDbTweetProvier();
 		// p.addTweetHandler(new TweetToFileHandler(config.getOutputFile()));
 		// p.addTweetHandler(new TweetToJSONHandler(config.getOutputJSON()));
-		
-		TweetHandler handler = CreateUserToMongoDBHandler();
+
+		TweetHandler handler = CreateUserToDBHandler();
 		TweetHandler handler2 = CreateTweetToMongoDBHandler();
 		p.addTweetHandler(handler);
 		p.addTweetHandler(handler2);
-		
+
 		TweetHandler con = new TweetToConsolePrinter();
 		p.addTweetHandler(con);
 

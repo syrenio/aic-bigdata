@@ -10,7 +10,7 @@ import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.handler.TweetToConsolePrinter;
 import aic.bigdata.extraction.handler.TweetToMongoDBHandler;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
-import aic.bigdata.extraction.handler.UserToMongoDBHandler;
+import aic.bigdata.extraction.handler.UserToDBHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 
 public class TaskManager {
