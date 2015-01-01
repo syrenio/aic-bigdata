@@ -1,6 +1,7 @@
 package aic.bigdata.server;
 
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -11,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
-import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 
@@ -76,15 +77,14 @@ public class TwitterStreamJob implements TweetProvider {
 		List<String> terms = config.getTerms();
 		List<String> langs = config.getLanguages();
 
-		// read from additional users form mongoDB
-		MongoDatabase m = new MongoDatabase(config);
-
+		// read from additional users form sqldb
 		if (config.isAddDBUsers()) {
 			List<Long> users;
 			try {
-				users = m.readUserIds(config.getMaxFollowersFromDB());
+				SqlDatabase sqldb = new SqlDatabase(config);
+				users = sqldb.getUserIds(config.getMaxFollowersFromDB());
 				followings.addAll(users);
-			} catch (UnknownHostException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
@@ -93,7 +93,7 @@ public class TwitterStreamJob implements TweetProvider {
 		hosebirdEndpoint.trackTerms(terms);
 		hosebirdEndpoint.languages(langs);
 		hosebirdEndpoint.addQueryParameter("with", "following");
-		hosebirdEndpoint.addQueryParameter("replies","all");
+		hosebirdEndpoint.addQueryParameter("replies", "all");
 
 		String s = String.format("Followers(%s): %s ", followings.size(), StringUtils.join(followings, ","));
 		System.out.println(s);

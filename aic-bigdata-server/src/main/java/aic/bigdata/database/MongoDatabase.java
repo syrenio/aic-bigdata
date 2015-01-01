@@ -83,21 +83,21 @@ public class MongoDatabase {
 		return result.toString();
 	}
 
-	public List<Long> readUserIds(Integer limit) throws UnknownHostException {
-		if (!init)
-			intialize();
-
-		List<Long> list = new ArrayList<Long>();
-		DBObject f = new BasicDBObject();
-		DBObject k = new BasicDBObject();
-		k.put("id", 1);
-		DBCursor find = this.users.find(f, k).limit(limit);
-		for (DBObject o : find) {
-			Long val = ((Number) o.get("id")).longValue();
-			list.add(val);
-		}
-		return list;
-	}
+	// public List<Long> readUserIds(Integer limit) throws UnknownHostException {
+	// if (!init)
+	// intialize();
+	//
+	// List<Long> list = new ArrayList<Long>();
+	// DBObject f = new BasicDBObject();
+	// DBObject k = new BasicDBObject();
+	// k.put("id", 1);
+	// DBCursor find = this.users.find(f, k).limit(limit);
+	// for (DBObject o : find) {
+	// Long val = ((Number) o.get("id")).longValue();
+	// list.add(val);
+	// }
+	// return list;
+	// }
 
 	public void writeAd(String ad) throws UnknownHostException {
 		if (!init)
@@ -130,7 +130,7 @@ public class MongoDatabase {
 	 * @param topicname
 	 * @param adId
 	 * @param adding
-	 *            Adds an ad id, if true, removes an ad id, if false.
+	 *          Adds an ad id, if true, removes an ad id, if false.
 	 * @throws UnknownHostException
 	 */
 	public void updateTopicAd(String topicname, int adId, boolean adding) throws UnknownHostException {
@@ -233,27 +233,29 @@ public class MongoDatabase {
 		this.init = true;
 	}
 
-	public List<DBObject> getUsers(int pageNumber, int size) throws UnknownHostException {
-		if (!init)
-			intialize();
-
-		DBObject sort = new BasicDBObject("name", 1);
-		DBCursor cur = this.users.find().sort(sort).skip(pageNumber > 0 ? ((pageNumber - 1) * size) : 0).limit(size);
-
-		List<DBObject> list = new ArrayList<DBObject>();
-		for (DBObject dbObject : cur) {
-			list.add(dbObject);
-		}
-		return list;
-	}
-
-	public DBObject getUserById(Long id) throws UnknownHostException {
-		if (!init)
-			intialize();
-
-		DBObject f = new BasicDBObject();
-		f.put("id", id);
-		DBObject o = this.users.findOne(f);
-		return o;
-	}
+	// public List<DBObject> getUsers(int pageNumber, int size) throws
+	// UnknownHostException {
+	// if (!init)
+	// intialize();
+	//
+	// DBObject sort = new BasicDBObject("name", 1);
+	// DBCursor cur = this.users.find().sort(sort).skip(pageNumber > 0 ?
+	// ((pageNumber - 1) * size) : 0).limit(size);
+	//
+	// List<DBObject> list = new ArrayList<DBObject>();
+	// for (DBObject dbObject : cur) {
+	// list.add(dbObject);
+	// }
+	// return list;
+	// }
+	//
+	// public DBObject getUserById(Long id) throws UnknownHostException {
+	// if (!init)
+	// intialize();
+	//
+	// DBObject f = new BasicDBObject();
+	// f.put("id", id);
+	// DBObject o = this.users.findOne(f);
+	// return o;
+	// }
 }

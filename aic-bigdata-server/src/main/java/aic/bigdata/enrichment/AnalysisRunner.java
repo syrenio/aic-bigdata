@@ -2,6 +2,7 @@ package aic.bigdata.enrichment;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -15,20 +16,20 @@ import aic.bigdata.server.ServerConfig;
 
 public class AnalysisRunner {
 	private static ServerConfig config;
-	
+
 	static {
 		config = new ServerConfigBuilder().getConfig();
 	}
-	
+
 	private static void FillAdsTopicDatabase(GraphDatabase neo) {
 		AdsTopicsToDatabaseFiller filler = new AdsTopicsToDatabaseFiller(config, neo);
-        try {
+		try {
 			filler.fillDatabase();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void DeleteSampleAdsTopics() {
 		MongoDatabase b = new MongoDatabase(config);
 		try {
@@ -37,20 +38,20 @@ public class AnalysisRunner {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void AnalyzeTweets(GraphDatabase neo) {
-		TopicAnalyzer analyzer = new TopicAnalyzer(config,neo);
+		TopicAnalyzer analyzer = new TopicAnalyzer(config, neo);
 		try {
 			analyzer.analyzeTweets();
-		} catch (UnknownHostException e) {
+		} catch (UnknownHostException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		TweetToNeo4JHandler neo4jHandler = new TweetToNeo4JHandler(config,GraphDatabase.getInstance());
+		TweetToNeo4JHandler neo4jHandler = new TweetToNeo4JHandler(config, GraphDatabase.getInstance());
 		DeleteSampleAdsTopics();
-		
+
 		FillAdsTopicDatabase(GraphDatabase.getInstance());
 
 		AnalyzeTweets(GraphDatabase.getInstance());

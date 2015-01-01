@@ -2,6 +2,7 @@ package aic.bigdata.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.h2.jdbcx.JdbcDataSource;
@@ -12,6 +13,7 @@ import aic.bigdata.server.ServerConfig;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
@@ -44,12 +46,31 @@ public class SqlDatabase {
 		}
 	}
 
+	public AicUser getUserById(long id) throws SQLException {
+		return userDao.queryForId(String.valueOf(id));
+	}
+
 	public long getUserCount() throws SQLException {
 		return userDao.countOf();
 	}
 
 	public List<AicUser> getAllUsers() throws SQLException {
 		return userDao.queryForAll();
+	}
+
+	public List<AicUser> getUsers(long page, long pageSize) throws SQLException {
+		long startRow = page * pageSize;
+		PreparedQuery<AicUser> q = userDao.queryBuilder().offset(startRow).limit(pageSize).prepare();
+		return userDao.query(q);
+	}
+
+	public List<Long> getUserIds(int userLimit) throws SQLException {
+		List<Long> list = new ArrayList<Long>();
+		PreparedQuery<AicUser> q = userDao.queryBuilder().prepare();
+		for (AicUser usr : userDao.query(q)) {
+			list.add(usr.getId());
+		}
+		return list;
 	}
 
 }

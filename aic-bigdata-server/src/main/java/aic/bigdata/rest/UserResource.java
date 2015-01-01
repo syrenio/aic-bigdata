@@ -1,8 +1,7 @@
 package aic.bigdata.rest;
 
-import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -16,15 +15,14 @@ import javax.ws.rs.core.MediaType;
 
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.database.SqlDatabase;
+import aic.bigdata.database.model.AicUser;
 import aic.bigdata.extraction.ServerConfigBuilder;
-import aic.bigdata.rest.model.SigmaNode;
 import aic.bigdata.rest.model.Connections;
 import aic.bigdata.rest.model.ResultEntry;
 import aic.bigdata.rest.model.ResultPage;
+import aic.bigdata.rest.model.SigmaNode;
 import aic.bigdata.server.ServerConfig;
-
-import com.mongodb.DBObject;
-import com.sun.jersey.spi.resource.Singleton;
 
 @Path("users")
 public class UserResource {
@@ -33,24 +31,20 @@ public class UserResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultPage getUsers(@QueryParam("size") int size,
-			@QueryParam("page") int page) {
+	public ResultPage getUsers(@QueryParam("size") int size, @QueryParam("page") int page) {
 
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 
-		MongoDatabase mongo = new MongoDatabase(config);
-
-		List<DBObject> list = null;
+		List<AicUser> list = null;
 		try {
-			list = mongo.getUsers(page, size);
+			SqlDatabase sqldb = new SqlDatabase(config);
+			list = sqldb.getUsers(page, size);
 			List<ResultEntry> result = new ArrayList<ResultEntry>();
-			for (DBObject user : list) {
+			for (AicUser user : list) {
 				ResultEntry entry = new ResultEntry();
-				Long long1 = new Long(user.get("id").toString());
-				String name = String.valueOf(user.get("name"));
-				entry.setId(long1);
-				entry.setName(name);
+				entry.setId(user.getId());
+				entry.setName(user.getName());
 				result.add(entry);
 			}
 
@@ -58,7 +52,7 @@ public class UserResource {
 			resultPage.setResult(result);
 			resultPage.setTotalSize(size);
 			return resultPage;
-		} catch (UnknownHostException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,10 +68,9 @@ public class UserResource {
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 
-		if(mongo==null)
+		if (mongo == null)
 			mongo = new MongoDatabase(config);
 
-		
 		// FIXME CREATE NEO4J DB Instance and get Connections
 		// MongoDatabase mongo = new MongoDatabase(config);
 		Set<String> mentionedTopics = GraphDatabase.getInstance().getMentionedTopics(userId);
