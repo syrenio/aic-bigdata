@@ -1,28 +1,40 @@
-var app = angular.module("bigdataApp", [ "ngResource", "angular-loading-bar" ]);
+var app = angular.module("bigdataApp", ["ngRoute","ngResource", "angular-loading-bar" ]);
+
+app.config(["$routeProvider",function($routeProvider){
+	$routeProvider.
+		when('/dashboard', {
+			templateUrl: 'partials/dashboard.html'
+		}).
+		when('/users', {
+			templateUrl: 'partials/users.html',
+			controller: 'UsersCtrl'
+		}).
+		otherwise({
+			redirectTo: '/dashboard'
+		});
+}]);
 
 app.controller("ServiceCtrl", function($scope, $http) {
-	$scope.startService = function() {
-		$http.get("api/service?command=start").success(function(data) {
+	function exCommand(cmd){
+		$http.get("api/service?command="+cmd).success(function(data) {
 			$scope.result = data;
 		});
+	}
+
+	$scope.startService = function() {
+		exCommand("start");
 	};
 	$scope.stopService = function() {
-		$http.get("api/service?command=stop").success(function(data) {
-			$scope.result = data;
-		});
+		exCommand("stop");
+	};
+	$scope.startExtraction = function() {
+		exCommand("extraction");
+	};
+	$scope.startAnalyse = function() {
+		exCommand("analyse");
 	};
 	$scope.getStatus = function() {
 		$http.get("api/service/status", {}).success(function(data) {
-			$scope.result = data;
-		});
-	};
-	$scope.startExtraction = function() {
-		$http.get("api/service?command=extraction", {}).success(function(data) {
-			$scope.result = data;
-		});
-	};
-	$scope.startAnalyse = function() {
-		$http.get("api/service?command=analyse", {}).success(function(data) {
 			$scope.result = data;
 		});
 	};
@@ -94,7 +106,7 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 	}
 });
 
-app.controller("UserCtrl", function($scope, $http, UserService) {
+app.controller("UsersCtrl", function($scope, $http, UserService) {
 	$scope.pageSize = 100;
 	$scope.pageNumber = 0;
 
