@@ -11,13 +11,31 @@
 <link
 	href="bower_components/angular-loading-bar/build/loading-bar.min.css"
 	rel="stylesheet" type="text/css">
+<link href="bower_components/ng-table/ng-table.min.css" rel="stylesheet"
+	type="text/css">
 <link href="css/app.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-	<div ng-app="bigdataApp" class="container">
-		<div ng-view>
-
+	<div ng-app="bigdataApp">
+		<nav class="navbar navbar-default">
+			<div class="container">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">Brand</a>
+				</div>
+				<div class="collapse navbar-collapse"
+					id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#/dashboard">Dashboard</a></li>
+						<li><a href="#/users">Users</a></li>
+						<li><a href="#/queries">Query</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+			<div ng-view></div>
 		</div>
 	</div>
 
@@ -27,6 +45,7 @@
 	<script src="bower_components/angular-resource/angular-resource.js"></script>
 	<script
 		src="bower_components/angular-loading-bar/build/loading-bar.min.js"></script>
+	<script src="bower_components/ng-table/ng-table.js"></script>
 	<script src="bower_components/sigma.js/sigma.min.js"></script>
 	<script src="scripts/app.js"></script>
 </body>
