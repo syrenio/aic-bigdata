@@ -11,26 +11,7 @@
 </div>
 <hr>
 <div class="row">
-	<div class="col-md-6" ng-controller="UsersCtrl">
-		<h3>Users</h3>
-
-		Page:<input ng-model="pageNumber" /> PageSize:<input
-			ng-model="pageSize" />
-		<button ng-click="updateUsers()">Get Users!</button>
-		<table class="table table-condensed table-hover table-striped">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-				</tr>
-			</thead>
-			<tr ng-repeat="usr in users.result" ng-click="selectUser(usr)">
-				<td>{{usr.id}}</td>
-				<td>{{usr.name}}</td>
-			</tr>
-		</table>
-	</div>
-	<div class="col-md-6" ng-controller="ConnectionCtrl">
+	<div class="col-md-12" ng-controller="ConnectionCtrl">
 		<h3>Connections</h3>
 		<select ng-model="selTopic" ng-options="t for t in topics"
 			ng-change="findUsers(t)">

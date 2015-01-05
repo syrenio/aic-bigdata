@@ -1,19 +1,32 @@
 <div class="col-md-12">
 	<h3>Users</h3>
-
-	Page:<input ng-model="pageNumber" /> PageSize:<input
-		ng-model="pageSize" />
-	<button ng-click="updateUsers()">Get Users!</button>
-	<table class="table table-condensed table-hover table-striped">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-			</tr>
-		</thead>
-		<tr ng-repeat="usr in users.result" ng-click="selectUser(usr)">
-			<td>{{usr.id}}</td>
-			<td>{{usr.name}}</td>
+	<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
+		<tr ng-repeat="user in $data">
+			<td data-title="'Id'">
+				{{user.id}}
+			</td>
+			<td data-title="'Name'">
+				{{user.name}}
+			</td>
 		</tr>
 	</table>
 </div>
+
+<script type="text/ng-template" id="custom/pager">
+	<ul class="pager ng-cloak">
+		<li ng-repeat="page in pages"
+			ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+			ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+			<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+			<a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+		</li>
+		<li>
+			<div class="btn-group">
+				<button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+				<button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+				<button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+				<button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+			</div>
+		</li>
+	</ul>
+</script>

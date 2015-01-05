@@ -50,7 +50,7 @@ public class UserResource {
 
 			ResultPage resultPage = new ResultPage();
 			resultPage.setResult(result);
-			resultPage.setTotalSize(size);
+			resultPage.setTotalSize(sqldb.getUserCount());
 			return resultPage;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

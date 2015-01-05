@@ -5,18 +5,18 @@ import java.util.List;
 
 public class ResultPage {
 
-	private int totalSize;
+	private long totalSize;
 	private List<? extends ResultEntry> result = new ArrayList<>();
 
 	public int getSize() {
 		return getResult().size();
 	}
 
-	public int getTotalSize() {
+	public long getTotalSize() {
 		return totalSize;
 	}
 
-	public void setTotalSize(int totalSize) {
+	public void setTotalSize(long totalSize) {
 		this.totalSize = totalSize;
 	}
 

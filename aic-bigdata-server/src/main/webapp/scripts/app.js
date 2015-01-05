@@ -1,4 +1,4 @@
-var app = angular.module("bigdataApp", ["ngRoute","ngResource", "angular-loading-bar" ]);
+var app = angular.module("bigdataApp", ["ngRoute","ngResource", "angular-loading-bar","ngTable" ]);
 
 app.config(["$routeProvider",function($routeProvider){
 	$routeProvider.
@@ -106,31 +106,48 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 	}
 });
 
-app.controller("UsersCtrl", function($scope, $http, UserService) {
+app.controller("UsersCtrl", function($scope, $http, UserService, ngTableParams) {
 	$scope.pageSize = 100;
 	$scope.pageNumber = 0;
+	var users = [{
+		id: 1,
+		name: "test1"
+	},{
+		id: 2,
+		name: "test2"
+	}];
 
 	function _init() {
-		getUsers();
+		getUsers($scope.pageSize,$scope.pageNumber);
 	}
 
-	function getUsers() {
-		var url = "api/users?size=" + $scope.pageSize + "&page="
-				+ $scope.pageNumber;
-		$http.get(url).success(function(data) {
-			$scope.users = data;
+	function getUsers(size,page) {
+		var url = "api/users?size=" + size + "&page="
+				+ page;
+		return $http.get(url).success(function(data) {
+			users = data;
+			$scope.users = users;
 		});
 	}
+
+	$scope.tableParams = new ngTableParams({
+		page: 1,            // show first page
+		count: 10           // count per page
+	}, {
+		total: 0, // length of data
+		getData: function($defer, params) {
+			getUsers(params.count(),params.page()).then(function(data){
+				params.total(users.totalSize);
+				$defer.resolve(users.result);
+			});
+		}
+	});
 
 	$scope.selectUser = function(user) {
 		UserService.getConnections(user.id).then(function(data) {
 			console.log(data);
 		});
-	}
-
-	$scope.updateUsers = function() {
-		getUsers();
-	}
+	};
 
 	_init();
 });
