@@ -3,6 +3,12 @@
  */
 var app = angular.module("bigdataApp");
 
+app.controller("HeadCtrl",function($scope, $location){
+    $scope.isActive = function (viewLocation) { 
+        return viewLocation === $location.path();
+    };
+});
+
 app.controller("ServiceCtrl", function($scope, $http) {
 	$scope.status = {
 		stream : false,
