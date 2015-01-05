@@ -51,10 +51,6 @@ public class TaskManager {
 		executor.shutdown();
 	}
 
-	public String getStatus() {
-		return "Service running: " + (executor.getActiveCount() != 0);
-	}
-
 	public String getTweetCount() {
 		return "Tweets found: " + streamJob.getCounter();
 	}

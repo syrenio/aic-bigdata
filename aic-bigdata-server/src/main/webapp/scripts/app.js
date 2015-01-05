@@ -15,9 +15,17 @@ app.config(["$routeProvider",function($routeProvider){
 }]);
 
 app.controller("ServiceCtrl", function($scope, $http) {
+	$scope.status = {
+		stream : false,
+		extraction : false,
+		analyse : false,
+		active: false
+	};
+
 	function exCommand(cmd){
 		$http.get("api/service?command="+cmd).success(function(data) {
-			$scope.result = data;
+			console.log(data);
+			$scope.status = data;
 		});
 	}
 
@@ -35,7 +43,7 @@ app.controller("ServiceCtrl", function($scope, $http) {
 	};
 	$scope.getStatus = function() {
 		$http.get("api/service/status", {}).success(function(data) {
-			$scope.result = data;
+			$scope.status = data;
 		});
 	};
 });

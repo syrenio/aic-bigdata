@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import aic.bigdata.rest.model.ServiceStatus;
 import com.sun.jersey.spi.resource.Singleton;
 
 import aic.bigdata.extraction.ServerConfigBuilder;
@@ -17,6 +18,7 @@ import aic.bigdata.server.TaskManager;
 public class ServiceResource {
 
 	private TaskManager sm = null;
+	private ServiceStatus status = new ServiceStatus();
 	
 	private TaskManager getTaskManager() {
 		if(sm == null)
@@ -26,29 +28,33 @@ public class ServiceResource {
 	
 	@GET
 	@Path("/status")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String showServiceStatus() {
-		return getTaskManager().getStatus();
+	@Produces(MediaType.APPLICATION_JSON)
+	public ServiceStatus showServiceStatus() {
+		return status;
 	}
 
 	
 	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String commandService(@QueryParam("command") String command) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public ServiceStatus commandService(@QueryParam("command") String command) {
 		ServerConfig cf = new ServerConfigBuilder().getConfig();
 		switch (command.toLowerCase()) {
 		case "start":
 			getTaskManager().startService(cf);
-			return "Service starting...";
+			status.stream = true;
+			return status;
 		case "stop":
 			getTaskManager().stopService();
-			return "Service stopping...";
+			status = new ServiceStatus();
+			return status;
 		case "extraction":
 			getTaskManager().startExtraction(cf);
-			return "Extraction started...";
+			status.extraction = true;
+			return status;
 		case "analyse":
 			getTaskManager().startAnalyse(cf);
-			return "Analysis started...";
+			status.analyse = true;
+			return status;
 		default:
 			break;
 		}

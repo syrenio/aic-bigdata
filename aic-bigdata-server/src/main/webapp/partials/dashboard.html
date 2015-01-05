@@ -1,13 +1,32 @@
 
 <div ng-controller="ServiceCtrl" class="row">
-	<button ng-click="startService()">Start Service</button>
-	<button ng-click="startExtraction()">Start Extraction</button>
-	<button ng-click="startAnalyse()">Start Analyse</button>
-	<button ng-click="getStatus()">Get Status</button>
-
-	<button ng-click="stopService()">Stop Service</button>
-	<div>{{result}}</div>
-	<aic-spinner></aic-spinner>
+	<table class="table table-condensed table-hover table-striped">
+		<thead>
+		<tr>
+			<th>Service</th>
+			<th>Status</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>Stream</td>
+			<td><span ng-show="status.stream"><aic-spinner></aic-spinner></span></td>
+			<td><button ng-disabled="status.active" class="btn btn-default" ng-click="startService()">Start Service</button></td>
+		</tr>
+		<tr>
+			<td>Extraction</td>
+			<td><span ng-show="status.extraction"><aic-spinner></aic-spinner></span></td>
+			<td><button ng-disabled="status.active" class="btn btn-default" ng-click="startExtraction()">Start Extraction</button></td>
+		</tr>
+		<tr>
+			<td>Analyse</td>
+			<td><span ng-show="status.analyse"><aic-spinner></aic-spinner></span></td>
+			<td><button ng-disabled="status.active" class="btn btn-default" ng-click="startAnalyse()">Start Analyse</button></td>
+		</tr>
+		</tbody>
+		</table>
+	<button ng-disabled="!status.active" class="btn btn-default" ng-click="stopService()">Stop Service</button>
 </div>
 <hr>
 <div class="row">

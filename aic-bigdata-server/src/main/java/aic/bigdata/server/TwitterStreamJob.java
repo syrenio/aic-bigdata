@@ -155,7 +155,9 @@ public class TwitterStreamJob implements TweetProvider {
 
 	@Override
 	public void stopProvider() {
-		client.stop();
+		if(client!=null) {
+			client.stop();
+		}
 	}
 
 }
