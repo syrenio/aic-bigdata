@@ -13,6 +13,10 @@ app.config(["$routeProvider",function($routeProvider){
 			templateUrl: 'partials/campaigns.html',
 			controller: 'CampaignsCtrl'
 		}).
+		when("/query", {
+			templateUrl: 'partials/query.html',
+			controller: 'QueryCtrl'
+		}).
 		otherwise({
 			redirectTo: '/dashboard'
 		});
