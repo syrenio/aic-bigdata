@@ -13,8 +13,19 @@ body{
     height: 500px;
     margin: auto;
   }
+
+.ads-list{
+	
+}
+.ads-list-item{
+	font-weight: bold;
+}
+.ads-list-item-topic{
+	font-weight: normal;
+	font-size: small;
+}
   
-  /*spinner*/
+/*spinner*/
   .spinner {
   display: inline-block;
   width: 50px;

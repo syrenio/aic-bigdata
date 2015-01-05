@@ -9,6 +9,10 @@ app.config(["$routeProvider",function($routeProvider){
 			templateUrl: 'partials/users.html',
 			controller: 'UsersCtrl'
 		}).
+		when("/campaigns", {
+			templateUrl: 'partials/campaigns.html',
+			controller: 'CampaignsCtrl'
+		}).
 		otherwise({
 			redirectTo: '/dashboard'
 		});
@@ -79,6 +83,25 @@ app.factory("UserService", function($http) {
 	};
 
 	return srv;
+});
+
+app.factory("AdsService",function($http){
+	return {
+		getAds : function(){
+			return $http.get("api/ads").then(
+					function(resp) {
+						console.log(resp.data);
+						return resp.data;
+					});
+		}
+	};
+});
+
+app.controller("CampaignsCtrl", function($scope,AdsService){
+	$scope.ads = [];
+	AdsService.getAds().then(function(data){
+		$scope.ads = data;
+	});
 });
 
 app.controller("ConnectionCtrl", function($scope, ConnectionService) {
