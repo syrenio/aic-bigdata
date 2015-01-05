@@ -13,7 +13,8 @@ Start
 - gradle build
 - gradle main            <-- start Console version
 - gradle neo4jExtraction <-- extract graph from mongodb
-- gradle tanalysis <-- add ads/topics and mine topics
+- gradle tanalysis       <-- add ads/topics and mine topics
+- gradle userConvert     <-- convert existing Users from MongoDB into H2 Database
 
 Web
 ----------
