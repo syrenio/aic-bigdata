@@ -17,6 +17,10 @@ app.controller("ServiceCtrl", function($scope, $http) {
 		active: false
 	};
 
+	function _init(){
+		$scope.getStatus();
+	}
+	
 	function exCommand(cmd){
 		$http.get("api/service?command="+cmd).success(function(data) {
 			console.log(data);
@@ -41,6 +45,9 @@ app.controller("ServiceCtrl", function($scope, $http) {
 			$scope.status = data;
 		});
 	};
+	
+	
+	_init();
 });
 
 
