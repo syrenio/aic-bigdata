@@ -1,5 +1,6 @@
 package aic.bigdata.rest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.database.model.AicUser;
 import aic.bigdata.enrichment.AdObject;
+import aic.bigdata.extraction.ServerConfigBuilder;
+import aic.bigdata.server.ServerConfig;
 
 /*
  * 1. Which users are the most inﬂuential persons in your data set? Inﬂuential persons do not only have many followers, 
@@ -33,11 +37,23 @@ import aic.bigdata.enrichment.AdObject;
 @Path("queries")
 public class QueryResource {
 
+	ServerConfig config = new ServerConfigBuilder().getConfig();
+
 	@GET
 	@Path("inflUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AicUser> getMostInflUsers() {
+
+		try {
+			SqlDatabase db = new SqlDatabase(config);
+			List<AicUser> users = db.getUsers(0, 10);
+			return users;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		List<AicUser> list = new ArrayList<AicUser>();
 		return list;
 	}

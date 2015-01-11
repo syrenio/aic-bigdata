@@ -60,7 +60,8 @@ public class SqlDatabase {
 
 	public List<AicUser> getUsers(long page, long pageSize) throws SQLException {
 		long startRow = page * pageSize;
-		PreparedQuery<AicUser> q = userDao.queryBuilder().offset(startRow).limit(pageSize).prepare();
+		PreparedQuery<AicUser> q = userDao.queryBuilder().offset(startRow).limit(pageSize).orderBy("name", true)
+				.prepare();
 		return userDao.query(q);
 	}
 

@@ -136,3 +136,22 @@ app.controller("UsersCtrl", function($scope, $http, UserService, ngTableParams) 
 
 	_init();
 });
+
+
+app.controller("QueryCtrl", function($scope, $http, QueryService) {
+	var that = this;
+	
+	that.mostInflPersons = [];
+	
+	that.queryMostInflPersons = function(){
+		QueryService.getMostInflPerson().then(function(data){
+			that.mostInflPersons = data;
+		});
+	};
+	
+	function _init() {
+		
+	}
+
+	_init();
+});
