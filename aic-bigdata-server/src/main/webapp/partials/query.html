@@ -1,1 +1,15 @@
 <h3>Query</h3>
+<h4>Most influential person</h4>
+<a class="btn btn-default btn-sm" ng-click="qc.queryMostInflPersons()">
+  <i class="fa fa-refresh"></i> Start</a>
+<ul>
+	<li ng-repeat="p in qc.mostInflPersons">{{p.name | empty:"no Name"}}  ({{p.screenName}})</li>
+</ul>
+
+<h4>Query users with interests</h4>
+
+
+<h4>Suggest ads for User (existing interests)</h4>
+
+
+<h4>Suggest ads for User (potential interests)</h4>

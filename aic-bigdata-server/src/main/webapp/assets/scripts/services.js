@@ -47,3 +47,16 @@ app.factory("AdsService",function($http){
 		}
 	};
 });
+
+
+app.factory("QueryService",function($http){
+	return {
+		getMostInflPerson : function(){
+			return $http.get("api/queries/inflUser").then(
+					function(resp) {
+						console.log(resp.data);
+						return resp.data;
+					});
+		}
+	};
+});

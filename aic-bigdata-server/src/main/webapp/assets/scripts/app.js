@@ -15,9 +15,25 @@ app.config(["$routeProvider",function($routeProvider){
 		}).
 		when("/query", {
 			templateUrl: 'partials/query.html',
-			controller: 'QueryCtrl'
+			controller: 'QueryCtrl',
+			controllerAs: "qc"
 		}).
 		otherwise({
 			redirectTo: '/dashboard'
 		});
 }]);
+
+
+app.filter("empty", function(){
+	return function(input,output){
+		output = output || "--empty--";
+		if(angular.isUndefined(input)){
+			return output;
+		}
+		input = input || "";
+		if(angular.isString(input) && input === ""){
+			return output;
+		}
+		return input;
+	};
+});

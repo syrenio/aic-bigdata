@@ -79,7 +79,7 @@ public class AicUser implements User {
 	private String miniProfileImageURL;
 	@DatabaseField()
 	private String miniProfileImageURLHttps;
-	@DatabaseField()
+	@DatabaseField(index = true)
 	private String name;
 	@DatabaseField()
 	private String originalProfileImageURL;
