@@ -20,3 +20,11 @@ quartz-web-test/
 
 *~
 mongodata/
+/aic-bigdata-server/dump/smallDB
+/aic-bigdata-server/neo4j-test-db.zip
+/aic-bigdata-server/smallDBDump.zip
+/aic-bigdata-server/userDb.mv.db
+/aic-bigdata-server/userDb.trace.db
+/aic-bigdata-server/aic-bigdata-server.iml
+/aic-bigdata-server/aic-bigdata-server.ipr
+/aic-bigdata-server/aic-bigdata-server.iws
