@@ -1,0 +1,8 @@
+#An empirical comparison of graph databases
+
+evtl. wenn wir results brauchen ...
+
+#An Evaluation Study of BigData Frameworks for Graph Processing
+
+Interessant weil Hadoop angesprochen wird und es Frameworks sind zum berechnen, nicht zum speichern
+

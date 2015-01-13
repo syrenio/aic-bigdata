@@ -1,0 +1,19 @@
+The paper should provide an overview about the scientic state of the art in NoSQL and big
+data management, especially with regard to graph databases. Note that the paper is not the
+documentation of your tool { it should mainly discuss scientic papers related to these topics in
+the style of a seminar paper. However, put more focus on these approaches that are actually
+relevant / related to your solution
+
+
+1st Erklärung was ist NoSQL -> damit man weiß was alles hinzugehört und wo beispielsweise graphDBs einordenbar sind + graph datenbanken interest geht zurück auf 1995 wegen genomen, jetzt aber eher wegen twitter/social media 
+
+2nd Erklärung was ist Big Data
+Evlt. kurz warum NoSQL in Big Data gut ist (horizontale skalierbarkeit)
+Und wie GraphDatenbanken dort hinzukommen
+(Paper:  NoSQL Systems for Big Data Management)
+
+3rd Vergleiche welche Graph-DBs gibt es
+
+4th Big Data Graph DBS (hauptsächlich recitieren von Distributed Graph Database for Large Scale Social Computing)
+Punkte zum hineingeben: warum funktionieren RDBMS nicht für Graphen (Paper: Managing massive graphs in relational DBMS)
+
