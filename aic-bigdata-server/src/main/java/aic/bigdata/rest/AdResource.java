@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.enrichment.AdObject;
+import aic.bigdata.enrichment.TopicObject;
 import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.rest.model.AdDTO;
 import aic.bigdata.rest.model.TopicDTO;
@@ -48,5 +49,28 @@ public class AdResource {
 			e.printStackTrace();
 		}
 		return ads;
+	}
+
+	@GET
+	@Path("/topics")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<TopicDTO> getTopics() {
+
+		List<TopicDTO> list = new ArrayList<TopicDTO>();
+		try {
+			if (mongo == null)
+				mongo = new MongoDatabase(config);
+
+			for (TopicObject o : mongo.getTopics()) {
+				TopicDTO t = new TopicDTO(o.getId(), GraphDatabase.getInstance().getUsersMentioning(o.getId()).size());
+				list.add(t);
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
 	}
 }

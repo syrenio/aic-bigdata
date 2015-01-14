@@ -6,6 +6,7 @@ import java.util.List;
 
 import twitter4j.Status;
 import aic.bigdata.enrichment.AdObject;
+import aic.bigdata.enrichment.TopicObject;
 import aic.bigdata.server.ServerConfig;
 
 import com.google.gson.Gson;
@@ -34,29 +35,25 @@ public class MongoDatabase {
 	}
 
 	public void writeTweet(String tweet) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBObject o = (DBObject) JSON.parse(tweet);
 		this.tweets.insert(o);
 	}
 
 	public DBCursor getCursorForTweets() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBCursor c = tweets.find();
 		return c;
 	}
 
 	public DBCursor getCursorForUsers() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBCursor c = users.find();
 		return c;
 	}
 
 	public boolean checkTweetExists(Status status) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		DBObject f = new BasicDBObject();
 		f.put("id", status.getId());
@@ -65,8 +62,7 @@ public class MongoDatabase {
 	}
 
 	public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		BasicDBObject usr = new BasicDBObject();
 		usr.put("user.id", userId);
@@ -86,15 +82,13 @@ public class MongoDatabase {
 	}
 
 	public void writeAd(String ad) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBObject o = (DBObject) JSON.parse(ad);
 		this.ads.insert(o);
 	}
 
 	public List<AdObject> getAds() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBCursor cur = this.ads.find();
 		List<AdObject> list = new ArrayList<AdObject>();
 		Gson g = new Gson();
@@ -105,16 +99,26 @@ public class MongoDatabase {
 		return list;
 	}
 
+	public List<TopicObject> getTopics() throws UnknownHostException {
+		initialize();
+		DBCursor cur = this.topics.find();
+		List<TopicObject> list = new ArrayList<TopicObject>();
+		Gson g = new Gson();
+		for (DBObject obj : cur) {
+			TopicObject a = g.fromJson(obj.toString(), TopicObject.class);
+			list.add(a);
+		}
+		return list;
+	}
+
 	public void writeTopic(String topic) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		DBObject o = (DBObject) JSON.parse(topic);
 		this.topics.insert(o);
 	}
 
 	public List<String> getTopicNames() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 		List<String> names = new ArrayList<String>();
 		DBCursor cursor = this.topics.find();
 		for (DBObject o : cursor) {
@@ -133,8 +137,7 @@ public class MongoDatabase {
 	 * @throws UnknownHostException
 	 */
 	public void updateTopicAd(String topicname, int adId, boolean adding) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		BasicDBObject upd = new BasicDBObject();
 		upd.put("id", topicname);
@@ -163,8 +166,7 @@ public class MongoDatabase {
 	}
 
 	public void removeAdsTopics() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		ads.remove(new BasicDBObject());
 		topics.remove(new BasicDBObject());
@@ -172,8 +174,7 @@ public class MongoDatabase {
 	}
 
 	public List<String> readAllTopicsInLowercase() throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		DBCursor c = topics.find();
 		List<String> topicsList = new ArrayList<String>();
@@ -187,8 +188,7 @@ public class MongoDatabase {
 	}
 
 	public boolean checkTopicExists(String name) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		DBObject f = new BasicDBObject();
 		f.put("id", name);
@@ -197,8 +197,7 @@ public class MongoDatabase {
 	}
 
 	public boolean checkAdExists(int id) throws UnknownHostException {
-		if (!init)
-			intialize();
+		initialize();
 
 		DBObject f = new BasicDBObject();
 		f.put("id", id);
@@ -218,18 +217,20 @@ public class MongoDatabase {
 		helper.createIndex("timestamp_ms", this.tweets, -1);
 	}
 
-	private void intialize() throws UnknownHostException {
-		this.mongoclient = new MongoClient(); // use local started one
-		String mongodbname = cfg.getMongoDbName();
-		System.out.println(mongodbname);
+	private void initialize() throws UnknownHostException {
+		if (!init) {
+			this.mongoclient = new MongoClient(); // use local started one
+			String mongodbname = cfg.getMongoDbName();
+			System.out.println(mongodbname);
 
-		this.database = mongoclient.getDB(mongodbname);
-		this.tweets = database.getCollection(cfg.getMongoCollection());
-		this.users = database.getCollection(cfg.getMongoCollectionUsers());
-		this.ads = database.getCollection(cfg.getMongoCollectionAds());
-		this.topics = database.getCollection(cfg.getMongoCollectionTopics());
-		createIndexies();
-		this.init = true;
+			this.database = mongoclient.getDB(mongodbname);
+			this.tweets = database.getCollection(cfg.getMongoCollection());
+			this.users = database.getCollection(cfg.getMongoCollectionUsers());
+			this.ads = database.getCollection(cfg.getMongoCollectionAds());
+			this.topics = database.getCollection(cfg.getMongoCollectionTopics());
+			createIndexies();
+			this.init = true;
+		}
 	}
 
 }

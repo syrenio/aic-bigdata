@@ -1,4 +1,4 @@
-var app = angular.module("bigdataApp", ["ngRoute","ngResource", "angular-loading-bar","ngTable" ]);
+var app = angular.module("bigdataApp", ["ngRoute","ngResource", "angular-loading-bar","ngTable"/*,'multi-select'*/ ]);
 
 app.config(["$routeProvider",function($routeProvider){
 	$routeProvider.

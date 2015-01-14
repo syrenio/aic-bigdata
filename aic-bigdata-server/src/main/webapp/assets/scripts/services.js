@@ -36,27 +36,39 @@ app.factory("UserService", function($http) {
 	return srv;
 });
 
-app.factory("AdsService",function($http){
+app.factory("AdsService", function($http) {
 	return {
-		getAds : function(){
-			return $http.get("api/ads").then(
-					function(resp) {
-						console.log(resp.data);
-						return resp.data;
-					});
+		getAds : function() {
+			return $http.get("api/ads").then(function(resp) {
+				console.log(resp.data);
+				return resp.data;
+			});
+		},
+		getTopics : function() {
+			return $http.get("api/ads/topics").then(function(resp) {
+				console.log("getTopics:", resp.data);
+				return resp.data;
+			});
 		}
 	};
 });
 
-
-app.factory("QueryService",function($http){
+app.factory("QueryService", function($http) {
 	return {
-		getMostInflPerson : function(){
-			return $http.get("api/queries/inflUser").then(
-					function(resp) {
-						console.log(resp.data);
-						return resp.data;
-					});
+		getMostInflPerson : function() {
+			return $http.get("api/queries/inflUser").then(function(resp) {
+				console.log(resp.data);
+				return resp.data;
+			});
+		},
+		getPersonsWithTopics : function(topics){
+			console.log("getPersonWithTopics",topics);
+			return $http.get("api/queries/usersWithInterests",{params : {
+				topics : topics
+			}}).then(function(resp) {
+				console.log(resp.data);
+				return resp.data;
+			});
 		}
 	};
 });

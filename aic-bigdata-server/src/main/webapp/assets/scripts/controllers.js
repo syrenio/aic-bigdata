@@ -3,10 +3,10 @@
  */
 var app = angular.module("bigdataApp");
 
-app.controller("HeadCtrl",function($scope, $location){
-    $scope.isActive = function (viewLocation) { 
-        return viewLocation === $location.path();
-    };
+app.controller("HeadCtrl", function($scope, $location) {
+	$scope.isActive = function(viewLocation) {
+		return viewLocation === $location.path();
+	};
 });
 
 app.controller("ServiceCtrl", function($scope, $http) {
@@ -14,15 +14,15 @@ app.controller("ServiceCtrl", function($scope, $http) {
 		stream : false,
 		extraction : false,
 		analyse : false,
-		active: false
+		active : false
 	};
 
-	function _init(){
+	function _init() {
 		$scope.getStatus();
 	}
-	
-	function exCommand(cmd){
-		$http.get("api/service?command="+cmd).success(function(data) {
+
+	function exCommand(cmd) {
+		$http.get("api/service?command=" + cmd).success(function(data) {
 			console.log(data);
 			$scope.status = data;
 		});
@@ -45,15 +45,13 @@ app.controller("ServiceCtrl", function($scope, $http) {
 			$scope.status = data;
 		});
 	};
-	
-	
+
 	_init();
 });
 
-
-app.controller("CampaignsCtrl", function($scope,AdsService){
+app.controller("CampaignsCtrl", function($scope, AdsService) {
 	$scope.ads = [];
-	AdsService.getAds().then(function(data){
+	AdsService.getAds().then(function(data) {
 		$scope.ads = data;
 	});
 });
@@ -62,7 +60,7 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 	$scope.topics = [];
 	$scope.selTopic;
 	$scope.connectedUsers = [];
-	
+
 	var sig = null;
 	var g = null;
 
@@ -76,81 +74,102 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 					console.log(data);
 					$scope.connectedUsers = data.nodes;
 
-					
-					if(sig != null){
+					if (sig != null) {
 						sig.kill();
 					}
 					sig = new sigma({
-						graph: data,
-						container: "graphContainer",
+						graph : data,
+						container : "graphContainer",
 						settings : {
 							defaultNodeColor : '#ec5148'
 						}
-					});	
+					});
 				});
 	}
 });
 
-app.controller("UsersCtrl", function($scope, $http, UserService, ngTableParams) {
-	$scope.pageSize = 100;
-	$scope.pageNumber = 0;
-	var users = [{
-		id: 1,
-		name: "test1"
-	},{
-		id: 2,
-		name: "test2"
-	}];
+app.controller("UsersCtrl",
+		function($scope, $http, UserService, ngTableParams) {
+			$scope.pageSize = 100;
+			$scope.pageNumber = 0;
+			var users = [ {
+				id : 1,
+				name : "test1"
+			}, {
+				id : 2,
+				name : "test2"
+			} ];
 
-	function _init() {
-		getUsers($scope.pageSize,$scope.pageNumber);
-	}
+			function _init() {
+				getUsers($scope.pageSize, $scope.pageNumber);
+			}
 
-	function getUsers(size,page) {
-		var url = "api/users?size=" + size + "&page="
-				+ page;
-		return $http.get(url).success(function(data) {
-			users = data;
-			$scope.users = users;
-		});
-	}
+			function getUsers(size, page) {
+				var url = "api/users?size=" + size + "&page=" + page;
+				return $http.get(url).success(function(data) {
+					users = data;
+					$scope.users = users;
+				});
+			}
 
-	$scope.tableParams = new ngTableParams({
-		page: 1,            // show first page
-		count: 10           // count per page
-	}, {
-		total: 0, // length of data
-		getData: function($defer, params) {
-			getUsers(params.count(),params.page()).then(function(data){
-				params.total(users.totalSize);
-				$defer.resolve(users.result);
+			$scope.tableParams = new ngTableParams({
+				page : 1, // show first page
+				count : 10
+			// count per page
+			}, {
+				total : 0, // length of data
+				getData : function($defer, params) {
+					getUsers(params.count(), params.page()).then(
+							function(data) {
+								params.total(users.totalSize);
+								$defer.resolve(users.result);
+							});
+				}
 			});
+
+			$scope.selectUser = function(user) {
+				UserService.getConnections(user.id).then(function(data) {
+					console.log(data);
+				});
+			};
+
+			_init();
+		});
+
+app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
+	var self = this;
+	var selectedTopics = [];
+
+	self.mostInflPersons = [];
+	self.topics = [];
+
+	self.selectTopics = function(x) {
+		var idx = selectedTopics.indexOf(x);
+		if (idx === -1) {
+			selectedTopics.push(x);
+		} else {
+			selectedTopics.splice(idx, 1);
 		}
-	});
+		console.log(selectedTopics);
+	};
 
-	$scope.selectUser = function(user) {
-		UserService.getConnections(user.id).then(function(data) {
-			console.log(data);
+	self.queryMostInflPersons = function() {
+		QueryService.getMostInflPerson().then(function(data) {
+			self.mostInflPersons = data;
 		});
 	};
 
-	_init();
-});
-
-
-app.controller("QueryCtrl", function($scope, $http, QueryService) {
-	var that = this;
-	
-	that.mostInflPersons = [];
-	
-	that.queryMostInflPersons = function(){
-		QueryService.getMostInflPerson().then(function(data){
-			that.mostInflPersons = data;
+	self.queryPersonsWithTopics = function() {
+		QueryService.getPersonsWithTopics(selectedTopics).then(function(data) {
+			self.personsWithTopics = data;
 		});
 	};
-	
+
 	function _init() {
-		
+		AdsService.getTopics().then(function(data) {
+			console.info("_init topics:", data);
+			self.topics = data;
+		});
 	}
 
 	_init();
