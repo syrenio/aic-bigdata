@@ -164,6 +164,17 @@ app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
 			self.personsWithTopics = data;
 		});
 	};
+	
+	self.querySuggestAds = function(userId){
+		QueryService.getSuggestAds(userId,false).then(function(data){
+			self.suggAds = data;
+		});
+	};
+	self.querySuggestAdsPotInt = function(userId){
+		QueryService.getSuggestAds(userId,true).then(function(data){
+			self.suggAdsPot = data;
+		});
+	};
 
 	function _init() {
 		AdsService.getTopics().then(function(data) {

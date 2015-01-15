@@ -1,5 +1,6 @@
 package aic.bigdata.rest;
 
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.StringUtils;
 
+import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.database.model.AicUser;
 import aic.bigdata.enrichment.AdObject;
@@ -43,6 +45,7 @@ public class QueryResource {
 
 	ServerConfig config = new ServerConfigBuilder().getConfig();
 
+	// FIXME DUMMY CODE!!!!
 	private List<AicUser> getDummyAicUserData() {
 		try {
 			// FIXME DUMMY CODE!!!!
@@ -59,6 +62,19 @@ public class QueryResource {
 		return new ArrayList<AicUser>();
 	}
 
+	private List<AdObject> getDummyAdObjects() {
+
+		try {
+			MongoDatabase md = new MongoDatabase(config);
+
+			return md.getAds();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<AdObject>();
+	}
+
 	@GET
 	@Path("inflUser")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -67,7 +83,7 @@ public class QueryResource {
 		System.out.println("inflUser called!");
 		List<AicUser> list = new ArrayList<AicUser>();
 
-		list = getDummyAicUserData();
+		list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
 
 		return list;
 	}
@@ -80,7 +96,9 @@ public class QueryResource {
 		System.out.println("getBroadIntrestUsers called! topics:" + StringUtils.join(topics, ","));
 
 		List<AicUser> list = new ArrayList<AicUser>();
-		list = getDummyAicUserData();
+
+		list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
+
 		return list;
 	}
 
@@ -91,6 +109,7 @@ public class QueryResource {
 	public List<AdObject> getSuggestedAdsForUser(@PathParam("userId") long userId,
 			@PathParam("potentialInterests") boolean potIntr) {
 		List<AdObject> list = new ArrayList<AdObject>();
+		list = getDummyAdObjects();
 		return list;
 	}
 

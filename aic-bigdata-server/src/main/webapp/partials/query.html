@@ -1,71 +1,161 @@
-<h3>Query</h3>
-<h4>Most influential person </h4>
-<div class="panel panel-default">
-	<div class="panel-body">
-		<a class="btn btn-default btn-sm" ng-click="qc.queryMostInflPersons()"><i class="fa fa-refresh"></i> Start</a>
-		<div class="row" ng-show="qc.mostInflPersons.length > 0">
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<table class="table table-condensed table-hover table-striped">
-					<thead>
-						<th>Rank</th>
-						<th>Name</th>
-					</thead>
-					<tbody>
-						<tr ng-repeat="p in qc.mostInflPersons">
-							<td data-title="Rank">
-								{{$index}}
-							</td>
-							<td data-title="Name">
-								{{p.name | empty:"no Name"}}  ({{p.screenName}})
-							</td>
-						</tr>
-					</tbody>
-				</table>
+<div class="query-page">
+	<h3>Query</h3>
+	<div class="panel panel-default">
+		<div class="panel-heading" ng-click="panel1 = !panel1 || false;"><h4>Most influential person </h4></div>
+		<div class="panel-body" ng-show="panel1">
+			<a class="btn btn-default btn-sm" ng-click="qc.queryMostInflPersons()"><i class="fa fa-refresh"></i> Start</a>
+			<div class="row" ng-show="qc.mostInflPersons.length > 0">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<table class="table table-condensed table-hover table-striped">
+						<thead>
+							<th>Rank</th>
+							<th>Name</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="p in qc.mostInflPersons">
+								<td data-title="Rank">
+									{{$index}}
+								</td>
+								<td data-title="Name">
+									{{p.name | empty:"no Name"}}  ({{p.screenName}})
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<h4>Query users with interests</h4>
-<div class="panel panel-default">
-	<div class="panel-body">
-		<div class="row">
-			<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-				<ul class="topic-list">
-					<li ng-repeat="x in qc.topics">
-						<span class="checkbox">
-						<label>
-							<input type="checkbox" ng-value="x.name" ng-click="qc.selectTopics(x.name)">
-							{{x.name}}
-						</label>
-						</span>
-					</li>
-				</ul>
-				<!--<select id="topicsSel" class="form-control" ng-model="topicSel" multiple="multiple" ng-options="x as x.name for x in qc.topics">
-				</select>-->
+	<div class="panel panel-default">
+		<div class="panel-heading" ng-click="panel2 = !panel2 || false;"><h4>Query users with interests</h4></div>
+		<div class="panel-body" ng-show="panel2">
+			<div class="row">
+				<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
+					<ul class="topic-list">
+						<li ng-repeat="x in qc.topics">
+							<span class="checkbox">
+							<label>
+								<input type="checkbox" ng-value="x.name" ng-click="qc.selectTopics(x.name)">
+								{{x.name}}
+							</label>
+							</span>
+						</li>
+					</ul>
+					<!--<select id="topicsSel" class="form-control" ng-model="topicSel" multiple="multiple" ng-options="x as x.name for x in qc.topics">
+					</select>-->
+				</div>
 			</div>
-		</div>
-		<a class="btn btn-default btn-sm" ng-click="qc.queryPersonsWithTopics()"><i class="fa fa-refresh"></i> Start</a>
-		<div class="row" ng-show="qc.personsWithTopics.length > 0">
-			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<table class="table table-condensed table-hover table-striped">
-					<thead>
-						<th>Rank</th>
-						<th>Name</th>
-					</thead>
-					<tbody>
-						<tr ng-repeat="p in qc.personsWithTopics">
-							<td data-title="Rank">
-								{{$index}}
-							</td>
-							<td data-title="Name">
-								{{p.name | empty:"no Name"}}  ({{p.screenName}})
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<a class="btn btn-default btn-sm" ng-click="qc.queryPersonsWithTopics()"><i class="fa fa-refresh"></i> Start</a>
+			<div class="row" ng-show="qc.personsWithTopics.length > 0">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<table class="table table-condensed table-hover table-striped">
+						<thead>
+							<th>Rank</th>
+							<th>Name</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="p in qc.personsWithTopics">
+								<td data-title="Rank">
+									{{$index}}
+								</td>
+								<td data-title="Name">
+									{{p.name | empty:"no Name"}}  ({{p.screenName}})
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading" ng-click="panel3 = !panel3 || false;"><h4>Suggest ads for User (existing interests)</h4></div>
+		<div class="panel-body" ng-show="panel3">
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-controller="UsersCtrl">
+					<h3>Users</h3>
+					<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
+						<tr ng-repeat="user in $data" ng-click="qc.querySuggestAds(user.id)">
+							<td data-title="'Id'">
+								{{user.id}}
+							</td>
+							<td data-title="'Name'">
+								{{user.name}}
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- {{qc.suggAds | json}} -->
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<h3>Ads</h3>
+					<table class="table table-condensed table-hover table-striped">
+						<thead>
+							<th>Ad-Name</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="p in qc.suggAds">
+								<td>
+									{{p.name | empty:"no Name"}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading" ng-click="panel4 = !panel4 || false;"><h4>Suggest ads for User (potential interests)</h4></div>
+		<div class="panel-body" ng-show="panel4">
+			<div class="row">
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-controller="UsersCtrl">
+					<h3>Users</h3>
+					<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
+						<tr ng-repeat="user in $data" ng-click="qc.querySuggestAdsPotInt(user.id)">
+							<td data-title="'Id'">
+								{{user.id}}
+							</td>
+							<td data-title="'Name'">
+								{{user.name}}
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- {{qc.suggAds | json}} -->
+				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<h3>Ads</h3>
+					<table class="table table-condensed table-hover table-striped">
+						<thead>
+							<th>Ad-Name</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="p in qc.suggAdsPot">
+								<td>
+									{{p.name | empty:"no Name"}}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/ng-template" id="custom/pager">
+	<ul class="pager ng-cloak">
+		<li ng-repeat="page in pages"
+			ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+			ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+			<a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo; Previous</a>
+			<a ng-switch-when="next" ng-click="params.page(page.number)" href="">Next &raquo;</a>
+		</li>
+		<li>
+			<div class="btn-group">
+				<button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+				<button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+				<button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+				<button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+			</div>
+		</li>
+	</ul>
+	</script>
 </div>
-<h4>Suggest ads for User (existing interests)</h4>
-<h4>Suggest ads for User (potential interests)</h4>

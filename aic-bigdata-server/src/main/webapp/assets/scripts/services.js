@@ -69,6 +69,16 @@ app.factory("QueryService", function($http) {
 				console.log(resp.data);
 				return resp.data;
 			});
+		},
+		getSuggestAds : function(userId,potInt){
+			console.log("getSuggestAds",userId,potInt);
+			return $http.get("api/queries/suggestAdsForUser",{params : {
+				userId : userId,
+				potentialInterests : potInt
+			}}).then(function(resp) {
+				console.log(resp.data);
+				return resp.data;
+			});
 		}
 	};
 });
