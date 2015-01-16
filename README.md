@@ -15,15 +15,15 @@ Start
 - gradle neo4jExtraction <-- extract graph from mongodb
 - gradle tanalysis       <-- add ads/topics and mine topics
 - gradle userConvert     <-- convert existing Users from MongoDB into H2 Database
+- gradle userClean       <-- clean and recreate the user table
 
 Web
 ----------
-- Install Node.js http://nodejs.org/
-- Install Bower http://bower.io/  "npm install -g bower"
-- cd src/main/webapp 
-- "bower install"
-- go back to project root-folder 
 - gradle appRun  <-- starts WebServer
+
+Notes
+----------
+- Search and filtering should work case insensitive, if not  (H2 varchar_ignorecase is not set -> gradle userClean to recreate the user table).
 
 MongoDB
 -----------
