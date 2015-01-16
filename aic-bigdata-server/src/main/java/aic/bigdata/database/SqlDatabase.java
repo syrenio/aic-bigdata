@@ -25,7 +25,7 @@ public class SqlDatabase {
 	private Dao<AicUser, String> userDao = null;
 
 	public SqlDatabase(ServerConfig config) throws SQLException {
-		String url = "jdbc:h2:file:./" + config.getSqlDatabaseName();
+		String url = "jdbc:h2:file:./" + config.getSqlDatabaseName() + ";IGNORECASE=TRUE";
 		connectionSource = new JdbcConnectionSource(url, "sa", "sa");
 
 		TableUtils.createTableIfNotExists(connectionSource, AicUser.class);
@@ -59,9 +59,17 @@ public class SqlDatabase {
 	}
 
 	public List<AicUser> getUsers(long page, long pageSize) throws SQLException {
-		long startRow = page * pageSize;
+		long startRow = (page - 1) * pageSize;
 		PreparedQuery<AicUser> q = userDao.queryBuilder().offset(startRow).limit(pageSize).orderBy("name", true)
 				.prepare();
+		return userDao.query(q);
+	}
+
+	public List<AicUser> getUsers(long page, long pageSize, String fname) throws SQLException {
+		long startRow = (page - 1) * pageSize;
+		PreparedQuery<AicUser> q = userDao.queryBuilder().offset(startRow).limit(pageSize).orderBy("name", true)
+				.where().like("name", "%" + fname + "%").prepare();
+		System.out.println(q.getStatement());
 		return userDao.query(q);
 	}
 

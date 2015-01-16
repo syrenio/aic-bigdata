@@ -28,18 +28,23 @@ import aic.bigdata.server.ServerConfig;
 public class UserResource {
 
 	MongoDatabase mongo = null;
+	SqlDatabase sql = null;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultPage getUsers(@QueryParam("size") int size, @QueryParam("page") int page) {
+	public ResultPage getUsers(@QueryParam("size") int size, @QueryParam("page") int page,
+			@QueryParam("fname") String fname) {
+		System.out.println("size=" + size + " page=" + page + " fname=" + fname);
 
 		ServerConfigBuilder scb = new ServerConfigBuilder();
 		ServerConfig config = scb.getConfig();
 
 		List<AicUser> list = null;
 		try {
-			SqlDatabase sqldb = new SqlDatabase(config);
-			list = sqldb.getUsers(page, size);
+			if (sql == null)
+				sql = new SqlDatabase(config);
+
+			list = sql.getUsers(page, size, fname);
 			List<ResultEntry> result = new ArrayList<ResultEntry>();
 			for (AicUser user : list) {
 				ResultEntry entry = new ResultEntry();
@@ -50,7 +55,9 @@ public class UserResource {
 
 			ResultPage resultPage = new ResultPage();
 			resultPage.setResult(result);
-			resultPage.setTotalSize(sqldb.getUserCount());
+			resultPage.setTotalSize(sql.getUserCount());
+			System.out.println(resultPage);
+
 			return resultPage;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

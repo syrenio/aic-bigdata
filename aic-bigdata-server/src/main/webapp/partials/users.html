@@ -1,11 +1,11 @@
 <div class="col-md-12">
 	<h3>Users</h3>
-	<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
+	<table ng-table="tableParams" show-filter="true" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
 		<tr ng-repeat="user in $data">
 			<td data-title="'Id'">
 				{{user.id}}
 			</td>
-			<td data-title="'Name'">
+			<td data-title="'Name'" filter="{ 'name' : 'text' }">
 				{{user.name}}
 			</td>
 		</tr>

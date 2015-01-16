@@ -89,7 +89,7 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 });
 
 app.controller("UsersCtrl",
-		function($scope, $http, UserService, ngTableParams) {
+		function($scope, $http, $filter, UserService, ngTableParams) {
 			$scope.pageSize = 100;
 			$scope.pageNumber = 0;
 			var users = [ {
@@ -104,9 +104,15 @@ app.controller("UsersCtrl",
 				getUsers($scope.pageSize, $scope.pageNumber);
 			}
 
-			function getUsers(size, page) {
-				var url = "api/users?size=" + size + "&page=" + page;
-				return $http.get(url).success(function(data) {
+			function getUsers(size, page, filterName) {
+				var p = {
+					params : {
+						size : size,
+						page : page,
+						fname : filterName || ""
+					}
+				};
+				return $http.get("api/users",p).success(function(data) {
 					users = data;
 					$scope.users = users;
 				});
@@ -114,16 +120,17 @@ app.controller("UsersCtrl",
 
 			$scope.tableParams = new ngTableParams({
 				page : 1, // show first page
-				count : 10
+				count : 10,
+				filter :  { name : ''}
 			// count per page
 			}, {
 				total : 0, // length of data
 				getData : function($defer, params) {
-					getUsers(params.count(), params.page()).then(
-							function(data) {
-								params.total(users.totalSize);
-								$defer.resolve(users.result);
-							});
+					getUsers(params.count(), params.page(), params.filter().name).then(
+						function(data) {
+							params.total(users.totalSize);
+							$defer.resolve(users.result);
+						});
 				}
 			});
 

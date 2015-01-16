@@ -27,4 +27,13 @@ public class ResultPage {
 	public void setResult(List<? extends ResultEntry> result) {
 		this.result = result;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.getClass().getSimpleName());
+		sb.append(" totalSize: " + getSize());
+		sb.append(" resultSize: " + getResult().size());
+		return sb.toString();
+	}
 }
