@@ -167,6 +167,14 @@ public class ServerConfig {
 		return mongo.getProperty("mongo.collection.topics");
 	}
 
+	public String getMongoCollectionRetweeterOriginalAuthors() {
+		return mongo.getProperty("mongo.collection.retweeteroriginalauthors");
+	}
+
+	public String getMongoCollectionOriginalAuthorRetweeters() {
+		return mongo.getProperty("mongo.collection.originalauthorretweeters");
+	}
+
 	private Configuration getConfigForTwitter4J() {
 		ConfigurationBuilder builder = new ConfigurationBuilder();
 		builder.setOAuthConsumerKey(twitter.getProperty("oauth.consumerKey"));

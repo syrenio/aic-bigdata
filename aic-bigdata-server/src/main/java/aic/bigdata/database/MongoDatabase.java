@@ -29,6 +29,8 @@ public class MongoDatabase {
 	private DBCollection users;
 	private DBCollection ads;
 	private DBCollection topics;
+	private DBCollection retweeteroriginalauthors;
+	private DBCollection originalauthorretweeters;
 
 	public MongoDatabase(ServerConfig cfg) {
 		this.cfg = cfg;
@@ -49,6 +51,18 @@ public class MongoDatabase {
 	public DBCursor getCursorForUsers() throws UnknownHostException {
 		initialize();
 		DBCursor c = users.find();
+		return c;
+	}
+
+	public DBCursor getCursorForRetweeterOriginalAuthors() throws UnknownHostException {
+		initialize();
+		DBCursor c = retweeteroriginalauthors.find();
+		return c;
+	}
+
+	public DBCursor getCursorForOriginalAuthorRetweeters() throws UnknownHostException {
+		initialize();
+		DBCursor c = originalauthorretweeters.find();
 		return c;
 	}
 
@@ -212,6 +226,8 @@ public class MongoDatabase {
 		helper.createUniqueIndex("id", this.tweets);
 		helper.createUniqueIndex("id", this.ads);
 		helper.createUniqueIndex("id", this.topics);
+		helper.createUniqueIndex("_id", this.retweeteroriginalauthors); // ?
+		helper.createUniqueIndex("_id", this.originalauthorretweeters); // ?
 
 		helper.createIndex("user.id", this.tweets, 1);
 		helper.createIndex("timestamp_ms", this.tweets, -1);
@@ -228,6 +244,8 @@ public class MongoDatabase {
 			this.users = database.getCollection(cfg.getMongoCollectionUsers());
 			this.ads = database.getCollection(cfg.getMongoCollectionAds());
 			this.topics = database.getCollection(cfg.getMongoCollectionTopics());
+			this.retweeteroriginalauthors = database.getCollection(cfg.getMongoCollectionRetweeterOriginalAuthors());
+			this.originalauthorretweeters = database.getCollection(cfg.getMongoCollectionOriginalAuthorRetweeters());
 			createIndexies();
 			this.init = true;
 		}
