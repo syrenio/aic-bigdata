@@ -1,0 +1,61 @@
+Basierend auf:
+* Einleitung - allgemeine Einleitung in die Thematik (Big Data)
+* Einleitung in die Spezialisierung (entweder Data Management oder Technologien) - allgemein erklären warum diese gebraucht werden
+* Beschreibung der einzelnen Technologien 
+* Vergleich der Technologien
+* Zusammenfassung: kurze Zusammenfassung (v.a. des Vergleichs der Technologien) + interessante Entwicklungsthemen in diesen Gebieten
+
+
+
+#Introduction
+-generelle introduction
+
+#Big Data skizzieren
+
+von Big data as strategic enabler anschauen
+Infors von Overview of Big Data Storage - beschreibt die entwicklung sehr gut
+Definition of Big Data abschreiben von Big Data Related technologies
+4Vs
+
+Challenges came that spread development (Storage Models, programming models like MapReduce and BSP systems)
+Challenges for RBDMS
+RDBMS typically applies to: structured data, poor horizontal scaling
+- structured/unstructured data
+Therefor we need new solutions
+
+#NoSQL Datenbanken und wie sie mit Big Data helfen
+
+- CAP Theorem beschreiben
+verschiedene Sachen kurz anreißen damit man ein gefühl bekommt
+Bild
+
+Key-Value Stores
+Column Stores
+Document Stores
+Grafik von Review of graph databases mit der Complexity
+
+#Graph Databases
+Wichtig: Choosing Between Graph Databases
+
+Generally, NoSQL - for most complex data suited
+
+1. RBDMS vs Neo4j - a real world example
+
+RDF is generally not in this case as they consider triples
+
+#Neo4j
+#Dex
+#HypergrabDB
+#Sparksee (Introduciton to Graph Databases)
+
+Evaluation of
+Dex, Neo4j, Hypergraphdb
+
+#Comparisions?
+Auch hinzugeben - Review of Graph Datbases - hinten die Studies
+
+Choosing Between Graph Databases ganz hinten die beiden Bilder
+
+#Conclusion:
+Einerseit wichtig was man machen möchte
+Auc wichtig welches Modell - Kombinationen von den Datenbanken + MapReduce/BSP Pregel zeugs wäre super
