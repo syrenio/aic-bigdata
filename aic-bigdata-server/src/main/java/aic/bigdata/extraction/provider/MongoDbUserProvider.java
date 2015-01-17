@@ -46,7 +46,7 @@ public class MongoDbUserProvider implements UserProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current Count: " + (counter * stepSize)
+					System.out.println("Current User Count: " + (counter * stepSize)
 							+ " Minutes:" + diff.getStandardMinutes());
 				}
 

@@ -18,21 +18,17 @@ public class Neo4JRetweetingInfoExtractionRunner {
 
 	public static void main(String[] args) {
 		MongoDatabase b = new MongoDatabase(config);
+		Neo4JBatchInserter batchInserter = new Neo4JBatchInserter(config);
 
+		// users
 		MongoDbUserProvider userProvider = new MongoDbUserProvider(b);
-
-		userProvider.addHandler(new UserToNeo4JHandler(config, new Neo4JBatchInserter(config)));
-
+		userProvider.addHandler(new UserToNeo4JHandler(config, batchInserter));
 		userProvider.run();
 
-/*
-		MongoDbRetweetingInfoProvider provider = new MongoDbRetweetingInfoProvider(b);
-
-		provider.addHandler(new RetweetingInfoToNeo4JHandler(config, GraphDatabase.getInstance()));
-
-		provider.run();
-*/
-
+		// a retweets b
+		MongoDbRetweetingInfoProvider riProvider = new MongoDbRetweetingInfoProvider(b);
+		riProvider.addHandler(new RetweetingInfoToNeo4JHandler(config, batchInserter));
+		riProvider.run();
 	}
 
 }

@@ -4,6 +4,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.lang.ClassCastException;
+
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Minutes;
@@ -47,7 +49,7 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current Count: " + (counter * stepSize)
+					System.out.println("Current Retweeting Info Count: " + (counter * stepSize)
 							+ " Minutes:" + diff.getStandardMinutes());
 				}
 
@@ -55,12 +57,41 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 					; // TODO: panic
 				}
 
-				Long id = (Long) c.get("_id");
-				BasicDBList l = (BasicDBList) c.get("value.arr");
-				List<Long> originalAuthors = (List<Long>) (List<?>) l; // casting TWICE is better than casting once...
+				// this is pretty ugly
+				Long id = null;
+				try {
+					id = ((Double) c.get("_id")).longValue();
+				}
+				catch (ClassCastException cce) {
+					try {
+						id = (Long) c.get("_id");
+					}
+					catch (ClassCastException cce2) {
+						System.err.println("_id is neither Long nor Double?");
+					}
+				}
 
-				for (RetweetingInfoHandler t : this.handler) {
-					t.HandleOriginalAuthors(id, originalAuthors);
+				// and it gets worse
+				BasicDBList l = (BasicDBList) ((DBObject) c.get("value")).get("arr");
+				List<Long> originalAuthors = new ArrayList<Long>(l.size());
+				for (Object o : l) {
+					try {
+						originalAuthors.add((Long) o);
+					}
+					catch (ClassCastException cce) {
+						try {
+							originalAuthors.add(((Double) o).longValue());
+						}
+						catch(ClassCastException cce2) {
+							System.err.println("I tried, but this thing is neither Long nor Double. I give up.");
+						}
+					}
+				}
+
+				if (id != null) {
+					for (RetweetingInfoHandler t : this.handler) {
+						t.HandleOriginalAuthors(id, originalAuthors);
+					}
 				}
 				stepCounter++;
 			}

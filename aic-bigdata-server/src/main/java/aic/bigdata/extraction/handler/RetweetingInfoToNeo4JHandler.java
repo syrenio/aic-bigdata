@@ -1,6 +1,6 @@
 package aic.bigdata.extraction.handler;
 
-import aic.bigdata.database.GraphDatabase;
+import aic.bigdata.database.Neo4JBatchInserter;
 import aic.bigdata.extraction.RetweetingInfoHandler;
 import aic.bigdata.server.ServerConfig;
 import twitter4j.Status;
@@ -40,33 +40,30 @@ public class RetweetingInfoToNeo4JHandler implements RetweetingInfoHandler {
 	private Index<Node> topicIndex;
 	private ServerConfig config;
 	private ExecutionEngine cypherEngine;
-	private GraphDatabase graph;
+	private Neo4JBatchInserter batchInserter;
 
-	public RetweetingInfoToNeo4JHandler(ServerConfig config, GraphDatabase graph) {
+	public RetweetingInfoToNeo4JHandler(ServerConfig config, Neo4JBatchInserter batchInserter) {
 		this.config = config;
-		this.graph = graph;
+		this.batchInserter = batchInserter;
 	}
 	
 	@Override
 	public void HandleOriginalAuthors(Long id, List<Long> originalAuthors) {
-		System.out.println("id: " + id);
-	}
+		Map<Long, Integer> frequencies = new HashMap<Long, Integer>();
 
-/*
-	public void HandleStatusTweet(Status status, String tweet) {
-		//System.out.println("TweetToNeo4JHandler: got tweet");
-		User user = status.getUser();
-		graph.addUser(user);
-		//addFriends(user);
-		if (status.isRetweet()) {
-			Status retweeted = status.getRetweetedStatus();
-			graph.addUser(retweeted.getUser());
-			graph.addRetweetsRelationship(user, retweeted.getUser()); //TODO SLOW
-			//searchTweetForTopics(status); // ?
-			HandleStatusTweet(retweeted, retweeted.getSource());
+		// count occurences for all original author ids
+		for (Long l : originalAuthors) {
+			if (frequencies.containsKey(l)) {
+				frequencies.put(l, frequencies.get(l)+1);
+			}
+			else {
+				frequencies.put(l, 1);
+			}
 		}
 
-		tweetsLogged++;
+		// insert edges
+		for (Long oaid : frequencies.keySet()) {
+			batchInserter.addRetweetsRelationship(id, oaid, frequencies.get(oaid));
+		}
 	}
-*/
 }
