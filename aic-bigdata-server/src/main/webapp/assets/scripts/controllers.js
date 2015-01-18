@@ -16,7 +16,11 @@ app.controller("ServiceCtrl", function($scope, $http) {
 		analyse : false,
 		active : false
 	};
-
+	
+	$scope.test = function(u){
+		console.log("new-test",u);
+	};
+	
 	function _init() {
 		$scope.getStatus();
 	}
@@ -90,6 +94,8 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 
 app.controller("UsersCtrl",
 		function($scope, $http, $filter, UserService, ngTableParams) {
+			var onSelectFunctions = [];
+	
 			$scope.pageSize = 100;
 			$scope.pageNumber = 0;
 			var users = [ {
@@ -117,6 +123,10 @@ app.controller("UsersCtrl",
 					$scope.users = users;
 				});
 			}
+			
+			this.addSelectFunction = function(f){
+				onSelectFunctions.push(f);
+			};
 
 			$scope.tableParams = new ngTableParams({
 				page : 1, // show first page
@@ -135,9 +145,16 @@ app.controller("UsersCtrl",
 			});
 
 			$scope.selectUser = function(user) {
+				console.log("selected user:",user);
+				
 				UserService.getConnections(user.id).then(function(data) {
 					console.log(data);
 				});
+				
+				for ( var idx in onSelectFunctions) {
+					var fx = onSelectFunctions[idx];
+					fx(user);
+				}
 			};
 
 			_init();
