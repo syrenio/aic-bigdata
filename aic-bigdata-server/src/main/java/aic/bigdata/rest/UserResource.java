@@ -44,7 +44,11 @@ public class UserResource {
 			if (sql == null)
 				sql = new SqlDatabase(config);
 
-			list = sql.getUsers(page, size, fname);
+			if (fname != null && !fname.isEmpty()) {
+				list = sql.getUsers(page, size, fname);
+			} else {
+				list = sql.getUsers(page, size);
+			}
 			List<ResultEntry> result = new ArrayList<ResultEntry>();
 			for (AicUser user : list) {
 				ResultEntry entry = new ResultEntry();
