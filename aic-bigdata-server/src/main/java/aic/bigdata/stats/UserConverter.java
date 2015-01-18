@@ -4,9 +4,9 @@ import java.net.UnknownHostException;
 import java.sql.SQLException;
 
 import twitter4j.TwitterException;
-import twitter4j.TwitterObjectFactory;
 import twitter4j.User;
 import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.database.MongoDatabaseHelper;
 import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.database.model.AicUser;
 import aic.bigdata.extraction.ServerConfigBuilder;
@@ -36,9 +36,16 @@ public class UserConverter {
 
 				System.out.println("Current user count: " + db.getUserCount());
 				System.out.print("Progress: ");
+				MongoDatabaseHelper help = new MongoDatabaseHelper();
 				while (cur.hasNext()) {
 					DBObject o = cur.next();
-					User usr = TwitterObjectFactory.createUser(o.toString());
+					User usr = null;
+					// if (o.containsField("followersCount")) {
+					// usr = g.fromJson(o.toString(), User.class);
+					// } else {
+					// usr = TwitterObjectFactory.createUser(o.toString());
+					// }
+					usr = help.convertToUser(o);
 					AicUser x = new AicUser(usr);
 					db.createUser(x);
 					count++;

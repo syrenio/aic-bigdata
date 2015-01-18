@@ -19,9 +19,9 @@ public class AicUser implements User {
 	// private RateLimitStatus rateLimitStatus;
 	@DatabaseField()
 	private int accessLevel;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private String biggerProfileImageURL;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private String biggerProfileImageURLHttps;
 	@DatabaseField()
 	private Date createdAt;
@@ -35,9 +35,9 @@ public class AicUser implements User {
 	private boolean showAllInlineMedia;
 	@DatabaseField()
 	private boolean isProtectedField;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private boolean profileUseBackgroundImage;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private boolean profileBackgroundTiled;
 	@DatabaseField()
 	private boolean geoEnabled;
@@ -87,9 +87,9 @@ public class AicUser implements User {
 	private String originalProfileImageURLHttps;
 	@DatabaseField()
 	private String profileBackgroundColor;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private String profileBackgroundImageURL;
-	@DatabaseField()
+	@DatabaseField(width = 500)
 	private String profileBackgroundImageUrlHttps;
 	@DatabaseField()
 	private String profileBannerIPadRetinaURL;
