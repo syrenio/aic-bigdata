@@ -6,17 +6,15 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Minutes;
 
-import twitter4j.User;
 import twitter4j.TwitterException;
-import twitter4j.TwitterObjectFactory;
+import twitter4j.User;
 import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.database.MongoDatabaseHelper;
 import aic.bigdata.extraction.UserHandler;
 import aic.bigdata.extraction.UserProvider;
 
 import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
 
 public class MongoDbUserProvider implements UserProvider {
 
@@ -37,6 +35,7 @@ public class MongoDbUserProvider implements UserProvider {
 		long stepSize = 1000;
 
 		try {
+			MongoDatabaseHelper help = new MongoDatabaseHelper();
 			for (DBObject c : db.getCursorForUsers()) {
 				if (!running)
 					break;
@@ -46,14 +45,15 @@ public class MongoDbUserProvider implements UserProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current User Count: " + (counter * stepSize)
-							+ " Minutes:" + diff.getStandardMinutes());
+					System.out.println("Current User Count: " + (counter * stepSize) + " Minutes:"
+							+ diff.getStandardMinutes());
 				}
 
 				String message = c.toString();
 				User user = null;
 				try {
-					user = TwitterObjectFactory.createUser(message);
+					user = help.convertToUser(c);
+					// user = TwitterObjectFactory.createUser(message);
 				} catch (TwitterException e) {
 					continue; // TODO: error message
 				}
