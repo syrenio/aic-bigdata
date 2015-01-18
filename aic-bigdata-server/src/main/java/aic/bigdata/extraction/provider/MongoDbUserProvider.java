@@ -37,6 +37,7 @@ public class MongoDbUserProvider implements UserProvider {
 		long stepSize = 1000;
 
 		try {
+			MongoDatabaseHelper help = new MongoDatabaseHelper();
 			for (DBObject c : db.getCursorForUsers()) {
 				if (!running)
 					break;
@@ -46,14 +47,15 @@ public class MongoDbUserProvider implements UserProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current User Count: " + (counter * stepSize)
-							+ " Minutes:" + diff.getStandardMinutes());
+					System.out.println("Current User Count: " + (counter * stepSize) + " Minutes:"
+							+ diff.getStandardMinutes());
 				}
 
 				String message = c.toString();
 				User user = null;
 				try {
-					user = TwitterObjectFactory.createUser(message);
+					user = help.convertToUser(c);
+					// user = TwitterObjectFactory.createUser(message);
 				} catch (TwitterException e) {
 					continue; // TODO: error message
 				}
