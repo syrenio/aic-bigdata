@@ -2,11 +2,12 @@ package aic.bigdata.enrichment;
 
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.server.ServerConfig;
 
 /**
@@ -16,28 +17,11 @@ public class TopicAnalyzer implements Runnable {
 
 	private MongoDatabase mongodb;
 	private GraphDatabase graphDB;
-	private SqlDatabase sqldb;
 
 	private boolean running = false;
 
-	/**
-	 * Maximum amount of users that are analyzed.
-	 */
-	private int userLimit = 1500000;
-
-	/**
-	 * Analyze only the most recent tweets to keep performance manageable.
-	 */
-	private int latestTweetsLimit = 100;
-
 	public TopicAnalyzer(ServerConfig config, GraphDatabase graphDB) {
 		this.mongodb = new MongoDatabase(config);
-		try {
-			this.sqldb = new SqlDatabase(config);
-		} catch (SQLException e) {
-			System.err.println("could not create sqldatabase connection");
-			e.printStackTrace();
-		}
 		this.graphDB = graphDB;
 	}
 
@@ -48,12 +32,33 @@ public class TopicAnalyzer implements Runnable {
 	 * @throws SQLException
 	 */
 	public void analyzeTweets() throws UnknownHostException, SQLException {
+		System.out.println("analyzing tweets...");
 		this.running = true;
+		
 		long time = System.currentTimeMillis();
+		
+		HashMap<Long, String> tweets = mongodb.getConcatTweets();
 		List<String> topics = mongodb.readAllTopicsInLowercase();
+		TopicTweetsMiner miner = new TopicTweetsMiner(topics);
+		
+		Iterator<Long> it = tweets.keySet().iterator();
+		
+		while(it.hasNext() && running) {
+			Long id = it.next();
+			String tweet = tweets.get(id);
+			
+			List<String> interests = miner.getInterestedTopics(tweet);
+			
+			for (int i = 0; i < interests.size(); i++) {
+				graphDB.addMentionsRelationship(id, interests.get(i));
+			}
+		}
+		
+		/*List<String> topics = mongodb.readAllTopicsInLowercase();
 		List<Long> userIds = sqldb.getUserIds(userLimit);
 		TopicTweetsMiner miner = new TopicTweetsMiner(topics);
 		String bigTweet = null;
+
 		for (int i = 0; i < userIds.size() && running; i++) {
 			bigTweet = mongodb.readLatestTweetsAsOneString(userIds.get(i), latestTweetsLimit);
 
@@ -62,10 +67,10 @@ public class TopicAnalyzer implements Runnable {
 			for (int j = 0; j < interests.size(); j++) {
 				graphDB.addMentionsRelationship(userIds.get(i), interests.get(j));
 			}
-		}
+		}*/
 
-		System.out.println("mining done. processing time: " + (System.currentTimeMillis() - time) + "ms for "
-				+ userIds.size() + " users.");
+		double totalTime = (System.currentTimeMillis() - time)/1000;
+		System.out.println("mining done. processing time: " + totalTime + "s.");
 	}
 
 	@Override

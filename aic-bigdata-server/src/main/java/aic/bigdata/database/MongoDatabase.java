@@ -2,6 +2,7 @@ package aic.bigdata.database;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import twitter4j.Status;
@@ -16,6 +17,8 @@ import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.MapReduceCommand;
+import com.mongodb.MapReduceOutput;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
@@ -75,7 +78,9 @@ public class MongoDatabase {
 		return o != null;
 	}
 
-	public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
+	// outdated method
+	/*public String readLatestTweetsAsOneString(Long userId, Integer latest) throws UnknownHostException {
+		
 		initialize();
 
 		BasicDBObject usr = new BasicDBObject();
@@ -93,6 +98,38 @@ public class MongoDatabase {
 		}
 
 		return result.toString();
+	}*/
+	
+	/**
+	 * Get all tweets as concatenated string from each user
+	 * 
+	 * @return
+	 * @throws UnknownHostException
+	 */
+	public HashMap<Long, String> getConcatTweets() throws UnknownHostException {
+		initialize();
+		
+		String map = "function map() {emit(this.user.id, {text: this.text});}";
+		String reduce = "function reduce(key, values) {var all=[]; values.forEach(function(x){all.push(x.text);}); return {'text': all.join(' . ')};}";
+		
+		MapReduceOutput out = tweets.mapReduce(map, reduce, null, MapReduceCommand.OutputType.INLINE, null);
+		
+		HashMap<Long, String> tweets = new HashMap<Long, String>();
+
+		for(DBObject obj : out.results()) {
+			String text = (String) ((DBObject)obj.get("value")).get("text");
+			double id = 0;
+			try {
+				id = (double) obj.get("_id");
+				long idL = (long) id;
+				tweets.put(idL, text);
+			} catch(Exception e) {
+				//System.out.println(id + "---------" + a.get("text"));
+			}
+			
+		}
+		
+		return tweets;
 	}
 
 	public void writeAd(String ad) throws UnknownHostException {
