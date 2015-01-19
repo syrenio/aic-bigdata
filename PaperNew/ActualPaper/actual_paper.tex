@@ -41,7 +41,7 @@
 
 \begin{document}
 
-\title{Overview of NoSQL in Big Data Management with a closer look on graph databases }
+\title{Overview of NoSQL in Big Data Management with a closer look on graph databases \titlenote{This paper was created for the VU Advanced Internet Computing LVA-NR: 184.269 in the term 2014W at TU Vienna.}}
 
 \numberofauthors{4}
 \author{
@@ -76,13 +76,10 @@ This new amount of data and the rate at which it is generated leads to new chall
 \section{Big Data}
 
 The term Big Data was first used in 2001 by the consulting company Mckinsey [ref overview big data]. There is no general definition about the term Big Data, but there is a common aggrement on some characteristics of Big Data. In general, the amount of data is too much as that it could be managed by traditional IT systems.
-
 In 2010, Apache Hadoop defined big data as “datasets which could not be
 captured, managed, and processed by general computers within an acceptable
 scope". This means that traditional relational database management systems have reached their limits.
-
 A basic characterization of Big data was done by IDC. This characterization are the "4Vs":
-
 \begin{itemize}
 	\item Variety - describing the different data and data structures
 	\item Veolocity - the speed of data creation
@@ -94,7 +91,7 @@ The following picture from [big data - related technologies] illustrates very we
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.5]{big_data.png}
+	\includegraphics[scale=0.45]{big_data.png}
 	\caption{Phenomenon of Big Data}
 \end{figure}
 
@@ -260,7 +257,7 @@ The core output is that Neo4J and DEX both outperform HyperGraphDB. Also Neo4J s
 		the corresponding engine timed out after 1 hour}
 \end{figure}
 
-\section{Conclusions}
+\section{Conclusion}
 
 We have seen how Big Data changed the landscape for data-storage systems and how it gave birth to a whole new family of storage systems, broadly described as "NoSQL"-Systems. We seen which properties they have in general and how they can be classified. At last, we took a closer look on Graph Database Management systems as graphs have widespread use. A closer comparison between Neo4J, DEX and Hypergraph showed us, that in this specialized field the performances can vary and one has to adept to the given situation. We hope to see the spread of Graph Databases and the emerge of standardized bench-marks.
 
