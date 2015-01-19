@@ -54,9 +54,9 @@ Florian Mihola\titlenote{e0304850@student.tuwien.ac.at}\\
 	\affaddr{TU Vienna}\\
 	\affaddr{e0304850}\\
 \and
-\alignauthor Lin mmmmhhh
-       \affaddr{Brookhaven Laboratories}\\
-       \email{lleipuner@researchlabs.org}
+\alignauthor Lin Xiashuo \titlenote{e0525594@student.tuwien.ac.at}
+       \affaddr{TU Vienna}\\
+       \email{e0525594}
 \alignauthor Patrick S{\"a}uerl\titlenote{e1125492@student.tuwien.ac.at}\\
        \affaddr{TU Vienna}\\
        \affaddr{e1125492}\\
@@ -65,33 +65,34 @@ Florian Mihola\titlenote{e0304850@student.tuwien.ac.at}\\
 
 \maketitle
 \begin{abstract}
-The Abstract that we are going to write.
+This paper gives an introduction to Big Data Management and NoSQL. A special look is taken on Graph-Storage systems and an example comparison of three popular systems.
 \end{abstract}
 
 \section{Introduction}
 
-The data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. Also the widespread use of mobile devices and the Internet of Things contribute the extreme data growth. In 2012 over 2.8 zettabytes of data existed. This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze it. This is trend is broadly described as Big Data. We will have a closer look on the it and the new data-storage systems that developed in the last years known as NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases and evaluate them. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
+The data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. Also the widespread use of mobile devices and the Internet of Things contribute the extreme data growth. In 2012 over 2.8 zettabytes of data existed\cite{DBLP:conf/bis/SchmidtMMPH14}. This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze it. This is trend is broadly described as Big Data. We will have a closer look on the it and the new data-storage systems that developed in the last years known as NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases and evaluate them. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
 
 \section{Big Data}
 
-The term Big Data was first used in 2001 by the consulting company Mckinsey [ref overview big data]. There is no general definition about the term Big Data, but there is a common agreement on some characteristics of Big Data. In general, the amount of data is too much ,as that it could be managed by traditional IT systems.
+The term Big Data was first used in 2001 by the consulting company Mckinsey\cite{DBLP:series/sbcs/ChenMZL14}. There is no general definition about the term Big Data, but there is a common agreement on some characteristics of Big Data. In general, the amount of data is too much ,as that it could be managed by traditional IT systems.
 In 2010, Apache Hadoop defined big data as "datasets which could not be
 captured, managed, and processed by general computers within an acceptable
-scope". [add cite]. This means that traditional relational database management systems have reached their limits.
-A basic characterization of Big data was done by IDC [paper ref]. This characterization are the "4Vs":
+scope"\cite{DBLP:series/sbcs/ChenMZL14}. This means that traditional relational database management systems have reached their limits.
+
+There are different characterizations for Big Data. The most common ones are the "3-Vs"\cite{bigdata-challenges}.
 \begin{itemize}
 	\item Variety - describing the different data and data structures
-	\item Veolocity - the speed of data creation
+	\item Velocity - the speed of data creation
 	\item Volume - the amount of data
-	\item Value - the worth derived from the data
 \end{itemize}
+Often, Value is added as a fourth V.
 
-The following picture from [big data - related technologies] illustrates very well the Velocity, Volume and Value of Big Data.
+The following picture from\cite{DBLP:series/sbcs/ChenMZL14} illustrates very well the Velocity, Volume and Value of Big Data.
 
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics[scale=0.45]{big_data.png}
-	\caption{Phenomenon of Big Data}
+	\caption{Phenomenon of Big Data\cite{DBLP:series/sbcs/ChenMZL14}}
 \end{figure}
 
 Traditionally, most of the data was stored in relational database management systems (RDBMS). They usually store structured data and are therefor not good in handling the point of variety. Because of the structured way and the integrity constraints in RDBMS, they do not scale very well horizontally, which makes them not good for storing large amounts of data. Because of this shortcomings, the he NoSQL ("Not only SQL") family of databases developed, which tackle those challenges.
@@ -110,12 +111,6 @@ The CAP or Brewer Theorem\cite{Gilbert:2002:BCF:564585.564601} was formulated in
 	\item \textbf{Partition tolerance} \\ this means that the system can be partitioned and works good with this partitioning. The consequence of this is, that it can also partition the data.
 \end{itemize}
 
-\begin{figure}[hbtp]
-	\centering
-	\includegraphics[scale=0.2]{CAP_Diagram_dist-copy.jpg}
-	\caption{CAP Theorem, Source: blog.nosqltips.com}
-\end{figure}
-
 Big Data is too big to be handeld on a single machine or a small cluster. Therefor, partition tolerance is needed. Traditional RDBMS focus on the properties C and A, NoSQL systems vary if they focus on CP or on AP, but basically the are horizontal scaleable. We will now see what kind of NoSQL databases exist.
 
 \subsection{Types of NoSQL systems}
@@ -124,7 +119,7 @@ There are several different classifications of "NoSQL" databases. Most of them c
 
 \subsubsection{Key-Value Stores}
 
-The data model is simpel. Each key is unique and it has an associated value. The storage has no knowledge about the value that is stored. Ad-Hoc query features and joins are usually omitted. They have very good scaling due to their easy lookup and storage model. A popular example is Amazon Dynamo DB, another ones are Apache Cassandra and BerkeleyDB.
+The data model is simpel. Each key is unique and it has an associated value. The storage has no knowledge about the value that is stored. Ad-Hoc query features and joins are usually omitted. They have very good scaling due to their easy lookup and storage model. A popular example is Amazon Dynamo DB, another ones are Apache Cassandra and BerkeleyDB\cite{Nayak_typeof}.
 	
 \subsubsection{Column-Stores}
 
@@ -132,9 +127,8 @@ In RDBMS, the important unit is a row. Column-Stores, as the name implies, lay t
 
 To achieve the performance needed, those databases normally allow temporary inconsistency. They usually store updates to data as a new version instead of updating the old one.
 
-Popular examples of this type of storage are Goolge BigTable and Apache HBase. Apache Cassandra also is in this section as it is a hybrid system having prominent features of key-value and column-stores.
+Popular examples of this type of storage are Goolge BigTable and Apache HBase. Apache Cassandra also is in this section as it is a hybrid system having prominent features of key-value and column-stores\cite{Nayak_typeof}\cite{DBLP:conf/services/GudivadaRR14};
 
-[Cite NoSQL systems for big data ]
 
 \subsubsection{Document Stores}
 
@@ -142,11 +136,10 @@ This kind of NoSQL Databases consider documents as their unit of information. A
 document can be seen like a record in an RDBMS, but they are schemaless. This
 gives them more flexibility and they do not include null values. Therefore those systems are very well suited systems that have unstructured data, so they tackle the issue of variety in Big Data.
 The documents are normally stored in JSON or XML. Usually, document stores are fully searchable. A typical element of a document store looks
-like this:
+like thi s:
 
 \begin{lstlisting}[language=json,firstnumber=1]
-{
-	FirstName: "Jonathan",
+{	FirstName: "Jonathan",
 	Address: "15 Wanamassa Point Road",
 	Children: [
 		{Name: "Michael", Age: 10},
@@ -159,27 +152,27 @@ like this:
 
 Prominent members for document stores are MongoDB and CouchDB. MongoDB also offers support for Hadoop, therefor suiting good for Map/Reduce applications. They both also provide good horizontal scaling.
 
-An example of a document store in the Big Data scenario was done by[Insert name of Crime Paper]. They have utilized MongoDB to capture unstructured data from various resources likes blogs, social media and RSS feed. Afterwards, they classified and analyzed the data to predict areas which have high crime rate.
+An example of a document store in the Big Data scenario was done in "Crime Analysis and Prediction Using Data Mining"\cite{crime} . They have utilized MongoDB to capture unstructured data from various resources likes blogs, social media and RSS feed. Afterwards, they classified and analyzed the data to predict areas which have high crime rate.
 
 \subsection{Graph Databases}
 
-The dominant feature of graph databases is, that they represent their data in an actual graph. The importance is here on the relationship between the data. The nodes and edges can have properties, describing the node or the relationship between the nodes. By the way the data is stored internally, they perform much better than relational databases on graphs, although there has been research on how relational databases could handle graphs better [add ref]. From all the data-models in the NoSQL family, the data model of graph-databases is the most complex and expressive one.
+The dominant feature of graph databases is, that they represent their data in an actual graph. The importance is here on the relationship between the data. The nodes and edges can have properties, describing the node or the relationship between the nodes. By the way the data is stored internally, they perform much better than relational databases on graphs. From all the data-models in the NoSQL family, the data model of graph-databases is the most complex and expressive one.
 
 When thinking of social media like Facebook, Xing and LinkedIn, one can see very easily how it would feel natural to model the data as graphs. User in those systems represent nodes and the edges between them if they are friends, for example.
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.5]{neo4j.jpg}
+	\includegraphics[scale=0.35]{neo4j.jpg}
 	\caption{a social graph, Source: /www.infoq.com/articles/graph-nosql-neo4j}
 \end{figure}
 
-Besides representing social-graphs, they have also use in scientific computing. A request for databases optimized for graphs dates back to 1995 as they can represent genomes easier [reference to genome]. Another nice example for the use of graph databases is in the support of cloud management. [Soundararajan and Kakaraddi, needs ref] used a graph database to support system admins with managing their cloud environment by mapping their virtual infrastructure to a graph.
+Besides representing social-graphs, they have also use in scientific computing. A request for databases optimized for graphs dates back to 1995 as they can represent genomes easier \cite{genome}. Another nice example for the use of graph databases is in the support of cloud management. 
 
-[...nosql vs rdbms paper] used Neo4J, a popular graph database, to implement a large-scale healthcare system. They compared it's performance to the implementation with a MySQL version of the system. An interesting finding of theirs was, that the performance of Neo4J degrades with respect to the degree of a node, while in the MySQL case it degrades with respect to the overall size.
+In\cite{healtcare}, they used Neo4J, a popular graph database, to implement a large-scale healthcare system. They compared it's performance to the implementation with a MySQL version of the system. An interesting finding of theirs was, that the performance of Neo4J degrades with respect to the degree of a node, while in the MySQL case it degrades with respect to the overall size (see figure 3).
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.5]{neo4j_mysql.png}
+	\includegraphics[scale=0.4]{neo4j_mysql.png}
 	\caption{Data Size vs. Query Processing Time [add ref]}
 \end{figure}
 
@@ -187,13 +180,11 @@ As those databases have the most expressive data-system, we will have a closer o
 
 \section{Graph Database Comparision}
 
-We will now look on three graph databases, Neo4J, HyperGraphDB and Dex a comparison between them done by [ref to choosing between].
+We will now look on three graph databases, Neo4J, HyperGraphDB and Dex. A comparison between them was done by in\cite{comparision}.
 
 \subsection{Neo4J}
 
-Neo4J is written in Java and was released in 2007. It is fully ACID compliant. The nodes and edges in the graph can have properties. Edges also have a type. 
-
-To access data, one has a wide variety of access methods. It is possible to query data via it's native Java API, or to use SPARQL, which normally used for RDF systems, Gremlin or Cypher. [... ]. Below is an example for a cypher query finding all connections between node a and node b with three hops or less.
+Neo4J is written in Java and was released in 2007. It is fully ACID compliant. The nodes and edges in the graph can have properties. Edges also have a type. A deep dive to the Neo4J architecture was done by Hongcheng Huang\cite{n4j}. To access data, one has a wide variety of access methods. It is possible to query data via it's native Java API, or to use SPARQL, which normally used for RDF systems, Gremlin or Cypher. Below is an example for a cypher query finding all connections between node a and node b with three hops or less;
 
 \begin{lstlisting}[language=json,firstnumber=1]
 START a=node:indexName(name="A")
@@ -204,56 +195,48 @@ RETURN distinct b;
 
 \subsection{HypergraphDB}
 
-HypergraphDB uses hypergraphs as a storage model. In hypergraphs, more edges correspond to a single hyperedge. Those hyperedges connect orderd sets of nodes. The HypergraphDB is built on top of the BerkeleyDB, a Key-Value Store.
-
-For accessing the data, a simple, but efficient querying
-API where data is loaded on demand with lazy join, bi-directional (whenever
-possible) cursors exists. [Ref]
+HypergraphDB uses hypergraphs as a storage model. In hypergraphs, more edges correspond to a single hyperedge. Those hyperedges connect orderd sets of nodes. The HypergraphDB is built on top of the BerkeleyDB, a Key-Value Store.For accessing the data, a simple, but efficient querying API where data is loaded on demand with lazy join, bi-directional (whenever possible) cursors exists. Borislav Iordanov wrote a very detailed paper about HypergraphDB\cite{hyper}.
 
 \subsection{DEX / Sparksee}
 
-The name of DEX was changed in February 2014 to Sparksee. The storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge can also contain various attributes. Because of the multigraph structure, multiple edges are allowed between two nodes.
-
-The core engine of DEX was written in C++. A Java library with complete API access was also created. 
-
-DEX does not offer a specific query language but instead relies on basic graph operations. The result of those operations are again graphs.
+The name of DEX was changed in February 2014 to Sparksee. The storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge can also contain various attributes. Because of the multigraph structure, multiple edges are allowed between two nodes. The core engine of DEX was written in C++. A Java library with complete API access was also created. DEX does not offer a specific query language but instead relies on basic graph operations. The result of those operations are again graphs. Dex is described very well in \cite{dex};
 
 \subsection{Performance}
 
-[Ref] used datasets representing road-networks that were used for the 9th DIMACS Implementation Challenge - Shortest Paths. Interestingly, when initially loading the data, the HyperGraphDB timed out after 24-hours on one of the test-instances.
+In \cite{comparision}, they used datasets representing road-networks that were used for the 9th DIMACS Implementation Challenge - Shortest Paths. Interestingly, when initially loading the data, the HyperGraphDB timed out after 24-hours on one of the test-instances.
 
 They compared the performance on two basic graph search-operations: Depth-First-Search and Breadth-First-Search, running internally and externally. For external algorithms, they relied on adjacency functions of the APIs.
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.35]{bfs.png}
+	\includegraphics[scale=0.32]{bfs.png}
 	\caption{BFS performance, non-shown bars indicate that
-		the corresponding engine timed out after 1 hour}
+		the corresponding engine timed out after 1 hour\cite{comparision}}
 \end{figure}
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.35]{dfs.png}
+	\includegraphics[scale=0.32]{dfs.png}
 	\caption{dfs performance, non-shown bars indicate that
-		the corresponding engine timed out after 1 hour}
+		the corresponding engine timed out after 1 hour\cite{comparision}}
 \end{figure}
 
 They also compared the performance for the following two use-cases: Densest-Subgraph and Graph-Summarization. Densest-Subgraph tries to look for a subgraph with the highest density. Graph-Summarization produces an aggregated graph of the initial graph where each node corresponds to a set of nodes and a single edge represent the set of edges between two node sets.
 
-The core output is that Neo4J and DEX both outperform HyperGraphDB. Also Neo4J seems to have better performance on sparse graphs and DEX works better on dense graphs. This correlates with the finding of [nosql -rdbms stuff] where Neo4Js performance drops with the degree of nodes.
+The core output is that Neo4J and DEX both outperform HyperGraphDB. Also Neo4J seems to have better performance on sparse graphs and DEX works better on dense graphs. This correlates with the finding of \cite{healtcare} where Neo4Js performance drops with the degree of nodes.
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.35]{dense.png}
+	\includegraphics[scale=0.32]{dense.png}
 	\caption{Denses Subgraph, non-shown bars indicate that
-		the corresponding engine timed out after 1 hour}
+		the corresponding engine timed out after 1 hour\cite{comparision}}
 \end{figure}
 
 \begin{figure}[hbtp]
 	\centering
-	\includegraphics[scale=0.35]{summarization.png}
+	\includegraphics[scale=0.32]{summarization.png}
 	\caption{Graph Summarization performance, non-shown bars indicate that
-		the corresponding engine timed out after 1 hour}
+		the corresponding engine timed out after 1 hour\cite{comparision}}
 \end{figure}
 
 \section{Conclusion}
@@ -266,8 +249,8 @@ We have seen how Big Data changed the landscape for data-storage systems and how
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
-\bibliographystyle{abbrv}
-\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+\bibliographystyle{plain}
+\bibliography{biblio}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ".bib" file
 %  and remember to run:
 % latex bibtex latex latex
