@@ -46,22 +46,20 @@
 \numberofauthors{4}
 \author{
 \alignauthor
-Bernd Landauer\\
+Bernd Landauer\titlenote{e0825716@student.tuwien.ac.at}\\
        \affaddr{TU Vienna}\\
-       \email{e0825716@student.tuwien.ac.at}
-\alignauthor Florian
-       \affaddr{The Th{\o}rv{\"a}ld Group}\\
-       \email{larst@affiliation.org}
+       \affaddr{e0825716}       
+\alignauthor 
+Florian Mihola\titlenote{e0304850@student.tuwien.ac.at}\\
+	\affaddr{TU Vienna}\\
+	\affaddr{e0304850}\\
 \and
-\alignauthor Lin
+\alignauthor Lin mmmmhhh
        \affaddr{Brookhaven Laboratories}\\
-       \affaddr{Brookhaven National Lab}\\
-       \affaddr{P.O. Box 5000}\\
        \email{lleipuner@researchlabs.org}
-\alignauthor Patrick Saeuerl\\
+\alignauthor Patrick S{\"a}uerl\titlenote{e1125492@student.tuwien.ac.at}\\
        \affaddr{TU Vienna}\\
-	   \affaddr{Bacc Studium}\\
-       \email{e1125492@student.tuwien.ac.at}
+       \affaddr{e1125492}\\
 }
 
 
@@ -104,7 +102,7 @@ Traditionally, most of the data was stored in relational database management sys
 
 \section{NoSQL Overview}
 
-"NoSQL" stands for "Not only SQL" and describes a broad family of database management systems. They tackle a variety of problems that were introduced by Big Data - mainly variety and volumne. The aspect of volumn is covered by enabling the databases to scale horizontally and reducing constraints by different approach to the CAP Theorem compared to RDBMS. The aspect of variety is covered by the wide range of different NoSQL systems. We will look at the CAP Theorem first as with it we can explain the horizontal scalability of NoSQL systems.
+"NoSQL" stands for "Not only SQL" and describes a broad family of database management systems. They tackle a variety of problems that were introduced by Big Data - mainly variety and volume. The aspect of volume is covered by enabling the databases to scale horizontally and reducing constraints by different approach to the CAP Theorem compared to RDBMS. The aspect of variety is covered by the wide range of different NoSQL systems. We will look at the CAP Theorem first as with it we can explain the horizontal scalability of NoSQL systems.
 
 \subsection{CAP-Theorem}
 
@@ -126,17 +124,17 @@ Big Data is too big to be handeld on a single machine or a small cluster. Theref
 
 \subsection{Types of NoSQL systems}
 
-There are several different classifications of "NoSQL" databases. Most of them contain the following classes: Key-Value stores, Column-Stores, Document-Stores und Graph Databases. Other types like Object-Oriented Databases and XML-Databases exist but they will not be covered here. We have a short look on the basic characterists of those types.
+There are several different classifications of "NoSQL" databases. Most of them contain the following classes: Key-Value stores, Column-Stores, Document-Stores und Graph Databases. Other types like Object-Oriented Databases and XML-Databases exist but they will not be covered here. We have a short look on the basic characteristics of those types.
 
 \subsubsection{Key-Value Stores}
 
-The data model is simpel. Each key is unique and it has an associated value. The storage has no knowledge about the value that is stored. Ad-Hoc query features and joins are usually ommited. They have very good scaling due to their easy lookup and storage model. A popular example is Amazon Dynamo DB, another ones are Apache Cassandra and BerkeleyDB.
+The data model is simpel. Each key is unique and it has an associated value. The storage has no knowledge about the value that is stored. Ad-Hoc query features and joins are usually omitted. They have very good scaling due to their easy lookup and storage model. A popular example is Amazon Dynamo DB, another ones are Apache Cassandra and BerkeleyDB.
 	
 \subsubsection{Column-Stores}
 
-In RDBMS, the important unit is a row. Column-Stores, as the name implies, lay their focus on columns instead of rows. The columns are groupd together to a column-family. A row consists out of column-families which need to be predefined. Which columns are in a column-family is open. The columns that belong to a column family should relate together. For example, Address would be a column family containing the columns that represent the whole address. Columns of a column family are stored together, which makes it easier to retrieve those columns and process them together.
+In RDBMS, the important unit is a row. Column-Stores, as the name implies, lay their focus on columns instead of rows. The columns are grouped together to a column-family. A row consists out of column-families which need to be predefined. Which columns are in a column-family is open. The columns that belong to a column family should relate together. For example, Address would be a column family containing the columns that represent the whole address. Columns of a column family are stored together, which makes it easier to retrieve those columns and process them together.
 
-To achieve the performance needed, those databases normally allow temporary inconsistency. They usually store updates to data as a new versio instead of updating the old one.
+To achieve the performance needed, those databases normally allow temporary inconsistency. They usually store updates to data as a new version instead of updating the old one.
 
 Popular examples of this type of storage are Goolge BigTable and Apache HBase. Apache Cassandra also is in this section as it is a hybrid system having prominent features of key-value and column-stores.
 
@@ -165,7 +163,7 @@ like this:
 
 Prominent members for document stores are MongoDB and CouchDB. MongoDB also offers support for Hadoop, therefor suiting good for Map/Reduce applications. They both also provide good horizontal scaling.
 
-An example of a document store in the Big Data scenario was done by[Insert name of Crime Paper]. They have utilized MongoDB to caputre unstructered data from various ressources likes blogs, social media and RSS feed. Afterwards, they classified and analyzed the data to predict areas which have high crime rate.
+An example of a document store in the Big Data scenario was done by[Insert name of Crime Paper]. They have utilized MongoDB to capture unstructured data from various resources likes blogs, social media and RSS feed. Afterwards, they classified and analyzed the data to predict areas which have high crime rate.
 
 \subsection{Graph Databases}
 
@@ -193,13 +191,13 @@ As those databases have the most expressive data-system, we will have a closer o
 
 \section{Graph Database Comparision}
 
-We will now look on three graph databases, Neo4J, HyperGraphDB and Dex a comparision between them done by [ref to choosing between].
+We will now look on three graph databases, Neo4J, HyperGraphDB and Dex a comparison between them done by [ref to choosing between].
 
 \subsection{Neo4J}
 
 Neo4J is written in Java and was released in 2007. It is fully ACID compliant. The nodes and edges in the graph can have properties. Edges also have a type. 
 
-To access data, one has a wide variaty of access methods. It is possible to query data via it's native Java API, or to use SPARQL (normally used for RDF systems), Gremlin or Cypher. [... ]. An example for a cypher query finding all connections between a and b with three hops or less.
+To access data, one has a wide variety of access methods. It is possible to query data via it's native Java API, or to use SPARQL (normally used for RDF systems), Gremlin or Cypher. [... ]. An example for a cypher query finding all connections between a and b with three hops or less.
 
 \begin{lstlisting}[language=json,firstnumber=1]
 START a=node:indexName(name="A")
@@ -218,7 +216,7 @@ possible) cursors exists.
 
 \subsection{DEX / Sparksee}
 
-DEX storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge acn also contain various attribtues. Because of the multigraph structure, multiple edges are allowed between two nodes.
+DEX storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge acn also contain various attributes. Because of the multigraph structure, multiple edges are allowed between two nodes.
 
 The core engine of DEX was written in C++. A Java library with complete API access was also created. The name was changed in February 2014 to Sparksee.
 
@@ -228,7 +226,7 @@ DEX does not offer a specific query language but instead relies on basic graph o
 
 [Ref] used datasets representing road-networks that were used 9th DIMACS Implementation Challenge - Shortest Paths. Interestingly, when initially loading the data, the HyperGraphDB timed out after 24-hours on one of the test-instances.
 
-They compared the performance on two basic graph search-operations: Depth-First-Search and Breadth-First-Search, running internally and externally. For external algorithmns, they relied on adjacency functions of the APIs.
+They compared the performance on two basic graph search-operations: Depth-First-Search and Breadth-First-Search, running internally and externally. For external algorithms, they relied on adjacency functions of the APIs.
 
 \begin{figure}[hbtp]
 	\centering
@@ -264,7 +262,7 @@ The core output is that Neo4J and DEX both outperform HyperGraphDB. Also Neo4J s
 
 \section{Conclusions}
 
-We have seen how Big Data changed the landscape for data-storage systems and how it gave birth to a whole new family of storage systems, broaldy desribed as "NoSQL"-Systems. We seen which properties they have in general and how they can be classified. At last, we took a closer look on Graph Database Management systems as graphs have widespdread use. A closer comparision between Neo4J, DEX and Hypergraph showed us, that in this specialised field the performances can vary and one has to adept to the given situation. We hope to see the spread of Graph Databases and the emerge of standardized bench-marks.
+We have seen how Big Data changed the landscape for data-storage systems and how it gave birth to a whole new family of storage systems, broadly described as "NoSQL"-Systems. We seen which properties they have in general and how they can be classified. At last, we took a closer look on Graph Database Management systems as graphs have widespread use. A closer comparison between Neo4J, DEX and Hypergraph showed us, that in this specialized field the performances can vary and one has to adept to the given situation. We hope to see the spread of Graph Databases and the emerge of standardized bench-marks.
 
 %\end{document}  % This is where a 'short' article might terminate
 
