@@ -19,10 +19,14 @@ public class Neo4JBatchInserter {
 	private BatchInserter batchInserter;
 	private Label userLabel;
 	private Label retweetsLabel;
+	private Label topicLabel;
+	private Label mentionsLabel;
 	private Map<Long, Long> twitterToNeo; // mapping ids
+	private Map<String, Long> topicToNeo; // mapping topics
 
-	enum OneType implements RelationshipType {
-		retweets
+	enum Type implements RelationshipType {
+		retweets,
+		mentions
 	}
 
 	public Neo4JBatchInserter(ServerConfig config) {
@@ -37,8 +41,11 @@ public class Neo4JBatchInserter {
 
 		userLabel = DynamicLabel.label("user");
 		retweetsLabel = DynamicLabel.label("retweets");
+		topicLabel = DynamicLabel.label("topic");
+		mentionsLabel = DynamicLabel.label("mentions");
 
 		twitterToNeo = new HashMap<Long, Long>();
+		topicToNeo = new HashMap<String, Long>();
 	}
 
 	public void addUser(AicUser user) {
@@ -67,7 +74,31 @@ public class Neo4JBatchInserter {
 			//System.out.println("no mapping for original author " + originalAuthorId + " (that's okay, it's probably just a user outside of our set)");
 		}
 		if (!retweeterUnknown && !originalAuthorUnknown) {
-			long _id = batchInserter.createRelationship(twitterToNeo.get(retweeterId), twitterToNeo.get(originalAuthorId), OneType.retweets, properties);
+			long _id = batchInserter.createRelationship(twitterToNeo.get(retweeterId), twitterToNeo.get(originalAuthorId), Type.retweets, properties);
+		}
+	}
+
+	public void addTopic(String topic) {
+		topic = topic.toLowerCase();
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("id", topic);
+
+		long neoId = batchInserter.createNode(properties, topicLabel);
+		topicToNeo.put(topic, neoId);
+	}
+
+	public void addMentionsRelationship(Long id, String topic, Integer count) {
+		topic = topic.toLowerCase();
+
+		Map<String, Object> properties = new HashMap<String, Object>();
+		properties.put("count", count);
+
+		boolean userUnknown = twitterToNeo.get(id) == null;
+		boolean topicUnknown = topicToNeo.get(topic) == null;
+
+		if (!userUnknown && !topicUnknown) {
+			long _id = batchInserter.createRelationship(twitterToNeo.get(id), topicToNeo.get(topic), Type.mentions, properties);
 		}
 	}
 }

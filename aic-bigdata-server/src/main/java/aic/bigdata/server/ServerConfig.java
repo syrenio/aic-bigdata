@@ -171,8 +171,8 @@ public class ServerConfig {
 		return mongo.getProperty("mongo.collection.retweeteroriginalauthors");
 	}
 
-	public String getMongoCollectionOriginalAuthorRetweeters() {
-		return mongo.getProperty("mongo.collection.originalauthorretweeters");
+	public String getMongoCollectionUserMentionedTopics() {
+		return mongo.getProperty("mongo.collection.usermentionedtopics");
 	}
 
 	private Configuration getConfigForTwitter4J() {

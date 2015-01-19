@@ -35,7 +35,7 @@ public class MongoDatabase {
 	private DBCollection ads;
 	private DBCollection topics;
 	private DBCollection retweeteroriginalauthors;
-	//private DBCollection originalauthorretweeters;
+	private DBCollection usermentionedtopics;
 
 	public MongoDatabase(ServerConfig cfg) {
 		this.cfg = cfg;
@@ -56,6 +56,12 @@ public class MongoDatabase {
 	public DBCursor getCursorForUsers() throws UnknownHostException {
 		initialize();
 		DBCursor c = users.find();
+		return c;
+	}
+
+	public DBCursor getCursorForTopics() throws UnknownHostException {
+		initialize();
+		DBCursor c = topics.find();
 		return c;
 	}
 
@@ -93,11 +99,11 @@ public class MongoDatabase {
 		return out.results();
 	}
 
-	/*public DBCursor getCursorForOriginalAuthorRetweeters() throws UnknownHostException {
+	public DBCursor getCursorForUserMentionedTopics() throws UnknownHostException {
 		initialize();
-		DBCursor c = originalauthorretweeters.find();
+		DBCursor c = usermentionedtopics.find();
 		return c;
-	}*/
+	}
 
 	public boolean checkTweetExists(Status status) throws UnknownHostException {
 		initialize();
@@ -294,7 +300,7 @@ public class MongoDatabase {
 		helper.createUniqueIndex("id", this.ads);
 		helper.createUniqueIndex("id", this.topics);
 		helper.createUniqueIndex("_id", this.retweeteroriginalauthors); // ?
-		//helper.createUniqueIndex("_id", this.originalauthorretweeters); // ?
+		helper.createUniqueIndex("_id", this.usermentionedtopics); // ?
 
 		helper.createIndex("user.id", this.tweets, 1);
 		helper.createIndex("timestamp_ms", this.tweets, -1);
@@ -312,7 +318,7 @@ public class MongoDatabase {
 			this.ads = database.getCollection(cfg.getMongoCollectionAds());
 			this.topics = database.getCollection(cfg.getMongoCollectionTopics());
 			this.retweeteroriginalauthors = database.getCollection(cfg.getMongoCollectionRetweeterOriginalAuthors());
-			//this.originalauthorretweeters = database.getCollection(cfg.getMongoCollectionOriginalAuthorRetweeters());
+			this.usermentionedtopics = database.getCollection(cfg.getMongoCollectionUserMentionedTopics());
 			createIndexies();
 			this.init = true;
 		}
