@@ -70,11 +70,11 @@ This paper gives an introduction to Big Data Management and NoSQL. A special loo
 
 \section{Introduction}
 
-The data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. Also the widespread use of mobile devices and the Internet of Things contribute the extreme data growth. In 2012 over 2.8 zettabytes of data existed\cite{DBLP:conf/bis/SchmidtMMPH14}. This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze it. This is trend is broadly described as Big Data. We will have a closer look on the it and the new data-storage systems that developed in the last years known as NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases and evaluate them. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
+The data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. Also the widespread use of mobile devices and the Internet of Things contribute the extreme data growth. In 2012 over 2.8 zettabytes of data existed\cite{DBLP:conf/bis/SchmidtMMPH14}. This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze it. This trend is broadly described as Big Data. We will have a closer look at it and the new data-storage systems that developed in the last years known as NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases and evaluate them. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
 
 \section{Big Data}
 
-The term Big Data was first used in 2001 by the consulting company Mckinsey\cite{DBLP:series/sbcs/ChenMZL14}. There is no general definition about the term Big Data, but there is a common agreement on some characteristics of Big Data. In general, the amount of data is too much ,as that it could be managed by traditional IT systems.
+The term Big Data was first used in 2001 by the consulting company Mckinsey\cite{DBLP:series/sbcs/ChenMZL14}. There is no general definition about the term Big Data, but there is a common agreement on some characteristics of Big Data. In general, the amount of data is too much, as that it could be managed by traditional IT systems.
 In 2010, Apache Hadoop defined big data as "datasets which could not be
 captured, managed, and processed by general computers within an acceptable
 scope"\cite{DBLP:series/sbcs/ChenMZL14}. This means that traditional relational database management systems have reached their limits.
@@ -95,7 +95,7 @@ The picture in Figure 1 from\cite{DBLP:series/sbcs/ChenMZL14} illustrates very w
 	\caption{Phenomenon of Big Data\cite{DBLP:series/sbcs/ChenMZL14}}
 \end{figure}
 
-Traditionally, most of the data was stored in relational database management systems (RDBMS). They usually store structured data and are therefor not good in handling the point of variety. Because of the structured way and the integrity constraints in RDBMS, they do not scale very well horizontally, which makes them not good for storing large amounts of data. Because of this shortcomings, the he NoSQL ("Not only SQL") family of databases developed, which tackle those challenges.
+Traditionally, most of the data was stored in relational database management systems (RDBMS). They usually store structured data and are therefor not good in handling the point of variety. Because of the structured way and the integrity constraints in RDBMS, they do not scale very well horizontally, which makes them not good for storing large amounts of data. Because of these shortcomings, the NoSQL ("Not only SQL") family of databases developed, which tackle those challenges.
 
 \section{NoSQL Overview}
 
