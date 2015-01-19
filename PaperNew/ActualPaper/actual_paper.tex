@@ -70,16 +70,15 @@ The Abstract that we are going to write.
 
 \section{Introduction}
 
-In data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. The same applies to the increased use of mobile devices and the Internet of Things. In 2012 over 2.8 zettabytes of data existed.
-This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze the data. We will have a closer look on the Big Data movement and the new data-storage systems that developed in the last years, broadly named NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
+The data growth in the last years was intense. Social Systems like Facebook, LinkedIn and Twitter produce more and more data each day. Also the widespread use of mobile devices and the Internet of Things contribute the extreme data growth. In 2012 over 2.8 zettabytes of data existed. This new amount of data and the rate at which it is generated leads to new challenges for companies and their storage models. The challenges include how to store the data and how to analyze it. This is trend is broadly described as Big Data. We will have a closer look on the it and the new data-storage systems that developed in the last years known as NoSQL systems. Because graphs are a natural structure for social media, we will introduce some of the most used graph databases and evaluate them. As the topic of big data is huge, we will not cover analyzation techniques like Map-Reduce and Bulk-Synchronous-Processing, although we recommend reading them up.
 
 \section{Big Data}
 
-The term Big Data was first used in 2001 by the consulting company Mckinsey [ref overview big data]. There is no general definition about the term Big Data, but there is a common aggrement on some characteristics of Big Data. In general, the amount of data is too much as that it could be managed by traditional IT systems.
-In 2010, Apache Hadoop defined big data as “datasets which could not be
+The term Big Data was first used in 2001 by the consulting company Mckinsey [ref overview big data]. There is no general definition about the term Big Data, but there is a common agreement on some characteristics of Big Data. In general, the amount of data is too much ,as that it could be managed by traditional IT systems.
+In 2010, Apache Hadoop defined big data as "datasets which could not be
 captured, managed, and processed by general computers within an acceptable
-scope". This means that traditional relational database management systems have reached their limits.
-A basic characterization of Big data was done by IDC. This characterization are the "4Vs":
+scope". [add cite]. This means that traditional relational database management systems have reached their limits.
+A basic characterization of Big data was done by IDC [paper ref]. This characterization are the "4Vs":
 \begin{itemize}
 	\item Variety - describing the different data and data structures
 	\item Veolocity - the speed of data creation
@@ -95,7 +94,7 @@ The following picture from [big data - related technologies] illustrates very we
 	\caption{Phenomenon of Big Data}
 \end{figure}
 
-Traditionally, most of the data was stored in relational database management systems (RDBMS). RDBMS usually store structured data and are therefor not good in handling the point of variety. Because of the structured way and the integrity constraints in RDBMS, they do not scale very well horizontally which makes them not good for storing large volumes of data. The NoSQL ("Not only SQL") family of databases tackle those challenges.
+Traditionally, most of the data was stored in relational database management systems (RDBMS). They usually store structured data and are therefor not good in handling the point of variety. Because of the structured way and the integrity constraints in RDBMS, they do not scale very well horizontally, which makes them not good for storing large amounts of data. Because of this shortcomings, the he NoSQL ("Not only SQL") family of databases developed, which tackle those challenges.
 
 \section{NoSQL Overview}
 
@@ -103,12 +102,12 @@ Traditionally, most of the data was stored in relational database management sys
 
 \subsection{CAP-Theorem}
 
-The CAP or Brewer Theorem\cite{Gilbert:2002:BCF:564585.564601} was formulated in 2000. The  theorem  states, that it is impossible for any data sharing system, to guarantee the following three properties all the time
+The CAP or Brewer Theorem\cite{Gilbert:2002:BCF:564585.564601} was formulated in 2000. The  theorem  states, that it is impossible for any data sharing system, to guarantee the following three properties all the time:
 
 \begin{itemize}
 	\item \textbf{Consistency} \\ this means that all clients see the same data. In an environment with a huge amount of data, this is hard to achieve as it might be stored in different parts of the cluster
-	\item \textbf{Availability} \\ this means that the service is basically available. To achieve this availability, the system must have some kind of fault tolerance to handle situations like servers going down. In our case with the amounts of data that Big Data is concernd with, multiple machines will be used for the system, therefor availability is needed.
-	\item \textbf{Partition tolerance} \\ this means that the data is partitioned to several parts of the database. This enables horizontal scalability and also fault tolerance.
+	\item \textbf{Availability} \\ this means that the service is basically available. To achieve this availability, the system must have some kind of fault tolerance to handle situations like servers going down. In our case with the amounts of data that Big Data is concernd with, multiple machines will be used for the system, even under heavy load and queries, the system should stay available.
+	\item \textbf{Partition tolerance} \\ this means that the system can be partitioned and works good with this partitioning. The consequence of this is, that it can also partition the data.
 \end{itemize}
 
 \begin{figure}[hbtp]
@@ -121,7 +120,7 @@ Big Data is too big to be handeld on a single machine or a small cluster. Theref
 
 \subsection{Types of NoSQL systems}
 
-There are several different classifications of "NoSQL" databases. Most of them contain the following classes: Key-Value stores, Column-Stores, Document-Stores und Graph Databases. Other types like Object-Oriented Databases and XML-Databases exist but they will not be covered here. We have a short look on the basic characteristics of those types.
+There are several different classifications of "NoSQL" databases. Most of them contain the following classes: Key-Value stores, Column-Stores, Document-Stores und Graph Databases. Other types like Object-Oriented Databases and XML-Databases exist but they will not be covered here. Also some databases do not fit very well in one category, as they take on aspects of other types as well. We have a short look on the basic characteristics of those types.
 
 \subsubsection{Key-Value Stores}
 
@@ -129,7 +128,7 @@ The data model is simpel. Each key is unique and it has an associated value. The
 	
 \subsubsection{Column-Stores}
 
-In RDBMS, the important unit is a row. Column-Stores, as the name implies, lay their focus on columns instead of rows. The columns are grouped together to a column-family. A row consists out of column-families which need to be predefined. Which columns are in a column-family is open. The columns that belong to a column family should relate together. For example, Address would be a column family containing the columns that represent the whole address. Columns of a column family are stored together, which makes it easier to retrieve those columns and process them together.
+In RDBMS, the important unit is a row. Column-Stores, as the name implies, lay their focus on columns instead of rows. The columns are grouped together to a column-family. A row consists out of column-families which need to be predefined. Which columns are in a column-family is open, but they should relate to the family. For example, Address would be a column family containing the columns that represent the whole address. Columns of a column family are stored together, which makes it easier to retrieve those columns and process them together.
 
 To achieve the performance needed, those databases normally allow temporary inconsistency. They usually store updates to data as a new version instead of updating the old one.
 
@@ -181,7 +180,7 @@ Besides representing social-graphs, they have also use in scientific computing. 
 \begin{figure}[hbtp]
 	\centering
 	\includegraphics[scale=0.5]{neo4j_mysql.png}
-	\caption{Data Size vs. Query Processing Time}
+	\caption{Data Size vs. Query Processing Time [add ref]}
 \end{figure}
 
 As those databases have the most expressive data-system, we will have a closer on look on some of the available graph databases and compare them.
@@ -194,7 +193,7 @@ We will now look on three graph databases, Neo4J, HyperGraphDB and Dex a compari
 
 Neo4J is written in Java and was released in 2007. It is fully ACID compliant. The nodes and edges in the graph can have properties. Edges also have a type. 
 
-To access data, one has a wide variety of access methods. It is possible to query data via it's native Java API, or to use SPARQL (normally used for RDF systems), Gremlin or Cypher. [... ]. An example for a cypher query finding all connections between a and b with three hops or less.
+To access data, one has a wide variety of access methods. It is possible to query data via it's native Java API, or to use SPARQL, which normally used for RDF systems, Gremlin or Cypher. [... ]. Below is an example for a cypher query finding all connections between node a and node b with three hops or less.
 
 \begin{lstlisting}[language=json,firstnumber=1]
 START a=node:indexName(name="A")
@@ -207,21 +206,21 @@ RETURN distinct b;
 
 HypergraphDB uses hypergraphs as a storage model. In hypergraphs, more edges correspond to a single hyperedge. Those hyperedges connect orderd sets of nodes. The HypergraphDB is built on top of the BerkeleyDB, a Key-Value Store.
 
-For accessing the data a simple, but efficient querying
+For accessing the data, a simple, but efficient querying
 API where data is loaded on demand with lazy join, bi-directional (whenever
-possible) cursors exists.
+possible) cursors exists. [Ref]
 
 \subsection{DEX / Sparksee}
 
-DEX storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge acn also contain various attributes. Because of the multigraph structure, multiple edges are allowed between two nodes.
+The name of DEX was changed in February 2014 to Sparksee. The storage model is a labeled and attributed multigraph. The edges between the nodes can be directed or undirected. In this kind of graph, every edge and node has a label representing the type. Each node and edge can also contain various attributes. Because of the multigraph structure, multiple edges are allowed between two nodes.
 
-The core engine of DEX was written in C++. A Java library with complete API access was also created. The name was changed in February 2014 to Sparksee.
+The core engine of DEX was written in C++. A Java library with complete API access was also created. 
 
 DEX does not offer a specific query language but instead relies on basic graph operations. The result of those operations are again graphs.
 
 \subsection{Performance}
 
-[Ref] used datasets representing road-networks that were used 9th DIMACS Implementation Challenge - Shortest Paths. Interestingly, when initially loading the data, the HyperGraphDB timed out after 24-hours on one of the test-instances.
+[Ref] used datasets representing road-networks that were used for the 9th DIMACS Implementation Challenge - Shortest Paths. Interestingly, when initially loading the data, the HyperGraphDB timed out after 24-hours on one of the test-instances.
 
 They compared the performance on two basic graph search-operations: Depth-First-Search and Breadth-First-Search, running internally and externally. For external algorithms, they relied on adjacency functions of the APIs.
 
