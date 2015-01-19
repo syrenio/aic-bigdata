@@ -9,22 +9,19 @@ import org.joda.time.Duration;
 
 import aic.bigdata.database.model.AicUser;
 
-import twitter4j.TwitterException;
-import twitter4j.User;
-import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.database.MongoDatabaseHelper;
+import aic.bigdata.database.SqlDatabase;
 import aic.bigdata.extraction.UserHandler;
 import aic.bigdata.extraction.UserProvider;
 
-import com.mongodb.DBObject;
+import java.sql.SQLException;
 
-public class MongoDbUserProvider implements UserProvider {
+public class SqlUserProvider implements UserProvider {
 
-	private MongoDatabase db;
+	private SqlDatabase db;
 	private List<UserHandler> handler = new ArrayList<UserHandler>();
 	private boolean running;
 
-	public MongoDbUserProvider(MongoDatabase db) {
+	public SqlUserProvider(SqlDatabase db) {
 		this.db = db;
 	}
 
@@ -37,8 +34,7 @@ public class MongoDbUserProvider implements UserProvider {
 		long stepSize = 1000;
 
 		try {
-			MongoDatabaseHelper help = new MongoDatabaseHelper();
-			for (DBObject c : db.getCursorForUsers()) {
+			for (AicUser user : db.getAllUsers()) {
 				if (!running)
 					break;
 
@@ -51,20 +47,13 @@ public class MongoDbUserProvider implements UserProvider {
 							+ diff.getStandardMinutes());
 				}
 
-				String message = c.toString();
-				User user = null;
-				try {
-					user = help.convertToUser(c);
-					// user = TwitterObjectFactory.createUser(message);
-				} catch (TwitterException e) {
-					continue; // TODO: error message
-				}
-
 				for (UserHandler t : this.handler) {
-					t.HandleUser(new AicUser(user));
+					t.HandleUser(user);
 				}
 				stepCounter++;
 			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

@@ -1,9 +1,8 @@
 package aic.bigdata.extraction.handler;
 
 import aic.bigdata.database.Neo4JBatchInserter;
-import aic.bigdata.extraction.UserHandler;
+import aic.bigdata.extraction.TopicHandler;
 import aic.bigdata.server.ServerConfig;
-import aic.bigdata.database.model.AicUser;
 
 import java.io.IOException;
 import java.util.Date;
@@ -30,18 +29,18 @@ import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.ResourceIterator;
 
-public class UserToNeo4JHandler implements UserHandler {
+public class TopicToNeo4JHandler implements TopicHandler {
 	private ServerConfig config;
 	private Neo4JBatchInserter batchInserter;
 
-	public UserToNeo4JHandler(ServerConfig config, Neo4JBatchInserter batchInserter) {
+	public TopicToNeo4JHandler(ServerConfig config, Neo4JBatchInserter batchInserter) {
 		this.config = config;
 		this.batchInserter = batchInserter;
 	}
 	
 	@Override
-	public void HandleUser(AicUser user) {
-		batchInserter.addUser(user);
+	public void HandleTopic(String topic) {
+		batchInserter.addTopic(topic);
 	}
 
 }

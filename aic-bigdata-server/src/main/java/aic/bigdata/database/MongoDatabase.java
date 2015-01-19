@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import java.lang.Iterable;
+
 import twitter4j.Status;
 import aic.bigdata.enrichment.AdObject;
 import aic.bigdata.enrichment.TopicObject;
@@ -33,7 +35,7 @@ public class MongoDatabase {
 	private DBCollection ads;
 	private DBCollection topics;
 	private DBCollection retweeteroriginalauthors;
-	private DBCollection originalauthorretweeters;
+	private DBCollection usermentionedtopics;
 
 	public MongoDatabase(ServerConfig cfg) {
 		this.cfg = cfg;
@@ -57,15 +59,49 @@ public class MongoDatabase {
 		return c;
 	}
 
+	public DBCursor getCursorForTopics() throws UnknownHostException {
+		initialize();
+		DBCursor c = topics.find();
+		return c;
+	}
+
 	public DBCursor getCursorForRetweeterOriginalAuthors() throws UnknownHostException {
 		initialize();
 		DBCursor c = retweeteroriginalauthors.find();
 		return c;
 	}
 
-	public DBCursor getCursorForOriginalAuthorRetweeters() throws UnknownHostException {
+	public Iterable<DBObject> getIterableForRetweeterOriginalAuthors() throws UnknownHostException {
 		initialize();
-		DBCursor c = originalauthorretweeters.find();
+
+		DBObject query = new BasicDBObject();
+		DBObject exists = new BasicDBObject();
+		exists.put("$exists", "true");
+		query.put("retweeted_status", exists);
+
+		MapReduceOutput out = tweets.mapReduce(
+			"function() {" +
+			"	emit(this.user.id, { arr: [this.retweeted_status.user.id], len: 1});" +
+    		"}",
+			"function(userId, objs) {" +
+	        "	accum = objs[0];" +
+        	"	for (var i = 1; i < objs.length; i++) {" +
+			"		accum.arr = accum.arr.concat(objs[i].arr);" +
+        	"	}" +
+        	"	accum.len = accum.arr.length;" +
+	        "	return accum;" +
+    		"}",
+			null,
+			MapReduceCommand.OutputType.INLINE,
+			query
+		);
+
+		return out.results();
+	}
+
+	public DBCursor getCursorForUserMentionedTopics() throws UnknownHostException {
+		initialize();
+		DBCursor c = usermentionedtopics.find();
 		return c;
 	}
 
@@ -264,7 +300,7 @@ public class MongoDatabase {
 		helper.createUniqueIndex("id", this.ads);
 		helper.createUniqueIndex("id", this.topics);
 		helper.createUniqueIndex("_id", this.retweeteroriginalauthors); // ?
-		helper.createUniqueIndex("_id", this.originalauthorretweeters); // ?
+		helper.createUniqueIndex("_id", this.usermentionedtopics); // ?
 
 		helper.createIndex("user.id", this.tweets, 1);
 		helper.createIndex("timestamp_ms", this.tweets, -1);
@@ -282,7 +318,7 @@ public class MongoDatabase {
 			this.ads = database.getCollection(cfg.getMongoCollectionAds());
 			this.topics = database.getCollection(cfg.getMongoCollectionTopics());
 			this.retweeteroriginalauthors = database.getCollection(cfg.getMongoCollectionRetweeterOriginalAuthors());
-			this.originalauthorretweeters = database.getCollection(cfg.getMongoCollectionOriginalAuthorRetweeters());
+			this.usermentionedtopics = database.getCollection(cfg.getMongoCollectionUserMentionedTopics());
 			createIndexies();
 			this.init = true;
 		}

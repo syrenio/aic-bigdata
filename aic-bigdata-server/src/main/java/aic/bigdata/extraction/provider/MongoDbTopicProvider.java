@@ -7,24 +7,20 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import aic.bigdata.database.model.AicUser;
-
-import twitter4j.TwitterException;
-import twitter4j.User;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.database.MongoDatabaseHelper;
-import aic.bigdata.extraction.UserHandler;
-import aic.bigdata.extraction.UserProvider;
+import aic.bigdata.extraction.TopicHandler;
+import aic.bigdata.extraction.TopicProvider;
 
 import com.mongodb.DBObject;
 
-public class MongoDbUserProvider implements UserProvider {
+public class MongoDbTopicProvider implements TopicProvider {
 
 	private MongoDatabase db;
-	private List<UserHandler> handler = new ArrayList<UserHandler>();
+	private List<TopicHandler> handler = new ArrayList<TopicHandler>();
 	private boolean running;
 
-	public MongoDbUserProvider(MongoDatabase db) {
+	public MongoDbTopicProvider(MongoDatabase db) {
 		this.db = db;
 	}
 
@@ -38,7 +34,7 @@ public class MongoDbUserProvider implements UserProvider {
 
 		try {
 			MongoDatabaseHelper help = new MongoDatabaseHelper();
-			for (DBObject c : db.getCursorForUsers()) {
+			for (DBObject c : db.getCursorForTopics()) {
 				if (!running)
 					break;
 
@@ -47,21 +43,14 @@ public class MongoDbUserProvider implements UserProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current User Count: " + (counter * stepSize) + " Minutes:"
+					System.out.println("Current Topic Count: " + (counter * stepSize) + " Minutes:"
 							+ diff.getStandardMinutes());
 				}
 
-				String message = c.toString();
-				User user = null;
-				try {
-					user = help.convertToUser(c);
-					// user = TwitterObjectFactory.createUser(message);
-				} catch (TwitterException e) {
-					continue; // TODO: error message
-				}
+				String topic = (String) c.get("id");
 
-				for (UserHandler t : this.handler) {
-					t.HandleUser(new AicUser(user));
+				for (TopicHandler t : this.handler) {
+					t.HandleTopic(topic);
 				}
 				stepCounter++;
 			}
@@ -76,7 +65,7 @@ public class MongoDbUserProvider implements UserProvider {
 	}
 
 	@Override
-	public void addHandler(UserHandler t) {
+	public void addHandler(TopicHandler t) {
 		this.handler.add(t);
 	}
 

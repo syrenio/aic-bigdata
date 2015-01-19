@@ -14,20 +14,20 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 import twitter4j.TwitterObjectFactory;
 import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.extraction.RetweetingInfoHandler;
-import aic.bigdata.extraction.RetweetingInfoProvider;
+import aic.bigdata.extraction.MentionsInfoHandler;
+import aic.bigdata.extraction.MentionsInfoProvider;
 
 import com.mongodb.DBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.BasicDBList;
 
-public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
+public class MongoDbMentionsInfoProvider implements MentionsInfoProvider {
 
 	private MongoDatabase db;
-	private List<RetweetingInfoHandler> handler = new ArrayList<RetweetingInfoHandler>();
+	private List<MentionsInfoHandler> handler = new ArrayList<MentionsInfoHandler>();
 	private boolean running;
 
-	public MongoDbRetweetingInfoProvider(MongoDatabase db) {
+	public MongoDbMentionsInfoProvider(MongoDatabase db) {
 		this.db = db;
 	}
 
@@ -40,7 +40,7 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 		long stepSize = 1000;
 
 		try {
-			for (DBObject c : db.getCursorForRetweeterOriginalAuthors()) {//db.getIterableForRetweeterOriginalAuthors()) {
+			for (DBObject c : db.getCursorForUserMentionedTopics()) {//db.getIterableForRetweeterOriginalAuthors()) {
 				if (!running)
 					break;
 
@@ -49,14 +49,11 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 					stepCounter = 0;
 					counter++;
 					Duration diff = new Duration(begin, end);
-					System.out.println("Current Retweeting Info Count: " + (counter * stepSize)
+					System.out.println("Current Mentions Info Count: " + (counter * stepSize)
 							+ " Minutes:" + diff.getStandardMinutes());
 				}
 
-				if (!(c.containsField("_id") && c.containsField("value.arr"))) {
-					; // TODO: panic
-				}
-
+				//Long id = ((Double) c.get("_id")).longValue();
 				// this is pretty ugly
 				Long id = null;
 				try {
@@ -71,26 +68,13 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 					}
 				}
 
-				// and it gets worse
-				BasicDBList l = (BasicDBList) ((DBObject) c.get("value")).get("arr");
-				List<Long> originalAuthors = new ArrayList<Long>(l.size());
-				for (Object o : l) {
-					try {
-						originalAuthors.add((Long) o);
-					}
-					catch (ClassCastException cce) {
-						try {
-							originalAuthors.add(((Double) o).longValue());
+				DBObject topics = (DBObject) c.get("value");
+				for (String field : topics.keySet()) {
+					Integer count = ((Double) topics.get(field)).intValue();
+					if (count > 0) {
+						for (MentionsInfoHandler t : this.handler) {
+							t.HandleTopic(id, field, count);
 						}
-						catch(ClassCastException cce2) {
-							System.err.println("I tried, but this thing is neither Long nor Double. I give up.");
-						}
-					}
-				}
-
-				if (id != null) {
-					for (RetweetingInfoHandler t : this.handler) {
-						t.HandleOriginalAuthors(id, originalAuthors);
 					}
 				}
 				stepCounter++;
@@ -106,7 +90,7 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 	}
 
 	@Override
-	public void addHandler(RetweetingInfoHandler t) {
+	public void addHandler(MentionsInfoHandler t) {
 		this.handler.add(t);
 	}
 
