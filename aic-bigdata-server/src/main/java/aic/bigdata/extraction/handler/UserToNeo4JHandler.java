@@ -3,9 +3,7 @@ package aic.bigdata.extraction.handler;
 import aic.bigdata.database.Neo4JBatchInserter;
 import aic.bigdata.extraction.UserHandler;
 import aic.bigdata.server.ServerConfig;
-import twitter4j.User;
-import twitter4j.IDs;
-import twitter4j.TwitterException;
+import aic.bigdata.database.model.AicUser;
 
 import java.io.IOException;
 import java.util.Date;
@@ -33,12 +31,7 @@ import org.neo4j.cypher.javacompat.ExecutionResult;
 import org.neo4j.graphdb.ResourceIterator;
 
 public class UserToNeo4JHandler implements UserHandler {
-	private int tweetsLogged = 0;
-	private GraphDatabaseService graphDb;
-	private Index<Node> userIndex;
-	private Index<Node> topicIndex;
 	private ServerConfig config;
-	private ExecutionEngine cypherEngine;
 	private Neo4JBatchInserter batchInserter;
 
 	public UserToNeo4JHandler(ServerConfig config, Neo4JBatchInserter batchInserter) {
@@ -47,7 +40,7 @@ public class UserToNeo4JHandler implements UserHandler {
 	}
 	
 	@Override
-	public void HandleUser(User user) {
+	public void HandleUser(AicUser user) {
 		batchInserter.addUser(user);
 	}
 

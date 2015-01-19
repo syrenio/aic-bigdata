@@ -10,7 +10,7 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.unsafe.batchinsert.BatchInserters;
 import org.neo4j.unsafe.batchinsert.BatchInserter;
 
-import twitter4j.User;
+import aic.bigdata.database.model.AicUser;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -41,18 +41,15 @@ public class Neo4JBatchInserter {
 		twitterToNeo = new HashMap<Long, Long>();
 	}
 
-	public void addUser(User user) {
-//		Node n = batchDb.createNode(userLabel);
-
+	public void addUser(AicUser user) {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("id", user.getId());
 		properties.put("name", user.getName());
 		properties.put("favouritesCount", user.getFavouritesCount());
-		/*properties.put("followersCount", user.getFollowersCount());
+		properties.put("followersCount", user.getFollowersCount());
 		properties.put("friendsCount", user.getFriendsCount());
-		properties.put("screenName", user.getScreenName());*/
+		//properties.put("screenName", user.getScreenName());
 
-		//batchInserter.createNode(user.getId(), properties, userLabel); // neo4j's internal id == user.getId()
 		long neoId = batchInserter.createNode(properties, userLabel); // neo4j's internal id != user.getId()
 		twitterToNeo.put(user.getId(), neoId);
 	}
@@ -61,7 +58,6 @@ public class Neo4JBatchInserter {
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("count", count);
 
-		//long _id = batchInserter.createRelationship(retweeterId, originalAuthorId, OneType.retweets, properties);
 		boolean retweeterUnknown = twitterToNeo.get(retweeterId) == null;
 		boolean originalAuthorUnknown = twitterToNeo.get(originalAuthorId) == null;
 		if (retweeterUnknown) {
