@@ -1,5 +1,26 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: actual_paper.aux
-The style file: abbrv.bst
-Database file #1: sigproc.bib
-Warning--I didn't find a database entry for "Gilbert:2002:BCF:564585.564601"
-(There was 1 warning)
+The style file: plain.bst
+Database file #1: biblio.bib
+Warning--string name "march" is undefined
+--line 110 of file biblio.bib
+Warning--string name "nov/dec" is undefined
+--line 122 of file biblio.bib
+Warning--string name "april" is undefined
+--line 179 of file biblio.bib
+A bad cross reference---entry "DBLP:conf/bis/SchmidtMMPH14"
+refers to entry "DBLP:conf/bis/2014", which doesn't exist
+A bad cross reference---entry "DBLP:conf/services/GudivadaRR14"
+refers to entry "DBLP:conf/services/2014", which doesn't exist
+A bad cross reference---entry "comparision"
+refers to entry "DBLP:conf/semweb/2013cold", which doesn't exist
+A bad cross reference---entry "hyper"
+refers to entry "DBLP:conf/waim/2010w", which doesn't exist
+Warning--I didn't find a database entry for "DBLP:conf/bis/2014"
+Warning--I didn't find a database entry for "DBLP:conf/services/2014"
+Warning--I didn't find a database entry for "DBLP:conf/semweb/2013cold"
+Warning--I didn't find a database entry for "DBLP:conf/waim/2010w"
+Too many commas in name 1 of "Martinez-Bazan, N. ; Gomez-Villamor, S.;Escale-Claveras, F" for entry dex
+while executing---line 1049 of file plain.bst
+Too many commas in name 1 of "Martinez-Bazan, N. ; Gomez-Villamor, S.;Escale-Claveras, F" for entry dex
+while executing---line 1090 of file plain.bst
+(There were 6 error messages)
