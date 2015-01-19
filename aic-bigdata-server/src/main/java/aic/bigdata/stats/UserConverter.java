@@ -25,40 +25,41 @@ public class UserConverter {
 		config = new ServerConfigBuilder().getConfig();
 	}
 
-	private static void convertUsersFromUserCollection(SqlDatabase db, MongoDatabase mongo) throws SQLException {
-
-		try {
-			DBCursor cur = mongo.getCursorForUsers();
-			int max = cur.size();
-			int step = max / 10;
-			int count = 0;
-
-			System.out.println("Current user count: " + db.getUserCount());
-			System.out.print("Progress: ");
-			MongoDatabaseHelper help = new MongoDatabaseHelper();
-			while (cur.hasNext()) {
-				DBObject o = cur.next();
-				User usr = null;
-				// if (o.containsField("followersCount")) {
-				// usr = g.fromJson(o.toString(), User.class);
-				// } else {
-				// usr = TwitterObjectFactory.createUser(o.toString());
-				// }
-				usr = help.convertToUser(o);
-				AicUser x = new AicUser(usr);
-				db.createUser(x);
-				count++;
-				if (count % step == 0)
-					System.out.print("#");
-			}
-			System.out.println();
-			System.out.println("Current user count: " + db.getUserCount());
-
-		} catch (UnknownHostException | TwitterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	// private static void convertUsersFromUserCollection(SqlDatabase db,
+	// MongoDatabase mongo) throws SQLException {
+	//
+	// try {
+	// DBCursor cur = mongo.getCursorForUsers();
+	// int max = cur.size();
+	// int step = max / 10;
+	// int count = 0;
+	//
+	// System.out.println("Current user count: " + db.getUserCount());
+	// System.out.print("Progress: ");
+	// MongoDatabaseHelper help = new MongoDatabaseHelper();
+	// while (cur.hasNext()) {
+	// DBObject o = cur.next();
+	// User usr = null;
+	// // if (o.containsField("followersCount")) {
+	// // usr = g.fromJson(o.toString(), User.class);
+	// // } else {
+	// // usr = TwitterObjectFactory.createUser(o.toString());
+	// // }
+	// usr = help.convertToUser(o);
+	// AicUser x = new AicUser(usr);
+	// db.createUser(x);
+	// count++;
+	// if (count % step == 0)
+	// System.out.print("#");
+	// }
+	// System.out.println();
+	// System.out.println("Current user count: " + db.getUserCount());
+	//
+	// } catch (UnknownHostException | TwitterException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
 
 	private static void convertUsersFromTweetCollection(SqlDatabase db, MongoDatabase mongo) throws SQLException {
 

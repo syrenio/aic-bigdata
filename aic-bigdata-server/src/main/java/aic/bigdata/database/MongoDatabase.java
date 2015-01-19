@@ -53,11 +53,12 @@ public class MongoDatabase {
 		return c;
 	}
 
-	public DBCursor getCursorForUsers() throws UnknownHostException {
-		initialize();
-		DBCursor c = users.find();
-		return c;
-	}
+//	@Deprecated
+//	public DBCursor getCursorForUsers() throws UnknownHostException {
+//		initialize();
+//		DBCursor c = users.find();
+//		return c;
+//	}
 
 	public DBCursor getCursorForTopics() throws UnknownHostException {
 		initialize();

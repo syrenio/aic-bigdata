@@ -1,25 +1,19 @@
 package aic.bigdata.extraction;
 
-import aic.bigdata.database.Neo4JBatchInserter;
-import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.database.SqlDatabase;
-import aic.bigdata.extraction.handler.RetweetingInfoToNeo4JHandler;
-import aic.bigdata.extraction.handler.MentionsInfoToNeo4JHandler;
-import aic.bigdata.extraction.handler.UserToNeo4JHandler;
-import aic.bigdata.extraction.handler.TopicToNeo4JHandler;
-import aic.bigdata.extraction.provider.MongoDbRetweetingInfoProvider;
-import aic.bigdata.extraction.provider.MongoDbMentionsInfoProvider;
-import aic.bigdata.extraction.provider.MongoDbUserProvider;
-import aic.bigdata.extraction.provider.MongoDbTopicProvider;
-import aic.bigdata.extraction.provider.SqlUserProvider;
-import aic.bigdata.extraction.UserProvider;
-import aic.bigdata.extraction.TopicProvider;
-import aic.bigdata.extraction.RetweetingInfoHandler;
-import aic.bigdata.extraction.MentionsInfoHandler;
-import aic.bigdata.server.ServerConfig;
-import aic.bigdata.server.TwitterStreamJob;
-
 import java.sql.SQLException;
+
+import aic.bigdata.database.MongoDatabase;
+import aic.bigdata.database.Neo4JBatchInserter;
+import aic.bigdata.database.SqlDatabase;
+import aic.bigdata.extraction.handler.MentionsInfoToNeo4JHandler;
+import aic.bigdata.extraction.handler.RetweetingInfoToNeo4JHandler;
+import aic.bigdata.extraction.handler.TopicToNeo4JHandler;
+import aic.bigdata.extraction.handler.UserToNeo4JHandler;
+import aic.bigdata.extraction.provider.MongoDbMentionsInfoProvider;
+import aic.bigdata.extraction.provider.MongoDbRetweetingInfoProvider;
+import aic.bigdata.extraction.provider.MongoDbTopicProvider;
+import aic.bigdata.extraction.provider.SqlDbUserProvider;
+import aic.bigdata.server.ServerConfig;
 
 public class Neo4JRetweetingInfoExtractionRunner {
 
@@ -30,13 +24,15 @@ public class Neo4JRetweetingInfoExtractionRunner {
 
 	public static void main(String[] args) throws SQLException {
 		MongoDatabase mongoDb = new MongoDatabase(config);
-		//SqlDatabase sqlDb = new SqlDatabase(config);
+		SqlDatabase sqlDb = new SqlDatabase(config);
+		// SqlDatabase sqlDb = new SqlDatabase(config);
 
 		Neo4JBatchInserter batchInserter = new Neo4JBatchInserter(config);
 
 		// users
 		System.out.println("Creating User Nodes...");
-		UserProvider userProvider = new MongoDbUserProvider(mongoDb); //new SqlUserProvider(sqlDb);
+		UserProvider userProvider = new SqlDbUserProvider(sqlDb); // new
+																	// SqlUserProvider(sqlDb);
 		userProvider.addHandler(new UserToNeo4JHandler(config, batchInserter));
 		userProvider.run();
 
