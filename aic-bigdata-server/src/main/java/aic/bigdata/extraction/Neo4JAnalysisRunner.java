@@ -52,6 +52,7 @@ public class Neo4JAnalysisRunner {
 		// delete and recreate Topics and Ads
 		DeleteSampleAdsTopics();
 		FillAdsTopicDatabase(GraphDatabase.getInstance());
+		GraphDatabase.closeInstance(); // close for the BatchInserter later...
 
 		MongoDatabase mongoDb = new MongoDatabase(config);
 		SqlDatabase sqlDb = new SqlDatabase(config);
