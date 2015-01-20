@@ -55,7 +55,7 @@ public class GraphDatabase {
 	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.userId = {userId} return b.userId";
 
 	final static private String getMentionedTopicsQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} return t.topic";
-	final static private String getUsersMentioningQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE t.topic = {topic} return u.userId";
+	final static private String getUsersMentioningQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE t.id = {topic} return u.id";
 
 	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
 	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
@@ -148,7 +148,7 @@ public class GraphDatabase {
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 			while (iterator.hasNext()) {
 				Map<String, Object> map = iterator.next();
-				ids.add((Long) map.get("u.userId"));
+				ids.add((Long) map.get("u.id"));
 			}
 		}
 
