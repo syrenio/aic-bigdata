@@ -45,7 +45,12 @@ app.factory("AdsService", function($http) {
 			});
 		},
 		getTopics : function() {
-			return $http.get("api/ads/topics").then(function(resp) {
+			var p = {
+				params : {
+					withMention : false
+				}
+			};
+			return $http.get("api/ads/topics",p).then(function(resp) {
 				console.log("getTopics:", resp.data);
 				return resp.data;
 			});
