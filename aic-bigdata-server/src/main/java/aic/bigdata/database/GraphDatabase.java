@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.neo4j.cypher.javacompat.ExecutionEngine;
 import org.neo4j.cypher.javacompat.ExecutionResult;
@@ -59,12 +61,16 @@ public class GraphDatabase {
 	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
 	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
 
-	
+
+	final static private String mostMentionedTopicsQ = "match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {userId} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
+//	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
+	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
+
 	public GraphDatabase(ServerConfig config) {
 		this.config = config;
 
 		try {
-			createDb(config.getNeo4JDbName());
+			createDb(config.getNeo4jFullDbName());
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -93,6 +99,7 @@ public class GraphDatabase {
 	}
 
 	private void createDb(String name) throws IOException {
+		System.out.println("Creating Neo4J database at '" + name + "'");
 		//graphDb = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(fullName).newGraphDatabase();
 		graphDb = new GraphDatabaseFactory().newEmbeddedDatabase(name);
 
@@ -456,6 +463,53 @@ public class GraphDatabase {
 			while (iterator.hasNext()) {
 				Map<String, Object> map = iterator.next();
 				ids.add((Long) map.get("b.userId"));
+			}
+		}
+
+		return ids;
+	}
+
+	public List<String> getMostMentionedTopics(long userId) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("userId", userId);
+		params.put("indirectness", 4);
+		params.put("limit", 10);
+
+		ExecutionResult result;
+
+		List<String> topics = new ArrayList<String>();
+
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(mostMentionedTopicsQ, params);
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+			while (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+				topics.add((String) map.get("t.id"));
+			}
+		}
+
+		return topics;
+	}
+
+	public List<Long> getMostInfluentalUserIDs() {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("retweetsFactor", new Double(1.0));
+		params.put("followersFactor", new Double(1.0));
+		params.put("favouritesFactor", new Double(1.0));
+		params.put("limit", 10);
+
+		ExecutionResult result;
+
+		List<Long> ids = new ArrayList<Long>();
+
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(mostInfluentalUsersQ, params);
+			System.out.println(result.dumpToString());
+
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+			while (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+				ids.add((Long) map.get("a.id"));
 			}
 		}
 

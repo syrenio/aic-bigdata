@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.database.SqlDatabase;
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.model.AicUser;
 import aic.bigdata.enrichment.AdObject;
 import aic.bigdata.extraction.ServerConfigBuilder;
@@ -82,6 +83,23 @@ public class QueryResource {
 	public List<AicUser> getMostInflUsers() {
 		System.out.println("inflUser called!");
 		List<AicUser> list = new ArrayList<AicUser>();
+		/*
+		GraphDatabase graphDb = GraphDatabase.getInstance();
+		List<Long> ids = graphDb.getMostInfluentalUserIDs();
+
+		ServerConfigBuilder b = new ServerConfigBuilder();
+
+		try {
+			SqlDatabase sqlDb = new SqlDatabase(b.getConfig());
+			for (Long id : ids) {
+				list.add(sqlDb.getUserById(id));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		System.out.println("most influental users: " + ids);
+		System.out.println("list has " + list.size() + " elements");*/
 
 		list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
 
@@ -108,6 +126,12 @@ public class QueryResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AdObject> getSuggestedAdsForUser(@PathParam("userId") long userId,
 			@PathParam("potentialInterests") boolean potIntr) {
+
+		/*GraphDatabase db = GraphDatabase.getInstance();
+		List<String> topics = db.getMostMentionedTopics(userId);
+
+		System.out.println("most mentioned topics for user #" + userId + ": " + topics);*/
+
 		List<AdObject> list = new ArrayList<AdObject>();
 		list = getDummyAdObjects();
 		return list;
