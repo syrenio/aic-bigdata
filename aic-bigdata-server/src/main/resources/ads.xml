@@ -74,4 +74,850 @@
 		<topic>Fast Food</topic>
 		<credits>40</credits>
 	</ad>
+	<ad id="9">
+		<name>Team Coco</name>
+		<company>Team Coco</company>
+		<campaign></campaign>
+		<text>#LiveCocoCam begins NOW! Let’s get physical with a little 80's aerobics @teamcoco style. Tune in here @ www.teamcoco.com/live</text>
+		<topic>TV</topic>
+		<topic>Entertainment</topic>
+		<credits>100</credits>
+	</ad>
+	<ad id="10">
+		<name>Selena Gomez</name>
+		<company>Selena Gomez</company>
+		<campaign></campaign>
+		<text>"Who Says" is now on @iTunesMusic! Listen to the full song and get it now. #whosays http://itun.es/i636Ms</text>
+		<topic>Music</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="11">
+		<name>Xbox</name>
+		<company>Xbox</company>
+		<campaign></campaign>
+		<text>We're giving away more #gears3beta codes today for @GearsofWar3! Who wants 'em? Tweet using #gears3beta for your chance to snag one!</text>
+		<topic>Fun</topic>
+		<topic>Games</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="12">
+		<name>Absolute Radio</name>
+		<company>Absolute Radio</company>
+		<campaign>250 competition</campaign>
+		<text>You could win £250 every hour from midnight tonight - just by tweeting us with what's #nowplaying on @absoluteradio http://www.absoluteradio.co.uk/freebies/competitions/nowplaying/</text>
+		<topic>Radio</topic>
+		<topic>Entertainment</topic>
+		<topic>Music</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="13">
+		<name>Absolute Radio</name>
+		<company>Absolute Radio</company>
+		<campaign>250 competition</campaign>
+		<text>Just 3 hours left to win with @absoluteradio. Listen and tweet what's #nowplaying on @absoluteradio to win £250! http://absoluteradio.co.uk/nowplaying</text>
+		<topic>Radio</topic>
+		<topic>Entertainment</topic>
+		<topic>Music</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="14">
+		<name>Airbnb</name>
+		<company>Airbnb</company>
+		<campaign></campaign>
+		<text>Sublets just got easier, and we'll pay $200 of your rent every month! Learn more here: http://bit.ly/pql1ip</text>
+		<topic>Travel</topic>
+		<credits>200</credits>
+	</ad>
+	<ad id="15">
+		<name>Airbnb</name>
+		<company>Airbnb</company>
+		<campaign></campaign>
+		<text>Sublets made easy on Airbnb - for $200 off your rent each mo. for up to 6 mo. Use code SUBLETS till 9/8(min 28 days) http://bit.ly/npGfaY</text>
+		<topic>Travel</topic>
+		<credits>100</credits>
+	</ad>
+	<ad id="16">
+		<name>ALTER</name>
+		<company>ALTER Brooklyn</company>
+		<campaign></campaign>
+		<text>Just in: another Osborn Shoe for ladies. http://instagr.am/p/KNoPfcJ4XG/</text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="17">
+		<name>ALTER</name>
+		<company>ALTER Brooklyn</company>
+		<campaign></campaign>
+		<text>Our latest ALTERTORIAL shoot featuring @Seventyjane in WIDOW http://bit.ly/WoAfYg</text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="18">
+		<name>ALTER</name>
+		<company>ALTER Brooklyn</company>
+		<campaign></campaign>
+		<text>Shhh, it's a sneak peek of the latest @alterbrooklyn #madeinbrooklyn project. Stay tuned!!! http://instagr.am/p/QUatsBp4cg/</text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="19">
+		<name>ALTER</name>
+		<company>ALTER Brooklyn</company>
+		<campaign></campaign>
+		<text>So what are you going to wear to our little party at LeBain this Wednesday night? http://bit.ly/JquVjD</text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="20">
+		<name>Red Cross</name>
+		<company>American Red Cross</company>
+		<campaign></campaign>
+		<text>1 easy way to help #thischristmas - RT or tell us what your #perfectgift would be and @CraigNewmark will donate $1 to @RedCross</text>
+		<topic>Donation</topic>
+		<topic>Charity</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="21">
+		<name>Blackboard</name>
+		<company>Blackboard</company>
+		<campaign></campaign>
+		<text>Heads up Sys #Admins! Keep an eye on #Blackboard social channels tomorrow for an fun contest to get you pumped up for the Fall!</text>
+		<topic>Software</topic>
+		<topic>Education</topic>
+		<credits>18</credits>
+	</ad>
+	<ad id="22">
+		<name>Blackboard</name>
+		<company>Blackboard</company>
+		<campaign></campaign>
+		<text>Resources for #Teachers- building effective courses w/ all types of content and learning from peers and industry experts! http://bit.ly/TCiJxj</text>
+		<topic>Software</topic>
+		<topic>Education</topic>
+		<credits>12</credits>
+	</ad>
+	<ad id="23">
+		<name>Blackboard</name>
+		<company>Blackboard</company>
+		<campaign></campaign>
+		<text>Sys Admins- Want to help ur school provide better learning tools? Download and install publisher partner building blocks. http://bit.ly/sysadminsuperstar</text>
+		<topic>Software</topic>
+		<topic>Education</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="24">
+		<name>Blackboard</name>
+		<company>Blackboard</company>
+		<campaign></campaign>
+		<text>Digital Content Cohort: Virtual meetings to help Faculty learn to adopt content efficiently through #Blackboard Learn http://bbbb.blackboard.com/LP=1487 </text>
+		<topic>Software</topic>
+		<topic>Education</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="25">
+		<name>Blackboard</name>
+		<company>Blackboard</company>
+		<campaign></campaign>
+		<text>A new student or a flipped classroom? See the #teacher POV on how integrating tech in the classroom sparked a change. http://bit.ly/MqPJU4 </text>
+		<topic>Software</topic>
+		<topic>Education</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="26">
+		<name>Bonobos</name>
+		<company>Bonobos</company>
+		<campaign></campaign>
+		<text>TWIXCLUSIVE Sale! Our 1 and only Washed Chinos. Were $88, now $49. 24-hour sale unlocks after 49 RTs. http://bno.bs/twittersale </text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>100</credits>
+	</ad>
+	<ad id="27">
+		<name>Bonobos</name>
+		<company>Bonobos</company>
+		<campaign></campaign>
+		<text>Just a little over 2 hours left to get our $88 Washed Chinos for $49. Get to it! http://bno.bs/twittersale  #twixclusive</text>
+		<topic>Fashion</topic>
+		<topic>Clothing</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="28">
+		<name>BHF</name>
+		<company>The British Heart Foundation</company>
+		<campaign></campaign>
+		<text>See how pushing #hardandfast to the beat of the Bee Gees can save a life: http://bit.ly/hardandfast</text>
+		<topic>Health</topic>
+		<video>http://youtu.be/JR0aZX1_TD8</video>
+		<credits>40</credits>
+	</ad>
+	<ad id="29">
+		<name>Wispa's Frothy Beast</name>
+		<company>Cadbury Wispa</company>
+		<campaign></campaign>
+		<text>The new version of ‘Gold’ – inspired by #WispaGold - is remixed by none other than the legendary @pauloakenfold! http://bit.ly/sWCGEh</text>
+		<topic>Food</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="30">
+		<name>Wispa's Frothy Beast</name>
+		<company>Cadbury Wispa</company>
+		<campaign></campaign>
+		<text>Join the Gold rush... Just shout "I love #WispaGold because …" and if we RT you, you've won a box of #WispaGold!</text>
+		<topic>Food</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="31">
+		<name>CIROC Ultra Premium</name>
+		<company>Ciroc</company>
+		<campaign></campaign>
+		<text>Download the @CIROC Celebration Guide mobile app for the smoothest venues to #CirocTheNewYear in your city!!!! http://bit.ly/Xnv1hy</text>
+		<topic>Alcohol</topic>
+		<topic>Beverages</topic>
+		<credits>14</credits>
+	</ad>
+	<ad id="32">
+		<name>CIROC Ultra Premium</name>
+		<company>Ciroc</company>
+		<campaign></campaign>
+		<text>Retweet if you're ready to #CirocTheNewYear!! Click here -> http://www.youtube.com/watch?v=i-oCa3CJMEA</text>
+		<topic>Alcohol</topic>
+		<topic>Beverages</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="33">
+		<name>Cirque du Soleil</name>
+		<company>Cirque du Soleil</company>
+		<campaign></campaign>
+		<text>It's #CirqueSwag! Tell us your favorite song from #mjIMMORTAL, use #CirqueSwag before 12pm PST and you could win 1 of 5 posters from the show!</text>
+		<topic>Fun</topic>
+		<topic>Circus</topic>
+		<credits>200</credits>
+	</ad>
+	<ad id="34">
+		<name>Cirque du Soleil</name>
+		<company>Cirque du Soleil</company>
+		<campaign></campaign>
+		<text>#Zarkana will return to NYC June 6th, and you can save up to $26 on your tickets here: http://cirk.me/IbhdtI</text>
+		<topic>Fun</topic>
+		<topic>Circus</topic>
+		<credits>130</credits>
+	</ad>
+	<ad id="35">
+		<name>Eldora Speedway</name>
+		<company>Eldora Speedway</company>
+		<campaign></campaign>
+		<text>#PerfectNight When no child goes to bed hungry. Eldora hosts the @FeedTheChildren @PreludetoDream Wed, June 6. Support by ordering on PPV</text>
+		<topic>Charity</topic>
+		<credits>30</credits>
+	</ad>
+	<ad id="36">
+		<name>Fujitsu Global</name>
+		<company>Fujitsu</company>
+		<campaign></campaign>
+		<text>Experience the Fujitsu quality of the LIFEBOOK #Ultrabooks on our Insider blog https://lifebook.ts.fujitsu.com/blog/blog/category/general Ultrabook. Inspired by Intel.</text>
+		<topic>Technology</topic>
+		<topic>Notebook</topic>
+		<credits>60</credits>
+	</ad>
+	<ad id="37">
+		<name>Fujitsu Global</name>
+		<company>Fujitsu</company>
+		<campaign></campaign>
+		<text>Increase your productivity on business trips w/ your Ultrabook. Inspired by Intel: #Reviews: http://bit.ly/11b4nIe </text>
+		<topic>Technology</topic>
+		<topic>Notebook</topic>
+		<credits>60</credits>
+	</ad>
+	<ad id="38">
+		<name>Fujitsu Global</name>
+		<company>Fujitsu</company>
+		<campaign></campaign>
+		<text>Become a part of the community and experience the quality of the LIFEBOOKs and win a flight https://lifebook.ts.fujitsu.com/blog/blog/category/general Ultrabook. Inspired by Intel</text>
+		<topic>Technology</topic>
+		<topic>Notebook</topic>
+		<credits>45</credits>
+	</ad>
+	<ad id="39">
+		<name>LA Galaxy</name>
+		<company>LA Galaxy</company>
+		<campaign></campaign>
+		<text>#BeckhamInLA Day is about to begin! interview on http://youtube.com/davidbeckham  at 9am PT, press conf. at 2pm PT on http://lagalaxy.com</text>
+		<topic>Sports</topic>
+		<topic>Soccer</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="40">
+		<name>LA Galaxy</name>
+		<company>LA Galaxy</company>
+		<campaign></campaign>
+		<text>G'morning #LAGalaxy fans! Join us for David Beckham's press conf. today at 2pm PT and chat with fans around the globe: http://bit.ly/y70guK</text>
+		<topic>Sports</topic>
+		<topic>Soccer</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="41">
+		<name>LA Galaxy</name>
+		<company>LA Galaxy</company>
+		<campaign></campaign>
+		<text>Want to see #BeckhamInLA and get collector's edition season tickets? Order by Jan. 22! http://lagalaxy.com/tickets </text>
+		<topic>Sports</topic>
+		<topic>Soccer</topic>
+		<picture>https://pbs.twimg.com/media/Aji6V_MCEAIFQUH.jpg:small</picture>
+		<credits>10</credits>
+	</ad>
+	<ad id="42">
+		<name>GetAheadoftheGames</name>
+		<company>GAOTG</company>
+		<campaign></campaign>
+		<text>Roads are becoming exceptionally busy. Avoid driving in central London, on and near the ORN and near Games venues. Plan at http://ow.ly/cr0ky </text>
+		<topic>Sports</topic>
+		<topic>Travel</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="43">
+		<name>GetAheadoftheGames</name>
+		<company>GAOTG</company>
+		<campaign></campaign>
+		<text>Travelling 2 the Opening Ceremony tonight? Take the District or Ham and City line 2 WEST HAM and walk 2 OlympicPark. Queues will be shorter.</text>
+		<topic>Sports</topic>
+		<topic>Travel</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="44">
+		<name>Gongshow</name>
+		<company>Gongshow Gear</company>
+		<campaign></campaign>
+		<text>Need to Drop Santa a Little Hint? RT this Holiday Gift Guide for Hockey Players/Fans and Let Santa Know http://on.fb.me/VLFvDX </text>
+		<topic>Clothing</topic>
+		<topic>Hockey</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="45">
+		<name>Gongshow</name>
+		<company>Gongshow Gear</company>
+		<campaign></campaign>
+		<text>Now available! Download Saucer King on App Store now!</text>
+		<topic>Clothing</topic>
+		<topic>Hockey</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="46">
+		<name>Gongshow</name>
+		<company>Gongshow Gear</company>
+		<campaign></campaign>
+		<text>Lifestyle Hockey Apparel: FREE Shipping All Of December With GUARANTEED Delivery- Enter Code "HOLIDAYS" at http://www.GongshowGear.com </text>
+		<topic>Clothing</topic>
+		<topic>Hockey</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="47">
+		<name>Gongshow</name>
+		<company>Gongshow Gear</company>
+		<campaign></campaign>
+		<text>What's the one thing all you beauticians feel like is missing in the Gongshow World? #Feedback #WeListen</text>
+		<topic>Clothing</topic>
+		<topic>Hockey</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="48">
+		<name>Hailo</name>
+		<company>Hailo</company>
+		<campaign></campaign>
+		<text>Heading to the #websummit today? Grab a Hailo cab! Taxi in two taps and pay with cash or card - https://itunes.apple.com/ie/app/hailo/id468420446?mt=8</text>
+		<topic>Transportation</topic>
+		<topic>Technology</topic>
+		<topic>Taxi</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="49">
+		<name>Hailo</name>
+		<company>Hailo</company>
+		<campaign></campaign>
+		<text>Download Hailo and get a taxi in two taps!</text>
+		<topic>Transportation</topic>
+		<topic>Technology</topic>
+		<topic>Taxi</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="50">
+		<name>Hailo</name>
+		<company>Hailo</company>
+		<campaign></campaign>
+		<text>Wet? Stuck for a dart? Grab a Hailo cab home! - http://itunes.apple.com/ie/app/hailo-taxi-app-in-london-dublin/id468420446?mt=8</text>
+		<topic>Transportation</topic>
+		<topic>Technology</topic>
+		<topic>Taxi</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="51">
+		<name>Hailo</name>
+		<company>Hailo</company>
+		<campaign></campaign>
+		<text>Heading out for Halloween? Want to avoid the ghosts and ghouls? Download Hailo and grab a cab in two taps #Hailoween - https://itunes.apple.com/ie/app/hailo/id468420446?mt=8</text>
+		<topic>Transportation</topic>
+		<topic>Technology</topic>
+		<topic>Taxi</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="52">
+		<name>Hub Spot</name>
+		<company>Hub Spot</company>
+		<campaign></campaign>
+		<text>Marketers! We’ve made a multimedia ebook which, as @dmscott says, "identifies nuggets of inspiration to drive success" http://ow.ly/9vPTG </text>
+		<topic>Marketing</topic>
+		<topic>Software</topic>
+		<topic>Business</topic>
+		<credits>35</credits>
+	</ad>
+	<ad id="53">
+		<name>Hub Spot</name>
+		<company>Hub Spot</company>
+		<campaign></campaign>
+		<text>Want to know what all the buzz is about? Request a demo of HubSpot to see what it can do for your business http://ow.ly/a1tBH </text>
+		<topic>Marketing</topic>
+		<topic>Software</topic>
+		<topic>Business</topic>
+		<credits>35</credits>
+	</ad>
+	<ad id="54">
+		<name>Hub Spot</name>
+		<company>Hub Spot</company>
+		<campaign></campaign>
+		<text>How to Use Twitter for Business Through Marketing http://hub.am/Y4wyJG</text>
+		<topic>Marketing</topic>
+		<topic>Software</topic>
+		<topic>Business</topic>
+		<credits>35</credits>
+	</ad>
+	<ad id="55">
+		<name>Interscope Records</name>
+		<company>Interscope Records</company>
+		<campaign></campaign>
+		<text>Watch the world video premiere for @LadyGaga's #Judas - http://bit.ly/judasvid - #BornThisWay 5 † 23 † 11</text>
+		<topic>Music</topic>
+		<topic>Entertainment</topic>
+		<credits>55</credits>
+	</ad>
+	<ad id="56">
+		<name>Interscope Records</name>
+		<company>Interscope Records</company>
+		<campaign></campaign>
+		<text>BORN THIS WAY THE ALBUM IS NOW RELEASED WORLDWIDE: http://bit.ly/jMjLid 5†23†11</text>
+		<topic>Music</topic>
+		<topic>Entertainment</topic>
+		<credits>55</credits>
+	</ad>
+	<ad id="57">
+		<name>Interscope Records</name>
+		<company>Interscope Records</company>
+		<campaign></campaign>
+		<text>Brand new song from @LadyGaga #TheEdgeofGlory out now! - #BornThisWay 5 † 23 † 11 RT - http://bit.ly/iOeMcb</text>
+		<topic>Music</topic>
+		<topic>Entertainment</topic>
+		<credits>55</credits>
+	</ad>
+	<ad id="58">
+		<name>Luxology</name>
+		<company>Luxology</company>
+		<campaign></campaign>
+		<text>Welcome to the #modo601 technology preview, right here on Twitter. Feel free to join in the conversation and remember to use #modo601.</text>
+		<topic>Animation</topic>
+		<topic>Software</topic>
+		<credits>30</credits>
+	</ad>
+	<ad id="59">
+		<name>Luxology</name>
+		<company>Luxology</company>
+		<campaign></campaign>
+		<text>Let’s see how Volumetrics work in #modo601. Here: http://www.luxology.com/tv/training/view.aspx?id=590</text>
+		<topic>Animation</topic>
+		<topic>Software</topic>
+		<credits>30</credits>
+	</ad>
+	<ad id="60">
+		<name>Luxology</name>
+		<company>Luxology</company>
+		<campaign></campaign>
+		<text>One hour until we give you a preview of #modo601. 9 AM PST is when we plan to start. #vfx #software #cgi</text>
+		<topic>Animation</topic>
+		<topic>Software</topic>
+		<credits>30</credits>
+	</ad>
+	<ad id="61">
+		<name>Marketo</name>
+		<company>Marketo</company>
+		<campaign></campaign>
+		<text>Inbound Marketing Alone is Not Enough. Combining it w/ Outbound Can Dramatically Increase Results and Increase ROI: http://bit.ly/xT3yfc  #B2B</text>
+		<topic>Marketing</topic>
+		<topic>B2B</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="62">
+		<name>Marketo</name>
+		<company>Marketo</company>
+		<campaign></campaign>
+		<text>The right metrics for understanding and interpreting results - Download The Definitive Guide to Marketing Metrics: http://bit.ly/vpDFzG </text>
+		<topic>Marketing</topic>
+		<topic>B2B</topic>
+		<credits>40</credits>
+	</ad>
+	<ad id="63">
+		<name>SeeMonterey</name>
+		<company>Monterey County</company>
+		<campaign></campaign>
+		<text>We want to hear about your favorite Monterey County winery! You could win a trip to Carmel! http://is.gd/kuO8gw </text>
+		<topic>Travel</topic>
+		<topic>Vacation</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="64">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>Which Browsers are the Fastest? [Real User Performance Data] http://bit.ly/HQgrZi  what's your experience? Which browser and OS do you use?</text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="65">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>Percona Bundles New Relic to Provide Gold and Platinum Support Customers with Comprehensive Application Visibility http://bit.ly/I0cD4B </text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="66">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>The Value of Instrumenting #Python: Our Q and A with @PyDanny http://blog.newrelic.com/?p=8990 </text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="67">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>Using New Relic to Monitor Ruby Background Tasks http://bit.ly/M810Op </text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="68">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>Here's to you, developers. We're huge fans of YOU. http://newrelic.com/developers  [video]</text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="69">
+		<name>New Relic</name>
+		<company>New Relic</company>
+		<campaign></campaign>
+		<text>Node.js and PaaS: Changing the Development and Operations World http://bit.ly/JzDp1G </text>
+		<topic>Software</topic>
+		<topic>Software Development</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="70">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>B2B #InboundMarketing Software from Optify. Reach more buyers and generate more demand. Start your free trial! http://bit.ly/IB8hjK </text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="71">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>Find great ‘seed’ keywords to get your #SEO research off to the right start. Download our new #B2B guide: http://bit.ly/L4FRlQ </text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="72">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>Learn how to jumpstart your #B2B #inbound marketing program with our new guide: 5 Steps to Building a Strategic KW List http://bit.ly/JyP1Xt </text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="73">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>We are all about helping you generate more demand for your #B2B business. Talk with an Optify expert to learn how! http://bit.ly/NnfQjB </text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="74">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>Inbound Marketer's Guide - How to Build and Execute a #SocialMedia Campaign for Lead Generation. http://bit.ly/wUbYBh  #leadgen</text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="75">
+		<name>Optify</name>
+		<company>Optify</company>
+		<campaign></campaign>
+		<text>Nuances of International #SEO: Global #Inbound Marketing. Download our #Search Rank Scenario http://bit.ly/w1AZvz </text>
+		<topic>B2B</topic>
+		<topic>Software</topic>
+		<topic>Marketing</topic>
+		<credits>70</credits>
+	</ad>
+	<ad id="76">
+		<name>Super 8</name>
+		<company>Paramount Pictures</company>
+		<campaign></campaign>
+		<text>TWITTER and PARAMOUNT TEAM UP FOR SNEAK PREVIEW OF SUPER 8; FILM RELEASED EARLY! http://www.Super8-Movie.com/sneak #Super8Secret</text>
+		<topic>Movie</topic>
+		<topic>Entertainment</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="77">
+		<name>Super 8</name>
+		<company>Paramount Pictures</company>
+		<campaign></campaign>
+		<text>Get your tickets online now for the Twitter Sneak Preview showings of Super 8 on Thursday: http://www.Super8-Movie.com/sneak #Super8Secret</text>
+		<topic>Movie</topic>
+		<topic>Entertainment</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="78">
+		<name>Porsche</name>
+		<company>Porsche</company>
+		<campaign></campaign>
+		<text>Our identity, our promise: Forever the sports car: #2012Porsche911 http://bit.ly/w5IxyU  #Porsche</text>
+		<topic>Automobile</topic>
+		<topic>Car</topic>
+		<video>http://youtu.be/y2F5ON6r-3Y</video>
+		<credits>250</credits>
+	</ad>
+	<ad id="79">
+		<name>Porsche</name>
+		<company>Porsche</company>
+		<campaign></campaign>
+		<text>The Golden Age of the sports car has just begun. Again. #2012Porsche911: http://porscheusa.com/911 </text>
+		<topic>Automobile</topic>
+		<topic>Car</topic>
+		<credits>50</credits>
+	</ad>
+	<ad id="80">
+		<name>Prefixmag</name>
+		<company>Prefix Magazine</company>
+		<campaign></campaign>
+		<text>Free Album Listening Events and Original Art From @ToroyMoi http://prefixm.ag/Rb9x05 </text>
+		<topic>Music</topic>
+		<topic>Art</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="81">
+		<name>Prefixmag</name>
+		<company>Prefix Magazine</company>
+		<campaign></campaign>
+		<text>S.S. Coachella is happening. Full lineup announced. http://prefixm.ag/NCmtid  @therealelp @KillerMikeGTO @theblacklips @smdisco @ztrip @Grimezsz</text>
+		<topic>Music</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="82">
+		<name>Prefixmag</name>
+		<company>Prefix Magazine</company>
+		<campaign></campaign>
+		<text>A$AP Rocky (@asvpxrocky) and @ASAPMOB hitting the road w/ @XDannyXBrownX, @ScHoolBoyQ for two month tour in Sept. ! http://prefixm.ag/NUrgYM </text>
+		<topic>Music</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="83">
+		<name>Regal Cinemas</name>
+		<company>Regal Cinemas</company>
+		<campaign></campaign>
+		<text>We've got 5 $25 Regal Gift Cards up for grabs! RT for a chance to win one and make sure you follow us!</text>
+		<topic>Cinema</topic>
+		<topic>Movie</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="84">
+		<name>Regal Cinemas</name>
+		<company>Regal Cinemas</company>
+		<campaign></campaign>
+		<text>RT for a chance to win this signed Live Free or @DieHard poster! Get your marathon tix here: http://regmovi.es/Y4qRYW</text>
+		<topic>Cinema</topic>
+		<topic>Movie</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="85">
+		<name>Regal Cinemas</name>
+		<company>Regal Cinemas</company>
+		<campaign></campaign>
+		<text>Tonight will you be yelling "Run, Forrest, Run" or chanting "Rudy, Rudy"? #Bama #NotreDame #BCS</text>
+		<topic>Cinema</topic>
+		<topic>Movie</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="86">
+		<name>Ring Central</name>
+		<company>Ring Central</company>
+		<campaign></campaign>
+		<text>Need a simple, full-featured #business #phone system? Ring it w/ @RingCentral, the #1 cloud-based telephony service: http://ringit.us/ckddX </text>
+		<topic>Cloud Computing</topic>
+		<topic>Phone</topic>
+		<topic>Cloud Telephone</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="87">
+		<name>Ring Central</name>
+		<company>Ring Central</company>
+		<campaign></campaign>
+		<text>So You’ve Decided to Manage Your #IT in the #Cloud? 4 Key Preparation Tips You Need to Know http://ringit.us/cgZDn  #cloudcomputing</text>
+		<topic>Cloud Computing</topic>
+		<topic>Phone</topic>
+		<topic>Cloud Telephone</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="88">
+		<name>Ring Central</name>
+		<company>Ring Central</company>
+		<campaign></campaign>
+		<text>Introducing Mobile VoIP for Android Smartphones http://ow.ly/9ZwkS  #RingCentral #smallbiz blog</text>
+		<topic>Cloud Computing</topic>
+		<topic>Phone</topic>
+		<topic>Cloud Telephone</topic>
+		<credits>20</credits>
+	</ad>
+	<ad id="89">
+		<name>Sharpie</name>
+		<company>Sharpie</company>
+		<campaign></campaign>
+		<text>Get out there and have fun. Uncap what's inside! http://fb.me/yy9ex8mO</text>
+		<topic>Marker</topic>
+		<topic>Office Supplies</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="90">
+		<name>Sexy Liberal</name>
+		<company>Sexy Liberal</company>
+		<campaign></campaign>
+		<text>#Chicago - Its truly going to be a Super Saturday on 3/3 (who needs Super Tuesday! though its a bigger joke) Tickets: ticketmaster.com/event/07004761</text>
+		<topic>Comedy</topic>
+		<topic>Entertainment</topic>
+		<credits>10</credits>
+	</ad>
+	<ad id="91">
+		<name>SPIKE TV</name>
+		<company>SPIKE TV</company>
+		<campaign></campaign>
+		<text>US Army Rangers vs North Korean Special Operations. Who do YOU think it will take it on #DWLIVE tonight at 10/9C? Tune-in! @Warriors_Den</text>
+		<topic>TV</topic>
+		<topic>Movie</topic>
+		<topic>Entertainment</topic>
+		<credits>5</credits>
+	</ad>
+	<ad id="92">
+		<name>SPIKE TV</name>
+		<company>SPIKE TV</company>
+		<campaign></campaign>
+		<text>Warriors, are you watching the AFTERSHOW? Stay tuned for our very special guest and check-on on GetGlue!! http://bit.ly/mYML8q  #DWLIVE</text>
+		<topic>TV</topic>
+		<topic>Movie</topic>
+		<topic>Entertainment</topic>
+		<credits>5</credits>
+	</ad>
+	<ad id="93">
+		<name>STA Travel U.S.</name>
+		<company>STA Travel U.S.</company>
+		<campaign></campaign>
+		<text>Win a trip to New Zealand for Rhythm and Vines Music Festival with Cut Copy, Grandmaster Flash and More CLICK http://sta.travel/mViE5C </text>
+		<topic>Travel</topic>
+		<topic>Vacation</topic>
+		<credits>25</credits>
+	</ad>
+	<ad id="94">
+		<name>Travel Wisconsin</name>
+		<company>Travel Wisconsin</company>
+		<campaign></campaign>
+		<text>#PACKERS MATH: #Lambeau Field + tickets + sideline passes = Heaven. Enter to #win today: http://on.fb.me/WinPackersTix </text>
+		<topic>Travel</topic>
+		<topic>Vacation</topic>
+		<topic>Football</topic>
+		<credits>15</credits>
+	</ad>
+	<ad id="95">
+		<name>U.S. Travel</name>
+		<company>U.S. Travel</company>
+		<campaign></campaign>
+		<text>#Travel one of "healthiest" sectors in economy, outpacing others http://nyti.ms/ABYHeE  #jobs #sotu #economy</text>
+		<topic>Travel</topic>
+		<topic>Economy</topic>
+		<credits>55</credits>
+	</ad>
+	<ad id="96">
+		<name>U.S. Travel</name>
+		<company>U.S. Travel</company>
+		<campaign></campaign>
+		<text>Today we launched our Vote Travel 2012 election campaign. Will you pledge to #VoteTravel in 2012? http://bit.ly/zfuLAq</text>
+		<topic>Travel</topic>
+		<credits>55</credits>
+	</ad>
+	<ad id="97">
+		<name>UNREAL</name>
+		<company>UNREAL</company>
+		<campaign></campaign>
+		<text>Watch this video now to see why Matt Damon, Gisele, and John Legend love UNREAL candy. http://bit.ly/Q889v8  #MattDamonGetsUNREAL</text>
+		<topic>Food</topic>
+		<topic>Sweets</topic>
+		<video>http://youtu.be/YOOeNvls7qc</video>
+		<credits>30</credits>
+	</ad>
+	<ad id="98">
+		<name>UNREAL</name>
+		<company>UNREAL</company>
+		<campaign></campaign>
+		<text>Proud to be a part of the unjunking of candy. Check out Unreal (@getunreal). It's really delicious. http://bit.ly/Q889v8 </text>
+		<topic>Food</topic>
+		<topic>Sweets</topic>
+		<video>http://youtu.be/YOOeNvls7qc</video>
+		<credits>30</credits>
+	</ad>
+	<ad id="99">
+		<name>UNREAL</name>
+		<company>UNREAL</company>
+		<campaign></campaign>
+		<text>Check out the @getunreal video featuring yours truly, Tom Brady, Gisele and Matt Damon. http://bit.ly/Q889v8 </text>
+		<topic>Food</topic>
+		<topic>Sweets</topic>
+		<video>http://youtu.be/YOOeNvls7qc</video>
+		<credits>30</credits>
+	</ad>
+	<ad id="100">
+		<name>UNREAL</name>
+		<company>UNREAL</company>
+		<campaign></campaign>
+		<text>Matt Damon, Gisele, and John Legend think UNREAL candy tastes..well..UNREAL. http://bit.ly/Q889v8  #MattDamonGetsUNREAL</text>
+		<topic>Food</topic>
+		<topic>Sweets</topic>
+		<video>http://youtu.be/YOOeNvls7qc</video>
+		<credits>30</credits>
+	</ad>
 </ads>
