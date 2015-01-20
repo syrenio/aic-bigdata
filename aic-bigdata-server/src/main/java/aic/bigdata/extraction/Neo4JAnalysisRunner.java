@@ -1,10 +1,18 @@
 package aic.bigdata.extraction;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.database.Neo4JBatchInserter;
 import aic.bigdata.database.SqlDatabase;
+import aic.bigdata.enrichment.AdsTopicsToDatabaseFiller;
 import aic.bigdata.extraction.handler.MentionsInfoToNeo4JHandler;
 import aic.bigdata.extraction.handler.RetweetingInfoToNeo4JHandler;
 import aic.bigdata.extraction.handler.TopicToNeo4JHandler;
@@ -22,7 +30,29 @@ public class Neo4JAnalysisRunner {
 		config = new ServerConfigBuilder().getConfig();
 	}
 
+	private static void FillAdsTopicDatabase(GraphDatabase neo) {
+		AdsTopicsToDatabaseFiller filler = new AdsTopicsToDatabaseFiller(config, neo);
+		try {
+			filler.fillDatabase();
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void DeleteSampleAdsTopics() {
+		MongoDatabase b = new MongoDatabase(config);
+		try {
+			b.removeAdsTopics();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void main(String[] args) throws SQLException {
+		// delete and recreate Topics and Ads
+		DeleteSampleAdsTopics();
+		FillAdsTopicDatabase(GraphDatabase.getInstance());
+
 		MongoDatabase mongoDb = new MongoDatabase(config);
 		SqlDatabase sqlDb = new SqlDatabase(config);
 		// SqlDatabase sqlDb = new SqlDatabase(config);
