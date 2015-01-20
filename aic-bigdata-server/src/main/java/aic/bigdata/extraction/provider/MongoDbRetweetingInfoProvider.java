@@ -40,7 +40,8 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 		long stepSize = 1000;
 
 		try {
-			for (DBObject c : db.getCursorForRetweeterOriginalAuthors()) {//db.getIterableForRetweeterOriginalAuthors()) {
+//			for (DBObject c : db.getCursorForRetweeterOriginalAuthors()) {
+			for (DBObject c : db.getIterableForRetweeterOriginalAuthors()) {
 				if (!running)
 					break;
 

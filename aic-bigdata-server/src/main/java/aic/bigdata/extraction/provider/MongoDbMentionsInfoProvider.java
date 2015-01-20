@@ -40,7 +40,8 @@ public class MongoDbMentionsInfoProvider implements MentionsInfoProvider {
 		long stepSize = 1000;
 
 		try {
-			for (DBObject c : db.getCursorForUserMentionedTopics()) {//db.getIterableForRetweeterOriginalAuthors()) {
+//			for (DBObject c : db.getCursorForUserMentionedTopics()) {
+			for (DBObject c : db.getIterableForUserMentionedTopics()) {
 				if (!running)
 					break;
 
@@ -69,9 +70,12 @@ public class MongoDbMentionsInfoProvider implements MentionsInfoProvider {
 				}
 
 				DBObject topics = (DBObject) c.get("value");
+				//System.out.println(c.toString());
 				for (String field : topics.keySet()) {
 					Integer count = ((Double) topics.get(field)).intValue();
+					//System.out.println("MongoDBMentionsInfoProvider: count " + count);
 					if (count > 0) {
+						//System.out.println("MongoDBMentionsInfoProvider: Providing topic '" + field + "' with count " + count);
 						for (MentionsInfoHandler t : this.handler) {
 							t.HandleTopic(id, field, count);
 						}

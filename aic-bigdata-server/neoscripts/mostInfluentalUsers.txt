@@ -1,0 +1,1 @@
+match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*1.0 + a.followersCount*1.0 + a.favouritesCount*1.0 as rank return a.id, a.name, rank order by rank desc limit 3;

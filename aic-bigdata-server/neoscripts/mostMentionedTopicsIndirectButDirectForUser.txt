@@ -1,0 +1,1 @@
+match p = (a:user)-[:retweets*0..0]->(f:user)-[m:mentions]->(t:topic) where a.name = "Alice" with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit 30;

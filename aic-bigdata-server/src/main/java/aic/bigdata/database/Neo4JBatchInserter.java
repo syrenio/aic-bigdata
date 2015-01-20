@@ -97,7 +97,13 @@ public class Neo4JBatchInserter {
 		boolean userUnknown = twitterToNeo.get(id) == null;
 		boolean topicUnknown = topicToNeo.get(topic) == null;
 
+/*		if (userUnknown)
+			System.out.println("Neo4JBatchInserter: Unknown user #" + id);
+		if (topicUnknown)
+			System.out.println("Neo4JBatchInserter: Unknown topic '" + topic + "'");
+*/
 		if (!userUnknown && !topicUnknown) {
+			//System.out.println("Neo4JBatchInserter: Adding (user #" + id + ")-[mentions]->(topic '" + topic + "')");
 			long _id = batchInserter.createRelationship(twitterToNeo.get(id), topicToNeo.get(topic), Type.mentions, properties);
 		}
 	}

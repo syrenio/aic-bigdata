@@ -24,6 +24,10 @@ import com.mongodb.MapReduceOutput;
 import com.mongodb.MongoClient;
 import com.mongodb.util.JSON;
 
+import org.bson.types.CodeWScope;
+import org.bson.BasicBSONObject;
+import org.bson.types.BasicBSONList;
+
 public class MongoDatabase {
 
 	private ServerConfig cfg;
@@ -65,13 +69,13 @@ public class MongoDatabase {
 		DBCursor c = topics.find();
 		return c;
 	}
-
+/*
 	public DBCursor getCursorForRetweeterOriginalAuthors() throws UnknownHostException {
 		initialize();
 		DBCursor c = retweeteroriginalauthors.find();
 		return c;
 	}
-
+*/
 	public Iterable<DBObject> getIterableForRetweeterOriginalAuthors() throws UnknownHostException {
 		initialize();
 
@@ -92,20 +96,140 @@ public class MongoDatabase {
         	"	accum.len = accum.arr.length;" +
 	        "	return accum;" +
     		"}",
-			null,
-			MapReduceCommand.OutputType.INLINE,
+			"RetweeterOriginalAuthors",
+			MapReduceCommand.OutputType.REPLACE,
 			query
 		);
 
 		return out.results();
 	}
 
+
+	public Iterable<DBObject> getIterableForUserMentionedTopics() throws UnknownHostException {
+		initialize();
+
+		BasicBSONList topics = new BasicBSONList();
+		try {
+			int i = 0;
+			for (DBObject c : getCursorForTopics()) {
+				topics.put("" + i, ((String) c.get("id")).toLowerCase());
+				i++;
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+
+		MapReduceCommand command = new MapReduceCommand(
+			tweets,
+			"function map() {" + 
+			"	var counts = {};" + 
+			"	var text = this.text.toLowerCase();" + 
+			"	topics.forEach(function (e) {" + 
+//	"print(\"searching for \" + e);" + 
+			"		counts[e] = occurences(text, e);" + 
+//	"if (counts[e] > 0) { print(\"found \" + counts[e] + \" occurences of '\" + e + \"'\"); }" + 
+			"	});" + 
+			"" + 
+//	"counts[\"MAPPED\"] = 7331;" +
+			"    emit(this.user.id, counts);" + 
+			"}",  
+			"function reduce(userId, objs) {" + 
+			"	var counts = {};" + 
+			"	topics.forEach(function (e) {" + 
+			"		counts[e] = sumFor(e, objs);" + 
+			"	});" + 
+//	"counts[\"REDUCED\"] = 1337;" +
+			"	return counts;" + 
+			"}",
+			"UserMentionedTopics",
+			MapReduceCommand.OutputType.REPLACE,
+			null
+		);
+
+		BasicBSONObject scope = new BasicBSONObject();
+
+		scope.put(
+			"occurences",
+			new CodeWScope(
+				"function (text, word) {" + 
+				"	text += \"\";" + 
+				"	word += \"\";" + 
+				"" + 
+				"	var count = 0;" + 
+				"	var pos = 0;" + 
+				"	while (true) {" + 
+				"		pos = text.indexOf(word, pos);" + 
+				"		if (pos >= 0) {" + 
+//					"print(\"found \" + word + \"@\" + pos + \" in \" + text);" +
+				"			count++;" + 
+				"			pos += word.length;" + 
+				"		}" + 
+				"		else {" + 
+				"			break;" + 
+				"		}" + 
+				"	}" +
+				"" +
+				"	return count;" +
+				"}",
+				new BasicBSONObject()
+			)
+		);
+
+		scope.put(
+			"sumFor",
+			new CodeWScope(
+				"function sumFor(topic, objs) {" + 
+				"	var sum = 0;" + 
+				"	objs.forEach(function (o) {" + 
+				"		sum += o[topic];" + 
+				"	});" + 
+				"	return sum;" + 
+				"}",
+				new BasicBSONObject()
+			)
+		);
+/*
+		scope.put(
+			"getTopics",
+			new CodeWScope(
+				"function () {" + 
+				"	cursor = db.Topics.find({}, {id : true});" + 
+				"	topicsList = [];" + 
+				"" + 
+				"	while (cursor.hasNext()) {" + 
+				"    	topicsList.push(cursor.next().id.toLowerCase());" + 
+				"	}" + 
+				"	return topicsList;" + 
+				"}",
+				new BasicBSONObject()
+			)
+		);
+*/
+		scope.put(
+			"topics",
+			topics
+			/*new CodeWScope(
+				"getTopics();",
+				new BasicBSONObject()
+			)*/
+		);
+
+		command.addExtraOption(
+			"scope",
+			scope
+		);
+
+		MapReduceOutput out = tweets.mapReduce(command);
+
+		return out.results();
+	}
+/*
 	public DBCursor getCursorForUserMentionedTopics() throws UnknownHostException {
 		initialize();
 		DBCursor c = usermentionedtopics.find();
 		return c;
 	}
-
+*/
 	public boolean checkTweetExists(Status status) throws UnknownHostException {
 		initialize();
 
