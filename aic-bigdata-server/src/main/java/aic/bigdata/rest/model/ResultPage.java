@@ -32,8 +32,8 @@ public class ResultPage {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(this.getClass().getSimpleName());
-		sb.append(" totalSize: " + getSize());
-		sb.append(" resultSize: " + getResult().size());
+		sb.append(" totalSize: " + getTotalSize());
+		sb.append(" resultSize: " + getSize());
 		return sb.toString();
 	}
 }

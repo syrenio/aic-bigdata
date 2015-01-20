@@ -93,10 +93,10 @@ app.controller("ConnectionCtrl", function($scope, ConnectionService) {
 });
 
 app.controller("UsersCtrl",
-		function($scope, $http, $filter, UserService, ngTableParams) {
+		function($scope, $http, $filter, $timeout, UserService, ngTableParams) {
 			var onSelectFunctions = [];
 	
-			$scope.pageSize = 100;
+			$scope.pageSize = 10;
 			$scope.pageNumber = 0;
 			var users = [ {
 				id : 1,
@@ -138,8 +138,10 @@ app.controller("UsersCtrl",
 				getData : function($defer, params) {
 					getUsers(params.count(), params.page(), params.filter().name).then(
 						function(data) {
-							params.total(users.totalSize);
-							$defer.resolve(users.result);
+							$timeout(function() {
+								params.total(users.totalSize);
+								$defer.resolve(users.result);
+							},500);
 						});
 				}
 			});
