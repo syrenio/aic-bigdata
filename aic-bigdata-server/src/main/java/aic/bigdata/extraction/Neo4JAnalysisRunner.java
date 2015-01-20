@@ -15,7 +15,7 @@ import aic.bigdata.extraction.provider.MongoDbTopicProvider;
 import aic.bigdata.extraction.provider.SqlDbUserProvider;
 import aic.bigdata.server.ServerConfig;
 
-public class Neo4JRetweetingInfoExtractionRunner {
+public class Neo4JAnalysisRunner {
 
 	private static ServerConfig config;
 	static {

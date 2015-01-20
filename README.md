@@ -12,8 +12,7 @@ Start
 - Install Gradle http://www.gradle.org/
 - gradle build
 - gradle main            <-- start Console version
-- gradle neo4jExtraction <-- extract graph from mongodb
-- gradle tanalysis       <-- add ads/topics and mine topics
+- gradle analyze         <-- extract graph from mongodb/sql
 - gradle userConvert     <-- convert existing Users from MongoDB into H2 Database
 - gradle userClean       <-- clean and recreate the user table
 

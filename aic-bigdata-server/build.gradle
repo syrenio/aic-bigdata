@@ -91,20 +91,20 @@ task main(type:JavaExec, dependsOn: build){
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-task neo4jExtraction(type:JavaExec, dependsOn: build){
-	main = "aic.bigdata.extraction.Neo4JExtractionRunner"
+//task neo4jExtraction(type:JavaExec, dependsOn: build){
+//	main = "aic.bigdata.extraction.Neo4JExtractionRunner"
+//	classpath = sourceSets.main.runtimeClasspath
+//}
+
+task analyze(type:JavaExec, dependsOn: build){
+	main = "aic.bigdata.extraction.Neo4JAnalysisRunner"
 	classpath = sourceSets.main.runtimeClasspath
 }
 
-task neoRI(type:JavaExec, dependsOn: build){
-	main = "aic.bigdata.extraction.Neo4JRetweetingInfoExtractionRunner"
-	classpath = sourceSets.main.runtimeClasspath
-}
-
-task tanalysis(type:JavaExec, dependsOn: build){
-	main = "aic.bigdata.enrichment.AnalysisRunner"
-	classpath = sourceSets.main.runtimeClasspath
-}
+//task tanalysis(type:JavaExec, dependsOn: build){
+//	main = "aic.bigdata.enrichment.AnalysisRunner"
+//	classpath = sourceSets.main.runtimeClasspath
+//}
 
 task userConvert(type:JavaExec, dependsOn: build){
 	main = "aic.bigdata.stats.UserConverter"
