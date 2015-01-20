@@ -13,7 +13,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "Users")
 public class AicUser implements User {
 
-	@DatabaseField(id = true)
+	@DatabaseField(id = true, index = true)
 	private long id;
 	// @DatabaseField()
 	// private RateLimitStatus rateLimitStatus;

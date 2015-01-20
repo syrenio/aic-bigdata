@@ -10,6 +10,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import aic.bigdata.database.model.AicUser;
 import aic.bigdata.server.ServerConfig;
 
+import com.j256.ormlite.dao.CloseableIterator;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -56,6 +57,10 @@ public class SqlDatabase {
 
 	public List<AicUser> getAllUsers() throws SQLException {
 		return userDao.queryForAll();
+	}
+
+	public CloseableIterator<AicUser> getUsersIterator() throws SQLException {
+		return userDao.iterator();
 	}
 
 	public List<AicUser> getUsers(long page, long pageSize) throws SQLException {

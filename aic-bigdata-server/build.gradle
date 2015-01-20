@@ -114,7 +114,7 @@ task userClean(type:JavaExec, dependsOn: build){
 	main = "aic.bigdata.stats.UserCleaner"
 	classpath = sourceSets.main.runtimeClasspath
 }
-task userStats(type:JavaExec, dependsOn: build){
-	main = "aic.bigdata.stats.UserStats"
-	classpath = sourceSets.main.runtimeClasspath
-}
+//task userStats(type:JavaExec, dependsOn: build){
+//	main = "aic.bigdata.stats.UserStats"
+//	classpath = sourceSets.main.runtimeClasspath
+//}
