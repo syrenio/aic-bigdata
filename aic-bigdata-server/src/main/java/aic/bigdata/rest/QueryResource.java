@@ -119,8 +119,6 @@ public class QueryResource {
 
 		List<AicUser> list = new ArrayList<AicUser>();
 
-		int count = 10;
-
 		ServerConfigBuilder b = new ServerConfigBuilder();
 
 
@@ -142,9 +140,6 @@ public class QueryResource {
 					}
 				}
 				list.add(sqlDb.getUserById(id));
-
-				if (count-- <= 0)
-					break;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -153,8 +148,6 @@ public class QueryResource {
 			e.printStackTrace();
 		}
 
-		//list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
-
 		return list;
 	}
 
@@ -162,8 +155,8 @@ public class QueryResource {
 	@Path("suggestAdsForUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AdObject> getSuggestedAdsForUser(@PathParam("userId") long userId,
-			@PathParam("potentialInterests") boolean potIntr) {
+	public List<AdObject> getSuggestedAdsForUser(@QueryParam("userId") long userId,
+			@QueryParam("potentialInterests") boolean potIntr) {
 
 		GraphDatabase db = GraphDatabase.getInstance();
 		List<String> topics = db.getMostMentionedTopics(userId, potIntr);
