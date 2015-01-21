@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -34,7 +35,15 @@ public class ConnectionResource {
 		ServerConfig config = scb.getConfig();
 		MongoDatabase mdb = new MongoDatabase(config);
 
-		return mdb.getTopicNames();
+		List<String> list = mdb.getTopicNames();
+		list.sort(new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				return o1.compareTo(o2);
+			}
+		});
+		return list;
 	}
 
 	@GET
@@ -57,8 +66,8 @@ public class ConnectionResource {
 			} else {
 				BigDecimal x = new BigDecimal(Math.random() * 10);
 				BigDecimal y = new BigDecimal(Math.random() * 10);
-				SigmaNode node = new SigmaNode(id.toString(), usr.getName(), x.setScale(2, RoundingMode.HALF_DOWN)
-						.doubleValue(), y.setScale(2, RoundingMode.HALF_DOWN).doubleValue(), 1);
+				SigmaNode node = new SigmaNode(id.toString(), usr.getName(), x.setScale(2, RoundingMode.HALF_DOWN).doubleValue(), y.setScale(2,
+						RoundingMode.HALF_DOWN).doubleValue(), 1);
 				SigmaEdge edge = new SigmaEdge(baseEdgeName + edgeCounter, node.getId(), topicName);
 				con.getNodes().add(node);
 				con.getEdges().add(edge);
