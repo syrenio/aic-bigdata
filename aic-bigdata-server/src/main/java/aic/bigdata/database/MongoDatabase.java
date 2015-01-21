@@ -40,6 +40,7 @@ public class MongoDatabase {
 	private DBCollection topics;
 	private DBCollection retweeteroriginalauthors;
 	private DBCollection usermentionedtopics;
+	private DBCollection tfsums;
 
 	public MongoDatabase(ServerConfig cfg) {
 		this.cfg = cfg;
@@ -259,11 +260,8 @@ public class MongoDatabase {
 			null
 		);
 
-		BasicDBObject sort = new BasicDBObject();
-//		BasicDBObject sortInner = new BasicDBObject();
-		sort.put("value", -1);
-//		sort.put("sort", sortInner);
-		//command.setSort((DBObject) sort);
+		command.setSort(new BasicDBObject("value", -1));
+		command.setLimit(10);
 
 		MapReduceOutput out = usermentionedtopics.mapReduce(command);
 
@@ -471,8 +469,9 @@ public class MongoDatabase {
 		helper.createUniqueIndex("id", this.tweets);
 		helper.createUniqueIndex("id", this.ads);
 		helper.createUniqueIndex("id", this.topics);
-		helper.createUniqueIndex("_id", this.retweeteroriginalauthors); // ?
-		helper.createUniqueIndex("_id", this.usermentionedtopics); // ?
+		helper.createUniqueIndex("_id", this.retweeteroriginalauthors);
+		helper.createUniqueIndex("_id", this.usermentionedtopics);
+		helper.createIndex("value", this.tfsums, -1);
 
 		helper.createIndex("user.id", this.tweets, 1);
 		helper.createIndex("timestamp_ms", this.tweets, -1);
@@ -491,6 +490,7 @@ public class MongoDatabase {
 			this.topics = database.getCollection(cfg.getMongoCollectionTopics());
 			this.retweeteroriginalauthors = database.getCollection(cfg.getMongoCollectionRetweeterOriginalAuthors());
 			this.usermentionedtopics = database.getCollection(cfg.getMongoCollectionUserMentionedTopics());
+			this.tfsums = database.getCollection("TFSums");
 			createIndexies();
 			this.init = true;
 		}
