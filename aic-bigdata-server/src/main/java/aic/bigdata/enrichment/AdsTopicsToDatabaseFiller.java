@@ -98,7 +98,7 @@ public class AdsTopicsToDatabaseFiller {
 				adList.add(adId);
 				TopicObject topicObject = new TopicObject(topic, adList);
 				mongodb.writeTopic(gson.toJson(topicObject));
-				neo4j.addTopic(topic);
+				//neo4j.addTopic(topic);
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

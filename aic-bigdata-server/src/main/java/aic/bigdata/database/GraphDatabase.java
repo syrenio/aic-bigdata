@@ -59,8 +59,8 @@ public class GraphDatabase {
 	// final static private String updateRetweetsCountQ =
 	// "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
 
-	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {userId} return b.userId";
-	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.userId = {userId} return b.userId";
+	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.id = {userId} return b.id";
+	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.id = {userId} return b.id";
 
 	final static private String getMentionedTopicsQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} return t.topic";
 	final static private String getUsersMentioningQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE t.id = {topic} return u.id";
@@ -70,9 +70,8 @@ public class GraphDatabase {
 	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
 
 	final static private String mostMentionedTopicsQ = "match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {userId} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
-	// final static private String mostInfluentalUsersQ =
-	// "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
-	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
+	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
+	//final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
 
 	public GraphDatabase(ServerConfig config) {
 		this.config = config;
@@ -494,7 +493,7 @@ public class GraphDatabase {
 	public List<String> getMostMentionedTopics(long userId) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
-		params.put("indirectness", 4);
+		//params.put("indirectness", 4);
 		params.put("limit", 10);
 
 		ExecutionResult result;
@@ -526,7 +525,7 @@ public class GraphDatabase {
 
 		try (Transaction ignoreMe = graphDb.beginTx()) {
 			result = cypherEngine.execute(mostInfluentalUsersQ, params);
-			System.out.println(result.dumpToString());
+			//System.out.println(result.dumpToString());
 
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 			while (iterator.hasNext()) {

@@ -100,8 +100,8 @@ public class QueryResource {
 			e.printStackTrace();
 		}
 
-		System.out.println("most influental users: " + ids);
-		System.out.println("list has " + list.size() + " elements");
+		//System.out.println("most influental users: " + ids);
+		//System.out.println("list has " + list.size() + " elements");
 
 		// list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
 
