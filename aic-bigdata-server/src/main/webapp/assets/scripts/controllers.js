@@ -148,10 +148,12 @@ app.controller("UsersCtrl",
 
 			$scope.selectUser = function(user) {
 				console.log("selected user:",user);
-				
+
+				/*
 				UserService.getConnections(user.id).then(function(data) {
 					console.log(data);
 				});
+				*/
 				
 				for ( var idx in onSelectFunctions) {
 					var fx = onSelectFunctions[idx];
