@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class ConnectionResource {
 		MongoDatabase mdb = new MongoDatabase(config);
 
 		List<String> list = mdb.getTopicNames();
-		list.sort(new Comparator<String>() {
+		Collections.sort(list, new Comparator<String>() {
 
 			@Override
 			public int compare(String o1, String o2) {
