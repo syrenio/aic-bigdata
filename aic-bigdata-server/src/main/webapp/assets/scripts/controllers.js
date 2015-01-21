@@ -170,6 +170,11 @@ app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
 
 	self.mostInflPersons = [];
 	self.topics = [];
+	self.resultSizes = [10,20,30,40,50,100];
+	
+	self.sugResultSize = 10;
+	self.sugPotResultSize = 10;
+	
 
 	self.selectTopics = function(x) {
 		var idx = selectedTopics.indexOf(x);

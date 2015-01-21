@@ -72,28 +72,24 @@
 		<div class="panel-heading" ng-click="panel3 = !panel3 || false;"><h4>Suggest ads for User (existing interests)</h4></div>
 		<div class="panel-body" ng-show="panel3">
 			<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-controller="UsersCtrl">
-					<h3>Users</h3>
-					<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
-						<tr ng-repeat="user in $data" ng-click="qc.querySuggestAds(user.id)">
-							<td data-title="'Id'">
-								{{user.id}}
-							</td>
-							<td data-title="'Name'">
-								{{user.name}}
-							</td>
-						</tr>
-					</table>
+				<div class="col-xs-2 col-xs-offset-10">
+					<label>Result size:</label>
+					<select class="form-control input-sm" ng-model="qc.sugResultSize" ng-options="val for val in qc.resultSizes"></select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+					<aic-user-table on-select="qc.querySuggestAds(user.id)"></aic-user-table>
 				</div>
 				<!-- {{qc.suggAds | json}} -->
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+				<div class="col-xs-4">
 					<h3>Ads</h3>
 					<table class="table table-condensed table-hover table-striped">
 						<thead>
 							<th>Ad-Name</th>
 						</thead>
 						<tbody>
-							<tr ng-repeat="p in qc.suggAds">
+							<tr ng-repeat="p in qc.suggAds | limitTo: qc.sugResultSize">
 								<td>
 									{{p.name | empty:"no Name"}}
 								</td>
@@ -108,28 +104,24 @@
 		<div class="panel-heading" ng-click="panel4 = !panel4 || false;"><h4>Suggest ads for User (potential interests)</h4></div>
 		<div class="panel-body" ng-show="panel4">
 			<div class="row">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" ng-controller="UsersCtrl">
-					<h3>Users</h3>
-					<table ng-table="tableParams" template-pagination="custom/pager" class="table table-condensed table-hover table-striped">
-						<tr ng-repeat="user in $data" ng-click="qc.querySuggestAdsPotInt(user.id)">
-							<td data-title="'Id'">
-								{{user.id}}
-							</td>
-							<td data-title="'Name'">
-								{{user.name}}
-							</td>
-						</tr>
-					</table>
+				<div class="col-xs-2 col-xs-offset-10">
+					<label>Result size:</label>
+					<select class="form-control input-sm" ng-model="qc.sugPotResultSize" ng-options="val for val in qc.resultSizes"></select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-8">
+					<aic-user-table on-select="qc.querySuggestAdsPotInt(user.id)"></aic-user-table>
 				</div>
 				<!-- {{qc.suggAds | json}} -->
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+				<div class="col-xs-4">
 					<h3>Ads</h3>
 					<table class="table table-condensed table-hover table-striped">
 						<thead>
 							<th>Ad-Name</th>
 						</thead>
 						<tbody>
-							<tr ng-repeat="p in qc.suggAdsPot">
+							<tr ng-repeat="p in qc.suggAdsPot | limitTo: qc.sugPotResultSize">
 								<td>
 									{{p.name | empty:"no Name"}}
 								</td>
