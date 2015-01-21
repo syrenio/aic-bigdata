@@ -23,6 +23,8 @@ Web
 Notes
 ----------
 - Search and filtering should work case insensitive, if not  (H2 varchar_ignorecase is not set -> gradle userClean to recreate the user table).
+- Dont forget to analyze your data : 
+- <img src="https://i.imgflip.com/gnjer.jpg"/>
 
 MongoDB
 -----------
