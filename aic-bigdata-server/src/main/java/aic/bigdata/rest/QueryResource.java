@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.mongodb.DBObject;
+
 import org.apache.commons.lang3.StringUtils;
 
 import aic.bigdata.database.GraphDatabase;
@@ -117,7 +119,41 @@ public class QueryResource {
 
 		List<AicUser> list = new ArrayList<AicUser>();
 
-		list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
+		int count = 10;
+
+		ServerConfigBuilder b = new ServerConfigBuilder();
+
+
+		try {
+			SqlDatabase sqlDb = new SqlDatabase(b.getConfig());
+			MongoDatabase mongoDb = new MongoDatabase(b.getConfig());
+
+			for (DBObject o : mongoDb.getIterableForTFSums()) {
+				Long id = null;
+				try {
+					id = ((Double) o.get("_id")).longValue();
+				}
+				catch (ClassCastException cce) {
+					try {
+						id = (Long) o.get("_id");
+					}
+					catch (ClassCastException cce2) {
+						System.err.println("_id is neither Long nor Double?");
+					}
+				}
+				list.add(sqlDb.getUserById(id));
+
+				if (count-- <= 0)
+					break;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Copy of Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
 
 		return list;
 	}
@@ -129,13 +165,10 @@ public class QueryResource {
 	public List<AdObject> getSuggestedAdsForUser(@PathParam("userId") long userId,
 			@PathParam("potentialInterests") boolean potIntr) {
 
-		/*
-		 * GraphDatabase db = GraphDatabase.getInstance(); List<String> topics =
-		 * db.getMostMentionedTopics(userId);
-		 * 
-		 * System.out.println("most mentioned topics for user #" + userId + ": "
-		 * + topics);
-		 */
+		GraphDatabase db = GraphDatabase.getInstance();
+		List<String> topics = db.getMostMentionedTopics(userId, potIntr);
+
+		System.out.println("most mentioned topics for user #" + userId + ": " + topics);
 
 		List<AdObject> list = new ArrayList<AdObject>();
 		list = getDummyAdObjects();
