@@ -53,21 +53,21 @@ public class GraphDatabase {
 	private ServerConfig config;
 	private ExecutionEngine cypherEngine;
 
-	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
+	final static private String createRetweetsRelationshipQ = "MATCH (a:user),(b:user) WHERE a.id = {aUserId} AND b.id = {bUserId} CREATE (a)-[r:retweets { count: 1 } ]->(b) RETURN r";
 	// final static private String getRetweetsCountQ =
-	// "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} RETURN r.count";
+	// "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.id = {aUserId} AND b.id = {bUserId} RETURN r.count";
 	// final static private String updateRetweetsCountQ =
-	// "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.userId = {aUserId} AND b.userId = {bUserId} SET r.count = r.count + 1 RETURN r.count";
+	// "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.id = {aUserId} AND b.id = {bUserId} SET r.count = r.count + 1 RETURN r.count";
 
 	final static private String getRetweetedQ = "MATCH (a:user)-[r:retweets]->(b:user) WHERE a.id = {userId} return b.id";
 	final static private String getRetweetersQ = "MATCH (b:user)-[r:retweets]->(a:user) WHERE a.id = {userId} return b.id";
 
-	final static private String getMentionedTopicsQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} return t.topic";
+	final static private String getMentionedTopicsQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.id = {userId} return t.topic";
 	final static private String getUsersMentioningQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE t.id = {topic} return u.id";
 
-	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
-	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} RETURN r.count";
-	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.userId = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
+	final static private String createMentionsRelationshipQ = "MATCH (u:user),(t:topic) WHERE u.id = {userId} AND t.topic = {topic} CREATE (u)-[r:mentions { count: 1 } ]->(t) RETURN r";
+	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.id = {userId} AND t.topic = {topic} RETURN r.count";
+	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.id = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
 
 	final static private String mostMentionedTopicsQ = "match p = (a:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
 	final static private String mostMentionedTopicsIndirectQ = "match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
@@ -505,7 +505,7 @@ public class GraphDatabase {
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 			while (iterator.hasNext()) {
 				Map<String, Object> map = iterator.next();
-				ids.add((Long) map.get("b.userId"));
+				ids.add((Long) map.get("b.id"));
 			}
 		}
 
