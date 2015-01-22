@@ -32,7 +32,7 @@
 -->
 <!--  <aic-user-table on-select="test(user)"></aic-user-table> -->
 <div class="row">
-	<div class="col-md-12" ng-controller="ConnectionCtrl">
+	<div class="col-xs-6" ng-controller="ConnectionCtrl">
 		<h3>Connections</h3>
 		<select ng-model="selTopic" ng-options="t for t in topics"
 			ng-change="findUsers(t)">
@@ -51,6 +51,8 @@
 				</tr>
 			</table>
 		</div>
+	</div>
+	<div class="col-xs-6">
 		<div id="graphContainer"></div>
 	</div>
 </div>
