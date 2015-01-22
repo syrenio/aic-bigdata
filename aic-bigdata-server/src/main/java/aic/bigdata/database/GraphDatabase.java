@@ -71,10 +71,10 @@ public class GraphDatabase {
 
 	final static private String mostMentionedTopicsQ = "match p = (a:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc;";// limit {limit}";
 	final static private String[] mostMentionedTopicsIndirectQ = {
-		"match p = (a:user)-[:retweets*0..1]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
-		"match p = (a:user)-[:retweets*0..2]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
-		"match p = (a:user)-[:retweets*0..3]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
-		"match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}"
+		"match p = (a:user)-[:retweets*0..1]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = (a:user)-[:retweets*0..2]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = (a:user)-[:retweets*0..3]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc"
 	};
 	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
 	//final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
@@ -540,7 +540,7 @@ public class GraphDatabase {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", userId);
 		//params.put("indirectness", 4);
-		//params.put("limit", int limit);
+		//params.put("limit", 10);
 
 		ExecutionResult result;
 
