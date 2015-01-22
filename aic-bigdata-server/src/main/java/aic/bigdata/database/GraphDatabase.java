@@ -69,8 +69,13 @@ public class GraphDatabase {
 	final static private String getMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.id = {userId} AND t.topic = {topic} RETURN r.count";
 	final static private String updateMentionsCountQ = "MATCH (u:user)-[r:mentions]->(t:topic) WHERE u.id = {userId} AND t.topic = {topic} SET r.count = r.count + 1 RETURN r.count";
 
-	final static private String mostMentionedTopicsQ = "match p = (a:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
-	final static private String mostMentionedTopicsIndirectQ = "match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}";
+	final static private String mostMentionedTopicsQ = "match p = (a:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc;";// limit {limit}";
+	final static private String[] mostMentionedTopicsIndirectQ = {
+		"match p = (a:user)-[:retweets*0..1]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
+		"match p = (a:user)-[:retweets*0..2]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
+		"match p = (a:user)-[:retweets*0..3]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}",
+		"match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc limit {limit}"
+	};
 	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
 	//final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
 
@@ -160,6 +165,7 @@ public class GraphDatabase {
 		try (Transaction ignoreMe = graphDb.beginTx()) {
 			result = cypherEngine.execute(getUserCountByTopicsQ, params);
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+			//System.out.println(result.dumpToString());
 			while (iterator.hasNext()) {
 				Map<String, Object> map = iterator.next();
 				topics.put((String) map.get("topic"), (Long) map.get("count"));
@@ -518,14 +524,23 @@ public class GraphDatabase {
 	}
 
 	public List<String> getMostMentionedTopics(long userId, boolean potIntr) {
+		return getMostMentionedTopics(userId, potIntr, 1);
+	}
+
+	public List<String> getMostMentionedTopics(long userId, boolean potIntr, int indirectness) {
 		String cypherQ = mostMentionedTopicsQ;
-		if (potIntr)
-			cypherQ = mostMentionedTopicsIndirectQ;
+		if (potIntr) {
+			if (indirectness < 1)
+				indirectness = 1;
+			if (indirectness > 4)
+				indirectness = 4;
+			cypherQ = mostMentionedTopicsIndirectQ[indirectness];
+		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("id", userId);
 		//params.put("indirectness", 4);
-		params.put("limit", 10);
+		//params.put("limit", int limit);
 
 		ExecutionResult result;
 
