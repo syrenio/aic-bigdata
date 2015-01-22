@@ -66,11 +66,8 @@ app.factory("QueryService", function($http) {
 				return resp.data;
 			});
 		},
-		getPersonsWithTopics : function(topics){
-			console.log("getPersonWithTopics",topics);
-			return $http.get("api/queries/usersWithInterests",{params : {
-				topics : topics
-			}}).then(function(resp) {
+		getPersonsWithTopics : function(){
+			return $http.get("api/queries/usersWithInterests").then(function(resp) {
 				console.log(resp.data);
 				return resp.data;
 			});

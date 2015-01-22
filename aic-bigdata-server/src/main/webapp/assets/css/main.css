@@ -39,6 +39,10 @@ body{
 .query-page .panel-heading:hover {
   background-color: #dfdfdf !important;
 }
+
+.user-table tr{
+	cursor: pointer;
+}
   
 /* animate */
 

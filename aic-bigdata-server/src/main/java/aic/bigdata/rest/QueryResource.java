@@ -9,12 +9,9 @@ import java.util.Random;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import com.mongodb.DBObject;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -25,6 +22,8 @@ import aic.bigdata.database.model.AicUser;
 import aic.bigdata.enrichment.AdObject;
 import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.server.ServerConfig;
+
+import com.mongodb.DBObject;
 
 /*
  * 1. Which users are the most inﬂuential persons in your data set? Inﬂuential persons do not only have many followers, 
@@ -102,8 +101,8 @@ public class QueryResource {
 			e.printStackTrace();
 		}
 
-		//System.out.println("most influental users: " + ids);
-		//System.out.println("list has " + list.size() + " elements");
+		// System.out.println("most influental users: " + ids);
+		// System.out.println("list has " + list.size() + " elements");
 
 		// list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
 
@@ -114,13 +113,12 @@ public class QueryResource {
 	@Path("usersWithInterests")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AicUser> getBroadIntrestUsers(@QueryParam("topics") List<String> topics) {
-		System.out.println("getBroadIntrestUsers called! topics:" + StringUtils.join(topics, ","));
+	// @QueryParam("topics") List<String> topics
+	public List<AicUser> getBroadIntrestUsers() {
 
 		List<AicUser> list = new ArrayList<AicUser>();
 
 		ServerConfigBuilder b = new ServerConfigBuilder();
-
 
 		try {
 			SqlDatabase sqlDb = new SqlDatabase(b.getConfig());
@@ -130,12 +128,10 @@ public class QueryResource {
 				Long id = null;
 				try {
 					id = ((Double) o.get("_id")).longValue();
-				}
-				catch (ClassCastException cce) {
+				} catch (ClassCastException cce) {
 					try {
 						id = (Long) o.get("_id");
-					}
-					catch (ClassCastException cce2) {
+					} catch (ClassCastException cce2) {
 						System.err.println("_id is neither Long nor Double?");
 					}
 				}
@@ -155,8 +151,7 @@ public class QueryResource {
 	@Path("suggestAdsForUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AdObject> getSuggestedAdsForUser(@QueryParam("userId") long userId,
-			@QueryParam("potentialInterests") boolean potIntr) {
+	public List<AdObject> getSuggestedAdsForUser(@QueryParam("userId") long userId, @QueryParam("potentialInterests") boolean potIntr) {
 
 		GraphDatabase db = GraphDatabase.getInstance();
 		List<String> topics = db.getMostMentionedTopics(userId, potIntr);
@@ -167,10 +162,10 @@ public class QueryResource {
 		MongoDatabase mongoDb = new MongoDatabase(b.getConfig());
 
 		List<AdObject> list = new ArrayList<AdObject>();
-		//list = getDummyAdObjects();
+		// list = getDummyAdObjects();
 		try {
 			list = mongoDb.getAdsForTopics(topics);
-		} catch(UnknownHostException e) {
+		} catch (UnknownHostException e) {
 			// TODO Copy of Auto-generated catch block
 			e.printStackTrace();
 		}

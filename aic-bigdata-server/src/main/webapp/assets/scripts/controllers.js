@@ -193,7 +193,7 @@ app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
 	};
 
 	self.queryPersonsWithTopics = function() {
-		QueryService.getPersonsWithTopics(selectedTopics).then(function(data) {
+		QueryService.getPersonsWithTopics().then(function(data) {
 			self.personsWithTopics = data;
 		});
 	};
