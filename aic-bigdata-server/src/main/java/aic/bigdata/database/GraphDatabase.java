@@ -74,6 +74,8 @@ public class GraphDatabase {
 	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
 	//final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
 
+	final static private String getUserCountByTopicsQ = "match (u:user)-[m:mentions]-(t:topic) return t.id as topic, count(m) as count";
+
 	public GraphDatabase(ServerConfig config) {
 		this.config = config;
 
@@ -148,9 +150,28 @@ public class GraphDatabase {
 		return topics;
 	}
 
+	public Map<String, Long> getUserCountByTopics() {
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		ExecutionResult result;
+
+		Map<String, Long> topics = new HashMap<String, Long>();
+
+		try (Transaction ignoreMe = graphDb.beginTx()) {
+			result = cypherEngine.execute(getUserCountByTopicsQ, params);
+			ResourceIterator<Map<String, Object>> iterator = result.iterator();
+			while (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
+				topics.put((String) map.get("topic"), (Long) map.get("count"));
+			}
+		}
+
+		return topics;
+	}
+
 	public Set<Long> getUsersMentioning(String topic) {
 		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("topic", topic.toLowerCase());
+		params.put("topic", topic);
 
 		ExecutionResult result;
 
@@ -172,7 +193,7 @@ public class GraphDatabase {
 		if (!nodeForTopicExists(topic)) {
 			try (Transaction tx = graphDb.beginTx()) {
 				Node topicNode = graphDb.createNode();
-				topicNode.setProperty("topic", topic.toLowerCase());
+				topicNode.setProperty("topic", topic);
 				topicNode.addLabel(DynamicLabel.label("topic"));
 
 				topicIndex.add(topicNode, "topic", topicNode.getProperty("topic"));
@@ -189,7 +210,7 @@ public class GraphDatabase {
 		boolean exists = false;
 
 		try (Transaction tx = graphDb.beginTx()) {
-			IndexHits<Node> hits = topicIndex.get("topic", topic.toLowerCase());
+			IndexHits<Node> hits = topicIndex.get("topic", topic);
 
 			exists = hits.size() == 1;
 			tx.success();
@@ -245,7 +266,7 @@ public class GraphDatabase {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
-		params.put("topic", topic.toLowerCase());
+		params.put("topic", topic);
 
 		ExecutionResult result;
 
