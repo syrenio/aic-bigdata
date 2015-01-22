@@ -6,7 +6,7 @@
 				{{user.id}}
 			</td>
 			<td data-title="'Name'" filter="{ 'name' : 'text' }">
-				{{user.name}}
+				{{user.name | empty:"no Name"}}
 			</td>
 		</tr>
 	</table>

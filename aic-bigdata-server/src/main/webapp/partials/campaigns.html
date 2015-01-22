@@ -1,9 +1,10 @@
 <div class="col-md-12">
 	<h3>Ads</h3>
-	<ul class="list-group">
+	<ul class="ad-list list-group">
 	  <li class="list-group-item" ng-repeat="ad in ads">
 	    <span class="badge {{t.name | lowercase}}" ng-repeat="t in ad.topics">{{t.name}}  <b>({{t.mentionings}})</b></span>
-	    <strong>{{ad.name}}</strong> {{ad.text}}
+	    <p><strong>{{ad.name}}</strong></p>
+	    <p> {{ad.text}}</p>
 	  </li>
 	</ul> 
 </div>
