@@ -2,7 +2,6 @@ package aic.bigdata.rest;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,19 +36,16 @@ public class AdResource {
 		if (mongo == null)
 			mongo = new MongoDatabase(config);
 
-		Map<String, Long> mentionCounts = new HashMap<String, Long>();
-
 		List<AdDTO> ads = new ArrayList<AdDTO>();
 		try {
+			Map<String, Long> topicUserCount = GraphDatabase.getInstance().getUserCountByTopics();
 			for (AdObject adObject : mongo.getAds()) {
 				AdDTO ad = new AdDTO(adObject);
 				for (TopicDTO t : ad.getTopics()) {
-					if (!mentionCounts.containsKey(t.getName())) {
-						mentionCounts.put(t.getName(),
-								new Long(GraphDatabase.getInstance().getUsersMentioning(t.getName()).size()));
+					long usercount = 0;
+					if (topicUserCount.containsKey(t.getName())) {
+						usercount = topicUserCount.get(t.getName());
 					}
-
-					long usercount = mentionCounts.get(t.getName());
 					System.out.println("user mentioning count for topic " + t.getName() + " : " + usercount);
 					t.setMentionings(usercount);
 				}
