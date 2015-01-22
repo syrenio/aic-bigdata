@@ -524,7 +524,7 @@ public class GraphDatabase {
 	}
 
 	public List<String> getMostMentionedTopics(long userId, boolean potIntr) {
-		return getMostMentionedTopics(userId, potIntr, 1);
+		return getMostMentionedTopics(userId, potIntr, 4);
 	}
 
 	public List<String> getMostMentionedTopics(long userId, boolean potIntr, int indirectness) {
@@ -534,7 +534,7 @@ public class GraphDatabase {
 				indirectness = 1;
 			if (indirectness > 4)
 				indirectness = 4;
-			cypherQ = mostMentionedTopicsIndirectQ[indirectness];
+			cypherQ = mostMentionedTopicsIndirectQ[indirectness-1];
 		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
