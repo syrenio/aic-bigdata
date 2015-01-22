@@ -171,9 +171,23 @@ app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
 	self.mostInflPersons = [];
 	self.topics = [];
 	self.resultSizes = [10,20,30,40,50,100];
+	self.friends = [{
+		text : "Friends",
+		value: 1
+	},{
+		text : "Friends of Friends",
+		value: 2
+	},{
+		text : "I know that guy",
+		value: 3
+	},{
+		text : "Facebook friend",
+		value: 4
+	}];
 	
 	self.sugResultSize = 10;
 	self.sugPotResultSize = 10;
+	self.selectedFriendOption = 1;
 	
 
 	self.selectTopics = function(x) {
@@ -199,12 +213,12 @@ app.controller("QueryCtrl", function($scope, $http, QueryService, AdsService) {
 	};
 	
 	self.querySuggestAds = function(userId){
-		QueryService.getSuggestAds(userId,false).then(function(data){
+		QueryService.getSuggestAds(userId,false,0).then(function(data){
 			self.suggAds = data;
 		});
 	};
-	self.querySuggestAdsPotInt = function(userId){
-		QueryService.getSuggestAds(userId,true).then(function(data){
+	self.querySuggestAdsPotInt = function(userId,jumps){
+		QueryService.getSuggestAds(userId,true,jumps).then(function(data){
 			self.suggAdsPot = data;
 		});
 	};

@@ -32,8 +32,7 @@ public class UserResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResultPage getUsers(@QueryParam("size") int size, @QueryParam("page") int page,
-			@QueryParam("fname") String fname) {
+	public ResultPage getUsers(@QueryParam("size") int size, @QueryParam("page") int page, @QueryParam("fname") String fname) {
 		System.out.println("size=" + size + " page=" + page + " fname=" + fname);
 
 		ServerConfigBuilder scb = new ServerConfigBuilder();
@@ -54,6 +53,7 @@ public class UserResource {
 				ResultEntry entry = new ResultEntry();
 				entry.setId(user.getId());
 				entry.setName(user.getName());
+				entry.setScreenName(user.getScreenName());
 				result.add(entry);
 			}
 

@@ -151,10 +151,12 @@ public class QueryResource {
 	@Path("suggestAdsForUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AdObject> getSuggestedAdsForUser(@QueryParam("userId") long userId, @QueryParam("potentialInterests") boolean potIntr) {
+	public List<AdObject> getSuggestedAdsForUser(@QueryParam("userId") long userId, @QueryParam("potentialInterests") boolean potIntr,
+			@QueryParam("jumps") int jumps) {
+		System.out.println("userId:" + userId + " potentialInterests: " + potIntr + " jumps: " + jumps);
 
 		GraphDatabase db = GraphDatabase.getInstance();
-		List<String> topics = db.getMostMentionedTopics(userId, potIntr);
+		List<String> topics = db.getMostMentionedTopics(userId, potIntr, jumps);
 
 		System.out.println("most mentioned topics for user #" + userId + ": " + topics);
 

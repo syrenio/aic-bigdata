@@ -4,6 +4,7 @@ public class ResultEntry {
 
 	private String name;
 	private Long id;
+	private String screenName;
 
 	public Long getId() {
 		return id;
@@ -19,6 +20,14 @@ public class ResultEntry {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getScreenName() {
+		return screenName;
+	}
+
+	public void setScreenName(String screenName) {
+		this.screenName = screenName;
 	}
 
 }

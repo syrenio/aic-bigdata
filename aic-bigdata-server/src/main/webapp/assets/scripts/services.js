@@ -72,11 +72,12 @@ app.factory("QueryService", function($http) {
 				return resp.data;
 			});
 		},
-		getSuggestAds : function(userId,potInt){
-			console.log("getSuggestAds",userId,potInt);
+		getSuggestAds : function(userId,potInt,jumps){
+			console.log("getSuggestAds",userId,potInt,jumps);
 			return $http.get("api/queries/suggestAdsForUser",{params : {
 				userId : userId,
-				potentialInterests : potInt
+				potentialInterests : potInt,
+				jumps : jumps
 			}}).then(function(resp) {
 				console.log(resp.data);
 				return resp.data;
