@@ -79,7 +79,7 @@ public class Neo4JBatchInserter {
 	}
 
 	public void addTopic(String topic) {
-		topic = topic.toLowerCase();
+		//topic = topic.toLowerCase();
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("id", topic);
@@ -89,7 +89,7 @@ public class Neo4JBatchInserter {
 	}
 
 	public void addMentionsRelationship(Long id, String topic, Integer count) {
-		topic = topic.toLowerCase();
+		//topic = topic.toLowerCase();
 
 		Map<String, Object> properties = new HashMap<String, Object>();
 		properties.put("count", count);

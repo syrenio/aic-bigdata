@@ -126,7 +126,7 @@ public class QueryResource {
 			SqlDatabase sqlDb = new SqlDatabase(b.getConfig());
 			MongoDatabase mongoDb = new MongoDatabase(b.getConfig());
 
-			for (DBObject o : mongoDb.getIterableForTFSums()) {
+			for (DBObject o : mongoDb.getCursorForTFSums()) {
 				Long id = null;
 				try {
 					id = ((Double) o.get("_id")).longValue();
@@ -163,8 +163,17 @@ public class QueryResource {
 
 		System.out.println("most mentioned topics for user #" + userId + ": " + topics);
 
+		ServerConfigBuilder b = new ServerConfigBuilder();
+		MongoDatabase mongoDb = new MongoDatabase(b.getConfig());
+
 		List<AdObject> list = new ArrayList<AdObject>();
-		list = getDummyAdObjects();
+		//list = getDummyAdObjects();
+		try {
+			list = mongoDb.getAdsForTopics(topics);
+		} catch(UnknownHostException e) {
+			// TODO Copy of Auto-generated catch block
+			e.printStackTrace();
+		}
 		return list;
 	}
 

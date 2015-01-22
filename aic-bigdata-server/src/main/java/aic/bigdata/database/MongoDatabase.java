@@ -113,7 +113,7 @@ public class MongoDatabase {
 		try {
 			int i = 0;
 			for (DBObject c : getCursorForTopics()) {
-				topics.put("" + i, ((String) c.get("id")).toLowerCase());
+				topics.put("" + i, ((String) c.get("id")));
 				i++;
 			}
 		} catch (UnknownHostException e) {
@@ -127,7 +127,7 @@ public class MongoDatabase {
 			"	var text = this.text.toLowerCase();" + 
 			"	topics.forEach(function (e) {" + 
 //	"print(\"searching for \" + e);" + 
-			"		counts[e] = occurences(text, e);" + 
+			"		counts[e] = occurences(text, e.toLowerCase());" + 
 //	"if (counts[e] > 0) { print(\"found \" + counts[e] + \" occurences of '\" + e + \"'\"); }" + 
 			"	});" + 
 			"" + 
@@ -225,7 +225,7 @@ public class MongoDatabase {
 		return out.results();
 	}
 
-	public Iterable<DBObject> getIterableForTFSums() throws UnknownHostException {
+	public DBCursor getCursorForTFSums() throws UnknownHostException {
 		initialize();
 
 		MapReduceCommand command = new MapReduceCommand(
@@ -238,7 +238,7 @@ public class MongoDatabase {
 			"        });" +
 			"        var m = Math.max.apply(Math, occurences);" +
 			"        if (m == 0) {" +
-			"            emit(this._id, this.value);" +
+			"            emit(this._id, 0.0);" +
 			"        }" +
 			"        else {" +
 			"            var tfs = {};" +
@@ -260,12 +260,21 @@ public class MongoDatabase {
 			null
 		);
 
-		command.setSort(new BasicDBObject("value", -1));
-		command.setLimit(10);
-
 		MapReduceOutput out = usermentionedtopics.mapReduce(command);
 
-		return out.results();
+		return tfsums.find().sort(new BasicDBObject("value", -1)).limit(10);
+	}
+
+	public List<AdObject> getAdsForTopics(List<String> topics) throws UnknownHostException {
+		initialize();
+		DBCursor cur = this.ads.find(new BasicDBObject("topics", new BasicDBObject("$in", topics)));
+		List<AdObject> list = new ArrayList<AdObject>();
+		Gson g = new Gson();
+		for (DBObject obj : cur) {
+			AdObject a = g.fromJson(obj.toString(), AdObject.class);
+			list.add(a);
+		}
+		return list;
 	}
 
 /*
