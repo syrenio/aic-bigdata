@@ -43,6 +43,10 @@ body{
 .user-table tr{
 	cursor: pointer;
 }
+
+.ad-list li.list-group-item:hover{
+	background-color: #f5f5f5;
+}
   
 /* animate */
 
