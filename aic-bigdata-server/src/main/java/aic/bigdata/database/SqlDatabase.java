@@ -30,9 +30,6 @@ public class SqlDatabase {
 		connectionSource = new JdbcConnectionSource(url, "sa", "sa");
 
 		TableUtils.createTableIfNotExists(connectionSource, AicUser.class);
-		if (config.getSqlCleanOnStart()) {
-			TableUtils.clearTable(connectionSource, AicUser.class);
-		}
 		userDao = DaoManager.createDao(connectionSource, AicUser.class);
 	}
 

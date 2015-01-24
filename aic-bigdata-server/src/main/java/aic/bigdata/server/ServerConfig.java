@@ -94,7 +94,7 @@ public class ServerConfig {
 	public List<Long> getFollowers() {
 		List<String> fol = new ArrayList<String>();
 		String strFol = server.getProperty("aic.bigdata.stream.followers");
-		if(!StringUtils.isEmpty(strFol)){
+		if (!StringUtils.isEmpty(strFol)) {
 			fol = Arrays.asList(strFol.split(","));
 		}
 		List<Long> longlist = new ArrayList<Long>();
@@ -158,11 +158,11 @@ public class ServerConfig {
 	public String getMongoCollectionUsers() {
 		return mongo.getProperty("mongo.collection.users");
 	}
-	
+
 	public String getMongoCollectionAds() {
 		return mongo.getProperty("mongo.collection.ads");
 	}
-	
+
 	public String getMongoCollectionTopics() {
 		return mongo.getProperty("mongo.collection.topics");
 	}
@@ -203,12 +203,12 @@ public class ServerConfig {
 
 	public String getNeo4JDbPath() {
 		String path = neo4j.getProperty("neo4j.path");
-		if(!path.endsWith("/"))
-			return path+"/";
+		if (!path.endsWith("/"))
+			return path + "/";
 		return path;
 	}
-	
-	public String getNeo4jFullDbName(){
+
+	public String getNeo4jFullDbName() {
 		return this.getNeo4JDbPath().concat(this.getNeo4JDbName());
 	}
 
@@ -218,17 +218,9 @@ public class ServerConfig {
 
 	public void setSql(Properties sql) {
 		this.sql = sql;
-	}	
-	
-	public String getSqlDatabaseName(){
+	}
+
+	public String getSqlDatabaseName() {
 		return sql.getProperty("sql.databaseName");
-	}
-	
-	public Boolean getSqlCleanOnStart(){
-		return new Boolean(sql.getProperty("sql.cleanOnStart"));
-	}
-	
-	public String getSqlStartScriptPath(){
-		return sql.getProperty("sql.create");
 	}
 }

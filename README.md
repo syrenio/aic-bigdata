@@ -6,28 +6,39 @@ AIC Group Project Big Data
 Architecture:
 https://www.dropbox.com/s/lqbvh8k3ydv8mqv/AIC_Architektur_Vorschlag.pdf?dl=0
 
-Start
------------
 
-- Install Gradle http://www.gradle.org/
-- gradle build
-- gradle main            <-- start Console version
-- gradle analyze         <-- extract graph from mongodb/sql
-- gradle userConvert     <-- convert existing Users from MongoDB into H2 Database
-- gradle userClean       <-- clean and recreate the user table
+# General Stuff
+### Software
+- Gradle 2+ (http://www.gradle.org)
+- Java 7+
+- MongoDB (http://www.mongodb.org/downloads & http://docs.mongodb.org/manual/)
 
-Web
-----------
-- gradle appRun  <-- starts WebServer
+
+# Instructions
+### General Gradle Tasks Descriptions
+    gradle build        // default build task
+    gradle startStream  // start stream and write to mongodb/sql
+    gradle analyze      // extract graph from mongodb/sql
+    gradle userConver   // convert existing Users from mognodb into H2 Database
+    gradle userClean    // clean and recreate H2 user table
+    gradle appRun       // starts WebApplication
+### Config files
+    mongo.properties    // configure MongoDB & Collection names
+    server.properties   // configure streaming options (terms,inital users, ...)
+    neo4j.properties    // configure Neo4j location
+    sql.properties      // configure H2 DB location
+    twitter.properties  // twitter credentials
+### Database locations
+    Neo4J: /data/neo/aicDB
+    SQL:   /data/sql/userDB
+### From Source
+### VM
+
+
+
 
 Notes
 ----------
 - Search and filtering should work case insensitive, if not  (H2 varchar_ignorecase is not set -> gradle userClean to recreate the user table).
-- Dont forget to analyze your data : 
+- Dont forget to analyze your data :
 - <img src="https://raw.githubusercontent.com/syrenio/aic-bigdata/master/stuff/notsimply.jpg"/>
-
-MongoDB
------------
-
-- Install MongoDB from: http://www.mongodb.org/downloads
-- Installation information for your distribution can be found at: http://docs.mongodb.org/manual/ Installation
