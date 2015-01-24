@@ -32,7 +32,22 @@ https://www.dropbox.com/s/lqbvh8k3ydv8mqv/AIC_Architektur_Vorschlag.pdf?dl=0
     Neo4J: /data/neo/aicDB
     SQL:   /data/sql/userDB
 ### From Source
+1. install software
+2. get source
+3. "gradle build" should build without problems
+4. "gradle startStream" will collect data (skip this step if you already have a dataset in your mongodb and users in the H2 database), task need to be stopped manually.
+5. "gradle analyze" extract the graph from the databases. (skip this step if you already have the extracted neo4j database(e.g. VM) )
+6. "gradle appRun" starts the web server and explore the collected data and queries.
+
 ### VM
+0. developers will provide you with the password*
+1. open terminal and change directory to ~/aic-bigdata/aic-bigdata-server
+2. execute "sudo gradle appRun"
+3. connect with your browser to http://localhost:8080/aic-bigdata-server
+
+<span style="color:red"> corrupt Neo4j:</span>
+1. if your Neo4j database is corrupt please delete the folder /data/neo/aicDB
+2. execute "sudo gradle analyze" in the "aic-bigdata-server" directory and the neo4j should be restored.
 
 
 
