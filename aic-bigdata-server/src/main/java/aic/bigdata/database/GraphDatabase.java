@@ -71,10 +71,22 @@ public class GraphDatabase {
 
 	final static private String mostMentionedTopicsQ = "match p = (a:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc;";// limit {limit}";
 	final static private String[] mostMentionedTopicsIndirectQ = {
-		"match p = (a:user)-[:retweets*0..1]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+/*		"match p = (a:user)-[:retweets*0..1]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
 		"match p = (a:user)-[:retweets*0..2]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
 		"match p = (a:user)-[:retweets*0..3]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
 		"match p = (a:user)-[:retweets*0..4]->(f:user)-[m:mentions]->(t:topic) where a.id = {id} with p, a, t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc"
+	};
+*/
+/*
+		"match p = (a:user)-[:retweets]->(b:user), (b:user)-[m:mentions]->(t:topic) where a.id = {id} and b.id <> a.id with t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = shortestPath((a:user)-[:retweets*..2]->(b:user)), (b:user)-[m:mentions]->(t:topic) where a.id = {id} and b.id <> a.id with t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = shortestPath((a:user)-[:retweets*..3]->(b:user)), (b:user)-[m:mentions]->(t:topic) where a.id = {id} and b.id <> a.id with t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc",
+		"match p = shortestPath((a:user)-[:retweets*..4]->(b:user)), (b:user)-[m:mentions]->(t:topic) where a.id = {id} and b.id <> a.id with t, m.count * (1.0/length(p)) as weightedCount return t.id, sum(weightedCount) order by sum(weightedCount) desc"
+*/
+		"match p = (a:user)-[:retweets*1..1]->(b:user), (b:user)-[m:mentions]->(t:topic) WHERE a.id = {id} and ALL(n in nodes(p) where 1 = length(filter(m in nodes(p) where m = n))) with t, m.count * (1.0/length(p)) as weightedCount return t.id, weightedCount",
+		"match p = (a:user)-[:retweets*1..2]->(b:user), (b:user)-[m:mentions]->(t:topic) WHERE a.id = {id} and ALL(n in nodes(p) where 1 = length(filter(m in nodes(p) where m = n))) with t, m.count * (1.0/length(p)) as weightedCount return t.id, weightedCount",
+		"match p = (a:user)-[:retweets*1..3]->(b:user), (b:user)-[m:mentions]->(t:topic) WHERE a.id = {id} and ALL(n in nodes(p) where 1 = length(filter(m in nodes(p) where m = n))) with t, m.count * (1.0/length(p)) as weightedCount return t.id, weightedCount",
+		"match p = (a:user)-[:retweets*1..4]->(b:user), (b:user)-[m:mentions]->(t:topic) WHERE a.id = {id} and ALL(n in nodes(p) where 1 = length(filter(m in nodes(p) where m = n))) with t, m.count * (1.0/length(p)) as weightedCount return t.id, weightedCount"
 	};
 	final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count)*{retweetsFactor} + a.followersCount*{followersFactor} + a.favouritesCount*{favouritesFactor} as rank return a.id, a.name, rank order by rank desc limit {limit}";
 	//final static private String mostInfluentalUsersQ = "match (a:user)-[r:retweets]-(b:user) with a, sum(r.count) + a.followersCount + a.favouritesCount as rank return a.id, a.name, rank order by rank desc limit 10;";
