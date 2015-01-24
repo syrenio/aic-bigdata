@@ -19,7 +19,7 @@ https://www.dropbox.com/s/lqbvh8k3ydv8mqv/AIC_Architektur_Vorschlag.pdf?dl=0
     gradle build        // default build task
     gradle startStream  // start stream and write to mongodb/sql
     gradle analyze      // extract graph from mongodb/sql
-    gradle userConver   // convert existing Users from mognodb into H2 Database
+    gradle userConvert   // convert existing Users from mognodb into H2 Database
     gradle userClean    // clean and recreate H2 user table
     gradle appRun       // starts WebApplication
 ### Config files
