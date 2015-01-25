@@ -51,7 +51,6 @@ public class TweetToJSONHandler implements TweetHandler {
 			obj = new JSONObject(tweet);
 			array.put(obj);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -61,8 +60,6 @@ public class TweetToJSONHandler implements TweetHandler {
 
 	@Override
 	public void HandleTweet(String tweet) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

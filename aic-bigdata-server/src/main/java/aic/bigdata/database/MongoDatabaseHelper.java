@@ -59,7 +59,7 @@ public class MongoDatabaseHelper {
 				String nkey = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, key);
 				nobj.put(nkey, o.get(key));
 			}
-			nobj.removeField("created_at"); // FIXME erzeugt einen parsing
+			nobj.removeField("created_at");
 			if (nobj.containsField("created_at")) {
 				String str = (String) nobj.get("created_at");
 				try {

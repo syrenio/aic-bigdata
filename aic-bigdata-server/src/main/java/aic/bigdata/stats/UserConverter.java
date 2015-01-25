@@ -56,7 +56,7 @@ public class UserConverter {
 	// System.out.println("Current user count: " + db.getUserCount());
 	//
 	// } catch (UnknownHostException | TwitterException e) {
-	// // TODO Auto-generated catch block
+	// 
 	// e.printStackTrace();
 	// }
 	// }
@@ -90,7 +90,6 @@ public class UserConverter {
 			System.out.println("Current user count: " + db.getUserCount());
 
 		} catch (UnknownHostException | TwitterException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -114,7 +113,6 @@ public class UserConverter {
 			System.out.println("Minutes: " + minutesBetween.getMinutes());
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.err.println("something went wrong in sql database");
 		}

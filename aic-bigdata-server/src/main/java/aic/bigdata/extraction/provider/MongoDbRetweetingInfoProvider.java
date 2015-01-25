@@ -4,22 +4,15 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.lang.ClassCastException;
-
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Minutes;
 
-import twitter4j.Status;
-import twitter4j.TwitterException;
-import twitter4j.TwitterObjectFactory;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.RetweetingInfoHandler;
 import aic.bigdata.extraction.RetweetingInfoProvider;
 
-import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.BasicDBList;
+import com.mongodb.DBObject;
 
 public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 
@@ -55,7 +48,7 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 				}
 
 				if (!(c.containsField("_id") && c.containsField("value.arr"))) {
-					; // TODO: panic
+					;
 				}
 
 				// this is pretty ugly

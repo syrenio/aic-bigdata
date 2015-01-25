@@ -29,15 +29,12 @@ public class TweetToFileHandler implements TweetHandler {
 					: " ");
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void HandleTweet(String tweet) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

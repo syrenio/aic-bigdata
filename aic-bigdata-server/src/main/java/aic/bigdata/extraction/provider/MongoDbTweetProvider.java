@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Minutes;
 
 import twitter4j.Status;
 import twitter4j.TwitterException;
@@ -16,7 +15,6 @@ import aic.bigdata.extraction.TweetHandler;
 import aic.bigdata.extraction.TweetProvider;
 
 import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
 
 public class MongoDbTweetProvider implements TweetProvider {
 

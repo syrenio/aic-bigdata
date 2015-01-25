@@ -18,7 +18,6 @@ import org.xml.sax.SAXException;
 
 import aic.bigdata.database.GraphDatabase;
 import aic.bigdata.database.MongoDatabase;
-import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
 
 import com.google.gson.Gson;

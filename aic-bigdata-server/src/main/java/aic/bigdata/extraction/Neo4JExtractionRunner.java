@@ -5,7 +5,6 @@ import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.extraction.provider.MongoDbTweetProvider;
 import aic.bigdata.server.ServerConfig;
-import aic.bigdata.server.TwitterStreamJob;
 
 public class Neo4JExtractionRunner {
 

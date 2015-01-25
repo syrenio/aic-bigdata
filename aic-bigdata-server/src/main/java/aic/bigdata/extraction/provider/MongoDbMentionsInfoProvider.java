@@ -4,22 +4,14 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.lang.ClassCastException;
-
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.Minutes;
 
-import twitter4j.Status;
-import twitter4j.TwitterException;
-import twitter4j.TwitterObjectFactory;
 import aic.bigdata.database.MongoDatabase;
 import aic.bigdata.extraction.MentionsInfoHandler;
 import aic.bigdata.extraction.MentionsInfoProvider;
 
 import com.mongodb.DBObject;
-import com.mongodb.DBCursor;
-import com.mongodb.BasicDBList;
 
 public class MongoDbMentionsInfoProvider implements MentionsInfoProvider {
 

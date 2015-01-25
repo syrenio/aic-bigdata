@@ -25,32 +25,14 @@ import aic.bigdata.server.ServerConfig;
 
 import com.mongodb.DBObject;
 
-/*
- * 1. Which users are the most inﬂuential persons in your data set? Inﬂuential persons do not only have many followers, 
- * they also trigger many retweets and favourites.
- * 
- 2. Which users are interested in a broad range of topics, which are more focused? 
- Keep in mind that simply counting topics may be too limiting, as users that tweet 
- a lot will naturally also mention more topics. Porting basic concepts from the “term frequency-inverse 
- document frequency” may help you here.
-
- 3. Suggest concrete ads from your database to a given user based on his existing interests, i.e., 
- topics the user is already mentioning actively.
-
- 4. Suggest concrete ads from your database to a given user based on his potential interests, i.e., 
- topics the user does not actively mention at the moment, but which
- are his connections (and their friends, and their friends, ..., with decreasing importance) are interested in.
- */
 
 @Path("queries")
 public class QueryResource {
 
 	ServerConfig config = new ServerConfigBuilder().getConfig();
 
-	// FIXME DUMMY CODE!!!!
 	private List<AicUser> getDummyAicUserData() {
 		try {
-			// FIXME DUMMY CODE!!!!
 			Random rnd = new Random();
 			int x = rnd.nextInt(10) + 10;
 
@@ -58,7 +40,6 @@ public class QueryResource {
 			List<AicUser> users = db.getUsers(x, 10);
 			return users;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new ArrayList<AicUser>();
@@ -71,7 +52,6 @@ public class QueryResource {
 
 			return md.getAds();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new ArrayList<AdObject>();
@@ -104,7 +84,7 @@ public class QueryResource {
 		// System.out.println("most influental users: " + ids);
 		// System.out.println("list has " + list.size() + " elements");
 
-		// list = getDummyAicUserData(); // FIXME DUMMY CODE!!!!
+		// list = getDummyAicUserData();
 
 		return list;
 	}
@@ -140,7 +120,6 @@ public class QueryResource {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
-			// TODO Copy of Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -168,7 +147,6 @@ public class QueryResource {
 		try {
 			list = mongoDb.getAdsForTopics(topics);
 		} catch (UnknownHostException e) {
-			// TODO Copy of Auto-generated catch block
 			e.printStackTrace();
 		}
 		return list;

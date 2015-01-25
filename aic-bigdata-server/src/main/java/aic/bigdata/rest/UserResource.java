@@ -64,7 +64,6 @@ public class UserResource {
 
 			return resultPage;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -82,7 +81,6 @@ public class UserResource {
 		if (mongo == null)
 			mongo = new MongoDatabase(config);
 
-		// FIXME CREATE NEO4J DB Instance and get Connections
 		// MongoDatabase mongo = new MongoDatabase(config);
 		Set<String> mentionedTopics = GraphDatabase.getInstance().getMentionedTopics(userId);
 

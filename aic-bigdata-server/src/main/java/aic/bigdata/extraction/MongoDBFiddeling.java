@@ -2,8 +2,6 @@ package aic.bigdata.extraction;
 
 import java.net.UnknownHostException;
 
-import aic.bigdata.server.ServerConfig;
-
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;

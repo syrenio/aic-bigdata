@@ -20,7 +20,6 @@ public class UserCleaner {
 			db = new SqlDatabase(config);
 			db.recreateTables();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

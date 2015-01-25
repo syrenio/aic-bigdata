@@ -297,11 +297,11 @@ public class GraphDatabase {
 		try (Transaction tx = graphDb.beginTx()) {
 			ResourceIterator<Map<String, Object>> iterator = result.iterator();
 
-			if (iterator.hasNext()) { // TODO SLOW
-				Map<String, Object> map = iterator.next(); // TODO SLOW
+			if (iterator.hasNext()) {
+				Map<String, Object> map = iterator.next();
 
-				result = cypherEngine.execute(updateMentionsCountQ, params); // TODO
-																				// SLOW
+				result = cypherEngine.execute(updateMentionsCountQ, params);
+																				
 				if (iterator.hasNext()) {
 					System.err.println("TweetToNeo4JHandler: Warning: More than one relationship (user " + userId
 							+ ")-[mentions]->(topic " + topic + ") in Neo4J DB");
@@ -441,15 +441,15 @@ public class GraphDatabase {
 	 * 
 	 * // why do we need a Transaction object we then ignore? ask the neo4j
 	 * docs, good luck! try (Transaction ignoreMe = graphDb.beginTx()) { result
-	 * = cypherEngine.execute(getRetweetsCountQ, params); //TODO SLOW }
+	 * = cypherEngine.execute(getRetweetsCountQ, params);}
 	 * 
 	 * try (Transaction tx = graphDb.beginTx()) { ResourceIterator<Map<String,
 	 * Object>> iterator = result.iterator();
 	 * 
-	 * if (iterator.hasNext()) { //TODO SLOW Map<String, Object> map =
-	 * iterator.next(); //TODO SLOW //params.put("currentCount",
+	 * if (iterator.hasNext()) {Map<String, Object> map =
+	 * iterator.next(); //params.put("currentCount",
 	 * map.get("r.count")); result = cypherEngine.execute(updateRetweetsCountQ,
-	 * params); //TODO SLOW if (iterator.hasNext()) { System.err.println(
+	 * params); if (iterator.hasNext()) { System.err.println(
 	 * "TweetToNeo4JHandler: Warning: More than one relationship (user " +
 	 * retweeter.getId() + ")-[retweets]->(user " + original.getId() +
 	 * ") in Neo4J DB"); } iterator.close(); iterator = result.iterator(); if

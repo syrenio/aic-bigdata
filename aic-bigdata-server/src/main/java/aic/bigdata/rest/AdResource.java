@@ -75,7 +75,6 @@ public class AdResource {
 				list.add(t);
 			}
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

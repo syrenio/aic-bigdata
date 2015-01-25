@@ -14,6 +14,10 @@ import aic.bigdata.extraction.ServerConfigBuilder;
 import aic.bigdata.extraction.handler.TweetToNeo4JHandler;
 import aic.bigdata.server.ServerConfig;
 
+/**
+ * Starts the the analysis process by triggering 
+ *
+ */
 public class AnalysisRunner {
 	private static ServerConfig config;
 

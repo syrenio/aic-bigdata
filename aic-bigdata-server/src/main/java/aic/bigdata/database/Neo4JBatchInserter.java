@@ -1,19 +1,16 @@
 package aic.bigdata.database;
 
-import aic.bigdata.server.ServerConfig;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.neo4j.graphdb.DynamicLabel;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.unsafe.batchinsert.BatchInserters;
 import org.neo4j.unsafe.batchinsert.BatchInserter;
+import org.neo4j.unsafe.batchinsert.BatchInserters;
 
 import aic.bigdata.database.model.AicUser;
-
-import java.util.Map;
-import java.util.HashMap;
+import aic.bigdata.server.ServerConfig;
 
 public class Neo4JBatchInserter {
 	private BatchInserter batchInserter;

@@ -25,8 +25,6 @@ public class UserToDBHandler implements TweetHandler {
 
 	@Override
 	public void HandleTweet(String tweet) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void internalHandleTweet(AicUser user) {

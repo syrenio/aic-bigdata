@@ -119,7 +119,6 @@ public class AicUser implements User {
 	}
 
 	public AicUser(User usr) {
-		// FIXME CONVERT TwitterUser to AicUser
 		accessLevel = usr.getAccessLevel();
 		biggerProfileImageURL = usr.getBiggerProfileImageURL();
 		biggerProfileImageURLHttps = usr.getBiggerProfileImageURLHttps();
