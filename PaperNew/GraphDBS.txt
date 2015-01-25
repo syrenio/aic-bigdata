@@ -1,5 +1,0 @@
-KeyWords
-GraphDBs: Neo4j, Trinitiy, OrientDB
-
-Big Data managment - definition
-
