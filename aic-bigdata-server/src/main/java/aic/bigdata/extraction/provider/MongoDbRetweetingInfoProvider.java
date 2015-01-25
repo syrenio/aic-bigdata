@@ -51,7 +51,6 @@ public class MongoDbRetweetingInfoProvider implements RetweetingInfoProvider {
 					;
 				}
 
-				// this is pretty ugly
 				Long id = null;
 				try {
 					id = ((Double) c.get("_id")).longValue();
