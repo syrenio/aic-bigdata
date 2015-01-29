@@ -40,7 +40,7 @@ https://www.dropbox.com/s/lqbvh8k3ydv8mqv/AIC_Architektur_Vorschlag.pdf?dl=0
 6. "gradle appRun" starts the web server and explore the collected data and queries.
 
 ### VM
-0. developers will provide you with the password*
+0. developers will provide you with the password = 'aic-bigdata' *
 1. open terminal and change directory to ~/aic-bigdata/aic-bigdata-server
 2. execute "sudo gradle appRun"
 3. connect with your browser to http://localhost:8080/aic-bigdata-server
